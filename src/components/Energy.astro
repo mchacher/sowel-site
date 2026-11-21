@@ -1,0 +1,197 @@
+---
+import type { SiteCopy } from "../content/types";
+import Accent from "./Accent.astro";
+
+interface Props {
+  copy: SiteCopy;
+}
+const { energy } = Astro.props.copy;
+---
+
+<section class="section" id={energy.id}>
+  <div class="container">
+    <div class="section-head section-head--center" data-reveal>
+      <p class="eyebrow">{energy.eyebrow}</p>
+      <h2 class="h2"><Accent text={energy.title} accent={energy.titleAccent} /></h2>
+      <p class="lead">{energy.lead}</p>
+    </div>
+
+    <div class="energy">
+      <figure class="ecard ecard--flow" data-reveal>
+        <div class="ecard__shot">
+          <img
+            src={energy.flow.image.src}
+            alt={energy.flow.image.alt}
+            width={energy.flow.image.width}
+            height={energy.flow.image.height}
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <figcaption>
+          <h3>{energy.flow.title}</h3>
+          <p>{energy.flow.body}</p>
+        </figcaption>
+      </figure>
+
+      <figure class="ecard ecard--bilan" data-reveal style="--delay:60ms">
+        <div class="ecard__shot">
+          <img
+            src={energy.bilan.image.src}
+            alt={energy.bilan.image.alt}
+            width={energy.bilan.image.width}
+            height={energy.bilan.image.height}
+            loading="lazy"
+            decoding="async"
+          />
+          <img
+            src={energy.bilan.savings.src}
+            alt={energy.bilan.savings.alt}
+            width={energy.bilan.savings.width}
+            height={energy.bilan.savings.height}
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <figcaption>
+          <h3>{energy.bilan.title}</h3>
+          <p>{energy.bilan.body}</p>
+        </figcaption>
+      </figure>
+
+      <figure class="ecard ecard--arbiter" data-reveal style="--delay:120ms">
+        <figcaption>
+          <h3>{energy.arbiter.title}</h3>
+          <p>{energy.arbiter.body}</p>
+        </figcaption>
+        <div class="ecard__shot">
+          <img
+            src={energy.arbiter.image.src}
+            alt={energy.arbiter.image.alt}
+            width={energy.arbiter.image.width}
+            height={energy.arbiter.image.height}
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<style>
+  .energy {
+    display: grid;
+    gap: 20px;
+    margin-top: clamp(40px, 5vw, 64px);
+  }
+  .ecard {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--r-xl);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+  }
+  /* The views are real captures taken at 2x or 3x and shown whole, on a soft well like the other product views. */
+  .ecard__shot {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(16px, 2.4vw, 28px);
+    background:
+      radial-gradient(70% 55% at 50% 100%, color-mix(in srgb, var(--accent) 20%, transparent), transparent 72%),
+      var(--n-50);
+  }
+  .ecard__shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--r-md);
+    box-shadow: 0 0 0 1px var(--border), 0 22px 44px -22px rgba(17, 23, 27, 0.35);
+    filter: var(--img-dim);
+  }
+  .ecard figcaption {
+    padding: 22px 26px 26px;
+  }
+  .ecard h3 {
+    font-size: 20px;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    color: var(--text-strong);
+  }
+  .ecard p {
+    margin: 8px 0 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-2);
+  }
+  /* The Bilan shows its top, then the two figures that matter, one under the other. */
+  .ecard--bilan .ecard__shot {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  /* The arbiter is the heart of the section: the saturated block, text beside its history. */
+  .ecard--arbiter {
+    background: var(--tile);
+    border-color: transparent;
+    box-shadow: var(--shadow-tile);
+  }
+  .ecard--arbiter figcaption {
+    padding: clamp(24px, 3vw, 40px);
+    align-self: center;
+  }
+  .ecard--arbiter h3 {
+    font-size: clamp(1.4rem, 1.1rem + 1vw, 1.9rem);
+    color: var(--tile-text);
+  }
+  .ecard--arbiter p {
+    margin-top: 12px;
+    font-size: 17px;
+    color: var(--tile-text-2);
+  }
+  .ecard--arbiter .ecard__shot {
+    background: transparent;
+    padding: 0 clamp(16px, 2.4vw, 28px) clamp(16px, 2.4vw, 28px);
+  }
+  .ecard--arbiter .ecard__shot img {
+    box-shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.55);
+  }
+
+  /* On a phone the history is wide: it keeps a readable width and scrolls sideways. */
+  @media (max-width: 959px) {
+    .ecard--arbiter .ecard__shot {
+      overflow-x: auto;
+      justify-content: flex-start;
+      -webkit-overflow-scrolling: touch;
+    }
+    .ecard--arbiter .ecard__shot img {
+      min-width: 680px;
+    }
+  }
+
+  @media (min-width: 960px) {
+    .energy {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
+    .ecard--flow {
+      grid-column: span 6;
+    }
+    .ecard--bilan {
+      grid-column: span 6;
+    }
+    .ecard--arbiter {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+      align-items: center;
+    }
+    .ecard--arbiter .ecard__shot {
+      padding: clamp(20px, 2.4vw, 32px) clamp(20px, 2.4vw, 32px) clamp(20px, 2.4vw, 32px) 0;
+    }
+  }
+</style>

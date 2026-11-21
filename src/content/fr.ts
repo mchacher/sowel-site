@@ -23,6 +23,7 @@ export const fr: SiteCopy = {
       { label: "Pièces", href: "#rooms" },
       { label: "Tableau de bord", href: "#dashboard" },
       { label: "Recettes", href: "#recipes" },
+      { label: "Énergie", href: "#energy" },
       { label: "Modes", href: "#modes" },
       { label: "Confidentialité", href: "#privacy" },
     ],
@@ -245,6 +246,49 @@ export const fr: SiteCopy = {
       { title: "Décrire votre maison", body: "Ajoutez vos pièces, connectez une intégration, placez vos équipements." },
     ],
     manual: { label: "Guide d'installation complet", href: DOCS },
+  },
+  energy: {
+    id: "energy",
+    eyebrow: "Énergie",
+    title: "Chaque watt de soleil mis au travail",
+    titleAccent: "mis au travail",
+    lead: "Sowel suit en direct ce que vous produisez et ce que vous consommez, et son arbitre envoie le surplus solaire là où il sert : d'abord le ballon d'eau chaude, puis la voiture. Aucune règle à écrire.",
+    flow: {
+      title: "Flux en direct",
+      body: "Production, consommation et réseau, en direct.",
+      image: {
+        src: withBase("/img/fr/energy-flow.webp"),
+        alt: "Le flux d'énergie en direct d'une maison par temps ensoleillé : 4,6 kW produits, 2,7 kW consommés, 1,9 kW envoyés au réseau.",
+        width: 1500,
+        height: 1184,
+      },
+    },
+    bilan: {
+      title: "Coûts et économies",
+      body: "La facture du mois, ce que le soleil vous a fait économiser et ce que l'arbitre a gagné, en euros, avec votre tarif heures pleines et creuses.",
+      image: {
+        src: withBase("/img/fr/energy-bilan.webp"),
+        alt: "La page Bilan d'un mois : la facture, l'électricité consommée, l'économie solaire et le gain de l'arbitre, en euros.",
+        width: 1500,
+        height: 1209,
+      },
+      savings: {
+        src: withBase("/img/fr/energy-savings.webp"),
+        alt: "Ce que le soleil a fait économiser et ce que l'arbitre a gagné sur le mois : 21,77 et 2,33 euros.",
+        width: 2000,
+        height: 253,
+      },
+    },
+    arbiter: {
+      title: "L'arbitre du surplus",
+      body: "Il répartit le surplus solaire entre votre ballon d'eau chaude et votre voiture, par priorité, et garde un journal de chaque décision. Ici, un matin : le soleil arrive, le ballon est servi, la borne attend son tour.",
+      image: {
+        src: withBase("/img/fr/energy-arbiter.webp"),
+        alt: "L'historique de l'arbitre sur une matinée : la courbe de surplus qui monte avec le soleil, le ballon servi, la borne en attente puis servie.",
+        width: 2200,
+        height: 733,
+      },
+    },
   },
   modes: {
     id: "modes",
