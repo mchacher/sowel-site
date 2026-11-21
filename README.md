@@ -18,7 +18,7 @@ All copy is in `src/content/en.ts` and `src/content/fr.ts`, one entry per sectio
 
 ## Deploy
 
-Every push to `main` publishes the site to GitHub Pages (`.github/workflows/deploy.yml`), at https://mchacher.github.io/sowel-site/ until the DNS of sowel.org points at GitHub. The workflow header says how to switch to sowel.org.
+Every push to `main` publishes the site to GitHub Pages (`.github/workflows/deploy.yml`), at https://sowel.org (custom domain of this repository, DNS in Cloudflare). The workflow header explains how to build for a sub-path instead.
 
 ## Specs
 
