@@ -112,7 +112,7 @@ export const en: SiteCopy = {
         src: withBase("/img/en/living-room-phone.webp"),
         alt: "The living room page on a phone: the lights, shutters and sensors of the room in a single column.",
         width: 900,
-        height: 1948,
+        height: 1800,
       },
       caption: "One room in Sowel: what is on, what is open, who moved, and the modes and recipes placed on it.",
     },
@@ -141,7 +141,7 @@ export const en: SiteCopy = {
       src: withBase("/img/en/dashboard-phone.webp"),
       alt: "Sowel on a phone: the dashboard with the gate, the garage door, the shutters of each floor, the heat pump and the weather.",
       width: 900,
-      height: 1948,
+      height: 1800,
     },
     modes: {
       title: "Modes for the whole home",
@@ -234,9 +234,9 @@ export const en: SiteCopy = {
   community: {
     id: "community",
     eyebrow: "Community",
-    title: "Built in the open",
-    titleAccent: "in the open",
-    lead: "Sowel is developed in public. Questions, ideas and bug reports are all welcome.",
+    title: "Made with the people who use it",
+    titleAccent: "the people who use it",
+    lead: "Sowel is open source. Ask a question, suggest an idea, report a bug or show us your home: it all happens on GitHub.",
     links: [
       { icon: "git-fork", title: "GitHub", body: "Code, issues and releases", href: REPO },
       { icon: "messages-square", title: "Discussions", body: "Questions, ideas, show your home", href: `${REPO}/discussions` },
