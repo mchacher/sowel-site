@@ -66,7 +66,7 @@ walk(t, 0);
             <div class="eq__col">
               <span class="eq__label">{home.equipment.equipmentLabel}</span>
               <span class="eqcard">
-                <span class="eqcard__tile"><Icon name="lightbulb" class="icon" /></span>
+                <span class="eqcard__tile"><Icon name={home.equipment.icon} class="icon" /></span>
                 <span class="eqcard__text">
                   <strong>{home.equipment.equipment}</strong>
                   <span>{home.equipment.room}</span>
@@ -97,7 +97,7 @@ walk(t, 0);
         <ProductWindow title={home.window.title} image={home.window.image} />
       </div>
       <div class="shot__phone">
-        <PhoneFrame image={home.window.imageSmall} max={300} />
+        <PhoneFrame image={home.window.imageSmall} max={240} />
       </div>
       <figcaption>{home.window.caption}</figcaption>
     </figure>
@@ -224,7 +224,11 @@ walk(t, 0);
     font-weight: 600;
     color: var(--text-3);
   }
+  .eq__col {
+    min-width: 0;
+  }
   .eq__link {
+    flex: 0 0 34px;
     width: 34px;
     height: 80px;
     margin-top: 22px;
@@ -309,17 +313,34 @@ walk(t, 0);
 
   .shot {
     margin-top: clamp(56px, 7vw, 96px);
+    display: grid;
+    gap: 28px;
+    justify-items: center;
+  }
+  .shot__desktop {
+    width: 100%;
+    min-width: 0;
   }
   .shot__phone {
-    display: none;
+    display: flex;
     justify-content: center;
+    width: 100%;
+  }
+  /* The same room twice: on the computer and, as an installed app, on the phone. */
+  @media (min-width: 960px) {
+    .shot {
+      grid-template-columns: minmax(0, 1fr) 240px;
+      align-items: end;
+      justify-items: stretch;
+      gap: 36px;
+    }
+    .shot figcaption {
+      grid-column: 1 / -1;
+    }
   }
   @media (max-width: 639px) {
     .shot__desktop {
       display: none;
-    }
-    .shot__phone {
-      display: flex;
     }
   }
   .shot figcaption {
@@ -360,5 +381,47 @@ walk(t, 0);
     background: #ffffff;
     border-color: transparent;
     box-shadow: 0 16px 32px -16px rgba(0, 0, 0, 0.45);
+  }
+  /* Narrow cards: the labels of two real devices are long, so the diagram tightens and wraps. */
+  @media (max-width: 520px) {
+    .eq {
+      gap: 4px;
+    }
+    .eq__link {
+      flex-basis: 22px;
+      width: 22px;
+    }
+    .chip {
+      height: auto;
+      min-height: 30px;
+      padding: 5px 8px;
+      font-size: 12px;
+      line-height: 1.2;
+      white-space: normal;
+    }
+    .chip__i {
+      display: none;
+    }
+    .eqcard {
+      gap: 8px;
+      padding: 8px 10px 8px 8px;
+    }
+    .eqcard__tile {
+      width: 34px;
+      height: 34px;
+      flex: none;
+    }
+    .eqcard {
+      min-width: 0;
+    }
+    .eqcard__text {
+      min-width: 0;
+    }
+    .eqcard__text strong {
+      font-size: 13px;
+      line-height: 1.2;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
   }
 </style>

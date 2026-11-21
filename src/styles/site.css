@@ -83,22 +83,29 @@ a:hover {
   border-block: 1px solid var(--border);
 }
 
+/* The name of a section: a pill, so it reads at a glance like a tab of the page. */
 .eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  font-size: 14px;
-  font-weight: 650;
-  letter-spacing: 0;
+  gap: 9px;
+  padding: 7px 16px 7px 13px;
+  border-radius: 999px;
+  background: var(--p-50);
+  border: 1px solid color-mix(in srgb, var(--accent-mark) 35%, transparent);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  line-height: 1.1;
   color: var(--accent-ink);
 }
 
 .eyebrow::before {
   content: "";
-  width: 20px;
-  height: 3px;
-  border-radius: 2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
   background: var(--accent-mark);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-mark) 20%, transparent);
 }
 
 /* The one word of a title that wears the accent (src/components/Accent.astro). */
