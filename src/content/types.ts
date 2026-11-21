@@ -134,6 +134,16 @@ export interface SiteCopy {
     steps: { title: string; body: string }[];
     manual: Link;
   };
+  energy: {
+    id: string;
+    eyebrow: string;
+    title: string;
+    titleAccent: string;
+    lead: string;
+    flow: { title: string; body: string; image: Img };
+    bilan: { title: string; body: string; image: Img; savings: Img };
+    arbiter: { title: string; body: string; image: Img };
+  };
   modes: {
     id: string;
     eyebrow: string;

@@ -23,6 +23,7 @@ export const en: SiteCopy = {
       { label: "Rooms", href: "#rooms" },
       { label: "Dashboard", href: "#dashboard" },
       { label: "Recipes", href: "#recipes" },
+      { label: "Energy", href: "#energy" },
       { label: "Modes", href: "#modes" },
       { label: "Privacy", href: "#privacy" },
     ],
@@ -245,6 +246,49 @@ export const en: SiteCopy = {
       { title: "Describe your home", body: "Add your rooms, connect an integration, place your equipment." },
     ],
     manual: { label: "Full installation guide", href: `${DOCS}` },
+  },
+  energy: {
+    id: "energy",
+    eyebrow: "Energy",
+    title: "Every watt of sun, put to work",
+    titleAccent: "put to work",
+    lead: "Sowel follows what you produce and what you consume, live, and its arbiter sends the solar surplus where it helps: the water heater first, then the car. No rule to write.",
+    flow: {
+      title: "Live flow",
+      body: "Production, consumption and the grid, as they happen.",
+      image: {
+        src: withBase("/img/en/energy-flow.webp"),
+        alt: "The live energy flow of a home on a sunny day: 4.6 kW produced, 2.7 kW consumed, 1.9 kW sent to the grid.",
+        width: 1500,
+        height: 1184,
+      },
+    },
+    bilan: {
+      title: "Costs and savings",
+      body: "The bill of the month, what the sun saved you and what the arbiter earned, in euros, with your peak and off-peak tariff.",
+      image: {
+        src: withBase("/img/en/energy-bilan.webp"),
+        alt: "The Costs page for a month: the bill, the electricity used, the solar savings and the arbiter gain, in euros.",
+        width: 1500,
+        height: 1209,
+      },
+      savings: {
+        src: withBase("/img/en/energy-savings.webp"),
+        alt: "What the sun saved and what the arbiter earned over the month: 21.77 and 2.33 euros.",
+        width: 2000,
+        height: 253,
+      },
+    },
+    arbiter: {
+      title: "The surplus arbiter",
+      body: "It shares the solar surplus between your water heater and your car, by priority, and keeps a journal of every decision. Here, one morning: the sun arrives, the water heater is served, the charger waits its turn.",
+      image: {
+        src: withBase("/img/en/energy-arbiter.webp"),
+        alt: "The history of the arbiter over one morning: the surplus curve rising with the sun, the water heater served, the charger waiting and then served.",
+        width: 2200,
+        height: 733,
+      },
+    },
   },
   modes: {
     id: "modes",
