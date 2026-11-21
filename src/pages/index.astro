@@ -1,8 +1,9 @@
 ---
 // Language picker: French when the browser says fr, English otherwise. No cookie, no storage.
-// FR is not built yet in this draft, so the script sends everyone to /en/ until /fr/ exists.
-// The French link joins this list with /fr/.
-const languages = [{ href: "/en/", label: "English", lang: "en" }];
+const languages = [
+  { href: "/en/", label: "English", lang: "en" },
+  { href: "/fr/", label: "Français", lang: "fr" },
+];
 ---
 
 <!doctype html>
@@ -13,9 +14,10 @@ const languages = [{ href: "/en/", label: "English", lang: "en" }];
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'" />
     <title>Sowel</title>
     <link rel="alternate" hreflang="en" href="/en/" />
+    <link rel="alternate" hreflang="fr" href="/fr/" />
     <link rel="alternate" hreflang="x-default" href="/en/" />
     <script is:inline>
-      location.replace("/en/");
+      location.replace(/^fr\b/i.test(navigator.language || "") ? "/fr/" : "/en/");
     </script>
     <style>
       body {

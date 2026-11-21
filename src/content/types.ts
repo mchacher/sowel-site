@@ -48,7 +48,11 @@ export interface SiteCopy {
   lang: "en" | "fr";
   meta: { title: string; description: string };
   a11y: { skip: string; home: string; nav: string; copyDone: string };
-  nav: { links: Link[]; github: Link };
+  nav: {
+    links: Link[];
+    github: Link;
+    switch: { label: string; aria: string; href: string; lang: "en" | "fr" };
+  };
   hero: {
     eyebrow: string;
     title: string;
@@ -112,17 +116,6 @@ export interface SiteCopy {
     lead: string;
     steps: { title: string; body: string }[];
     manual: Link;
-  };
-  compare: {
-    id: string;
-    eyebrow: string;
-    title: string;
-    lead: string;
-    draftNote: string;
-    checkedOn: string;
-    placeholder: string;
-    columns: [string, string, string, string];
-    rows: { label: string; sowel: string }[];
   };
   community: {
     id: string;

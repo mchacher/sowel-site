@@ -20,6 +20,7 @@ const { copy } = Astro.props;
       {copy.nav.links.map((l) => <a href={l.href}>{l.label}</a>)}
     </nav>
     <div class="header__actions">
+      <a class="lang" href={copy.nav.switch.href} hreflang={copy.nav.switch.lang} lang={copy.nav.switch.lang} aria-label={copy.nav.switch.aria}>{copy.nav.switch.label}</a>
       <a class="gh" href={copy.nav.github.href}>
         <Icon name="git-fork" class="icon icon--sm" />
         <span>{copy.nav.github.label}</span>
@@ -91,6 +92,22 @@ const { copy } = Astro.props;
     display: flex;
     align-items: center;
     gap: 8px;
+  }
+  .lang {
+    display: inline-flex;
+    align-items: center;
+    height: 38px;
+    padding-inline: 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--text-2);
+  }
+  .lang:hover {
+    color: var(--text-strong);
+    border-color: var(--text-3, var(--border));
   }
   .gh {
     display: none;
