@@ -1,6 +1,6 @@
 # Spec 001: The showcase page
 
-**Status**: Draft, waiting for the maintainer's approval
+**Status**: Approved 2026-11-21. Design validated on a first render; the comparison section was dropped at the maintainer's request
 **Parent**: sowel spec 209 (launch plan), step 2
 **Depends on**: the pitch and the message rules of spec 209 (`specs/209-launch-plan/spec.md`, « Message architecture »)
 
@@ -24,14 +24,14 @@ It reads public facts only and adds nothing to the product.
 
 ## Non-goals
 
-| Not here                                   | Where                                                                           |
-| ------------------------------------------ | ------------------------------------------------------------------------------- |
-| The manual, the API, plugin docs, specs    | `docs.sowel.org`, in the core repository                                        |
-| The public demo                            | `sowel-showroom`, second wave                                                   |
-| « The Sowel Method » article and the case  | Step 3 of spec 209; this spec leaves a menu slot and a route for it             |
-| A blog, a changelog, search                | Not planned. Release notes stay on `docs.sowel.org`                             |
+| Not here                                   | Where                                                                             |
+| ------------------------------------------ | --------------------------------------------------------------------------------- |
+| The manual, the API, plugin docs, specs    | `docs.sowel.org`, in the core repository                                          |
+| The public demo                            | `sowel-showroom`, second wave                                                     |
+| « The Sowel Method » article and the case  | Step 3 of spec 209; this spec leaves a menu slot and a route for it               |
+| A blog, a changelog, search                | Not planned. Release notes stay on `docs.sowel.org`                               |
 | Any endpoint, telemetry or change in Sowel | Forbidden by spec 209. A need of the site that the product lacks becomes an issue |
-| A short `sowel.org/install.sh`             | Dropped in spec 209 (2026-11-21). The long command stays                        |
+| A short `sowel.org/install.sh`             | Dropped in spec 209 (2026-11-21). The long command stays                          |
 
 ## Functional requirements
 
@@ -58,9 +58,8 @@ It reads public facts only and adds nothing to the product.
 6. **Your data stays at home**: runs on your hardware, no account, no Sowel cloud, no telemetry, plugins checked
    before install.
 7. **Install**: the one command, three short steps after it, link to the manual.
-8. **Honest comparison** with Home Assistant and Jeedom (see below).
-9. **Community**: GitHub, Discussions, the manual, the release notes. A chat channel only if the maintainer decides one.
-10. **Footer**: AGPL licence, GitHub, `docs.sowel.org`.
+8. **Community**: GitHub, Discussions, the manual, the release notes. A chat channel only if the maintainer decides one.
+9. **Footer**: AGPL licence, GitHub, `docs.sowel.org`.
 
 ### The film
 
@@ -69,16 +68,6 @@ It reads public facts only and adds nothing to the product.
 - Captions: a WebVTT track in each language. If the spoken lines are not yet available as text, the film ships
   without captions and the gap is a tracked item, not a silent omission.
 - If it fails to load, the poster stays and a plain link to the file is shown.
-
-### The comparison
-
-An honest table, not a score: what each of Sowel, Home Assistant and Jeedom starts from, who it suits, what it
-asks of you. Rules:
-
-- Every claim about another product is checked against its documentation on the day it is written, and the page
-  carries the date.
-- Sowel's weaknesses are stated (younger, smaller community, fewer integrations, no hosted option).
-- No claim of being unique or better. « Natively, with nothing to configure » is allowed where it was verified.
 
 ### Wording
 
@@ -95,14 +84,14 @@ self-hosted. Light and dark follow the visitor's system setting.
 
 ## Non-functional requirements
 
-| Requirement   | Target                                                                                          |
-| ------------- | ----------------------------------------------------------------------------------------------- |
-| Weight        | Page without the film: under 500 KB transferred, JavaScript under 20 KB                         |
-| Speed         | Lighthouse performance, accessibility, best practices and SEO each 95 or more, on mobile        |
-| Privacy       | Zero request to a host other than the site's own. Checked in CI on the built HTML and CSS       |
-| Accessibility | Keyboard reachable, visible focus, contrast checked in both themes, captions, alt text, `lang`  |
-| Works without JS | Everything readable and the film playable; only the copy button and the root redirect need JS |
-| SEO           | `hreflang` pairs, canonical URLs, one `h1` per page, Open Graph and social card, `SoftwareApplication` JSON-LD |
+| Requirement      | Target                                                                                                         |
+| ---------------- | -------------------------------------------------------------------------------------------------------------- |
+| Weight           | Page without the film: under 500 KB transferred, JavaScript under 20 KB                                        |
+| Speed            | Lighthouse performance, accessibility, best practices and SEO each 95 or more, on mobile                       |
+| Privacy          | Zero request to a host other than the site's own. Checked in CI on the built HTML and CSS                      |
+| Accessibility    | Keyboard reachable, visible focus, contrast checked in both themes, captions, alt text, `lang`                 |
+| Works without JS | Everything readable and the film playable; only the copy button and the root redirect need JS                  |
+| SEO              | `hreflang` pairs, canonical URLs, one `h1` per page, Open Graph and social card, `SoftwareApplication` JSON-LD |
 
 ## Edge cases
 
@@ -122,10 +111,9 @@ self-hosted. Light and dark follow the visitor's system setting.
 
 ## Acceptance criteria
 
-- [ ] `/en/` and `/fr/` render the ten sections in order (section 5 hidden until a real case exists)
+- [ ] `/en/` and `/fr/` render the nine sections in order (section 5 hidden until a real case exists)
 - [ ] The film plays from the site, with `preload="none"`, a poster and the fallback link
 - [ ] The install command copies in one click and is exactly the documented command
-- [ ] The comparison cites its sources and carries a date
 - [ ] CI fails on: a missing translation, a broken internal link, a request to a foreign host, Lighthouse under 95
 - [ ] `sowel.org` serves the site over HTTPS; the `/` redirect and the language switch work
 - [ ] Page weight and JavaScript budgets met

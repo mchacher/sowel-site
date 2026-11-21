@@ -2,5 +2,3 @@ node_modules/
 dist/
 .astro/
 .DS_Store
-# The film is committed once, deliberately (spec 001). Kept out while the draft iterates.
-public/media/*.mp4

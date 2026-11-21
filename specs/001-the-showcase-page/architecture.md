@@ -18,7 +18,7 @@ sowel-site/
 │   │   ├── en.ts               # every string of the page, one entry per section
 │   │   └── fr.ts               # same keys; the parity check compares the two
 │   ├── layouts/Base.astro      # head, hreflang, canonical, Open Graph, JSON-LD, theme
-│   ├── components/             # Hero, Topology, Rooms, Recipes, Energy, Privacy, Install, Compare, Community
+│   ├── components/             # Header, Hero, Home, Rooms, Recipes, Privacy, Install, Community, Footer, Page
 │   ├── pages/
 │   │   ├── index.astro         # language picker (JS redirect + noscript links)
 │   │   ├── en/index.astro
@@ -44,9 +44,6 @@ sowel-site/
 paragraphs, list items and image alt text. Components receive the object for the page's language and contain no
 text. The TypeScript type makes a missing key a compile error; the parity script also rejects an empty string.
 
-The comparison table is data too (`compare.rows[]`, each with `claim` and `source` and `checkedOn`), so a claim
-cannot be added without its source.
-
 ## Language handling
 
 Astro i18n routing, `en` default. `/` is a tiny page: an inline script reads `navigator.language` and calls
@@ -62,13 +59,13 @@ again to the history, so the film is revised rarely and deliberately.
 
 ## Build, checks, deploy
 
-| Step              | What                                                                                               |
-| ----------------- | -------------------------------------------------------------------------------------------------- |
-| `npm run validate` | typecheck (`astro check`), lint, `format:check`, i18n parity, `astro build`, external-request check, link check |
-| CI (`ci.yml`)     | `validate`, then Lighthouse CI on the built site, mobile profile, budgets of 95 and the weight limits |
-| Deploy (`deploy.yml`) | on push to `main`: build, upload the Pages artifact, deploy. No branch publishes                |
-| Secrets           | gitleaks in CI and pre-commit, like the other repos                                                |
-| Ruleset           | `main-protection`: PR required, linear history, required checks named as the CI jobs                |
+| Step                  | What                                                                                                            |
+| --------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `npm run validate`    | typecheck (`astro check`), lint, `format:check`, i18n parity, `astro build`, external-request check, link check |
+| CI (`ci.yml`)         | `validate`, then Lighthouse CI on the built site, mobile profile, budgets of 95 and the weight limits           |
+| Deploy (`deploy.yml`) | on push to `main`: build, upload the Pages artifact, deploy. No branch publishes                                |
+| Secrets               | gitleaks in CI and pre-commit, like the other repos                                                             |
+| Ruleset               | `main-protection`: PR required, linear history, required checks named as the CI jobs                            |
 
 ## DNS and domain (by the maintainer)
 

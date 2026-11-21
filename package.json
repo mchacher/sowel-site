@@ -9,7 +9,14 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "format": "prettier --write \"**/*.{md,yml,yaml,json,mjs}\"",
+    "format:check": "prettier --check \"**/*.{md,yml,yaml,json,mjs}\"",
+    "lint:i18n": "node scripts/check-i18n-parity.mjs",
+    "lint:built": "node scripts/check-external-requests.mjs dist && node scripts/check-links.mjs dist",
+    "test": "node --test scripts/*.test.mjs",
+    "prepare": "husky",
+    "validate": "npm run format:check && npm run check && npm run lint:i18n && npm test && npm run build && npm run lint:built && bash scripts/check-specs-complete.sh"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.3.0",
@@ -19,6 +26,14 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
     "lucide-static": "^1.77.0",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.4.1",
+    "prettier": "^3.9.6"
+  },
+  "lint-staged": {
+    "*.{md,yml,yaml,json,mjs}": [
+      "prettier --write"
+    ]
   }
 }
