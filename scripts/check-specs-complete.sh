@@ -20,7 +20,12 @@ BASE_REF="${1:-origin/main}"
 
 # Make sure the base ref is available (CI shallow clones).
 if ! git rev-parse --verify --quiet "${BASE_REF}" >/dev/null; then
-  git fetch --quiet origin main
+  # No main on the remote yet means the very first push of the repository:
+  # there is no base to compare against, so every spec folder is the initial import.
+  if ! git fetch --quiet origin main 2>/dev/null; then
+    echo "No origin/main yet (initial push) — specs completeness check skipped."
+    exit 0
+  fi
   BASE_REF="origin/main"
 fi
 
