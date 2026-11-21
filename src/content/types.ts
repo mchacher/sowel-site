@@ -61,7 +61,7 @@ export interface SiteCopy {
     lead: string;
     install: { label: string; command: string; copy: string; copied: string; note: string };
     ctas: { primary: Link; secondary: Link };
-    film: { src: string; poster: string; label: string; duration: string; fallback: string; fallbackLink: string };
+    film: { src: string; poster: string; label: string; play: string; duration: string; fallback: string; fallbackLink: string };
   };
   home: {
     id: string;

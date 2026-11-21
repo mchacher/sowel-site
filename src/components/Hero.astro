@@ -39,7 +39,7 @@ const { hero } = Astro.props.copy;
           <source src={hero.film.src} type="video/mp4" />
           <p>{hero.film.fallback} <a href={hero.film.src}>{hero.film.fallbackLink}</a></p>
         </video>
-        <button class="film__play" type="button" data-play hidden>
+        <button class="film__play" type="button" aria-label={hero.film.play} data-play hidden>
           <span class="film__playdisc"><Icon name="play" class="icon" /></span>
           <span class="film__playtext">{hero.film.label}<span>{hero.film.duration}</span></span>
         </button>

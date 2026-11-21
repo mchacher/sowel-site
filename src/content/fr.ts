@@ -25,7 +25,7 @@ export const fr: SiteCopy = {
       { label: "Confidentialité", href: "#privacy" },
     ],
     github: { label: "GitHub", href: REPO },
-    switch: { label: "EN", aria: "Read this site in English", href: withBase("/en/"), lang: "en" },
+    switch: { label: "EN", aria: "EN, read this site in English", href: withBase("/en/"), lang: "en" },
   },
   hero: {
     eyebrow: "Open source, sur votre propre matériel",
@@ -47,6 +47,7 @@ export const fr: SiteCopy = {
       src: withBase("/media/sowel-launch-720p.mp4"),
       poster: withBase("/media/sowel-launch-poster.jpg"),
       label: "Le film",
+      play: "Lire le film",
       duration: "1 min 43",
       fallback: "Le film ne peut pas être lu ici.",
       fallbackLink: "Le télécharger (MP4, 9 Mo)",
