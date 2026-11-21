@@ -79,8 +79,9 @@ const { hero } = Astro.props.copy;
     inset: 0;
     pointer-events: none;
     background:
-      radial-gradient(60% 50% at 50% 0%, var(--p-50) 0%, transparent 70%),
-      radial-gradient(50% 40% at 50% 78%, var(--glow) 0%, transparent 70%);
+      radial-gradient(70% 55% at 50% -5%, var(--warm-peach) 0%, transparent 70%),
+      radial-gradient(55% 45% at 85% 60%, var(--warm-sun) 0%, transparent 70%),
+      radial-gradient(50% 40% at 12% 70%, var(--warm-sky) 0%, transparent 70%);
   }
   .hero__bg::after {
     content: "";
@@ -123,7 +124,12 @@ const { hero } = Astro.props.copy;
     font-weight: 720;
     letter-spacing: -0.045em;
     color: var(--text-strong);
+    background: linear-gradient(95deg, var(--title-from) 15%, var(--title-mid) 70%, var(--title-to) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
     text-wrap: balance;
+    padding-bottom: 0.08em;
   }
   .hero__lead {
     margin-top: 24px;

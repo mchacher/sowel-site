@@ -90,7 +90,7 @@ a:hover {
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 0;
-  color: var(--p-500);
+  color: var(--coral-ink);
 }
 
 .eyebrow::before {
@@ -98,8 +98,8 @@ a:hover {
   width: 18px;
   height: 2px;
   border-radius: 2px;
-  background: currentColor;
-  opacity: 0.6;
+  background: var(--coral);
+  opacity: 0.9;
 }
 
 .h2 {
@@ -149,7 +149,7 @@ a:hover {
 }
 
 .btn--fill {
-  background: var(--p-fill);
+  background: linear-gradient(135deg, var(--p-fill), color-mix(in srgb, var(--p-fill) 78%, #4aa3d1));
   color: #fff;
 }
 

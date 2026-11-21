@@ -6,7 +6,7 @@ const DOCS = "https://docs.sowel.org/fr/";
 export const fr: SiteCopy = {
   lang: "fr",
   meta: {
-    title: "Sowel : la domotique qui connaît votre maison",
+    title: "Sowel : la domotique qui prend soin de votre maison",
     description:
       "Sowel connaît votre maison : elle se pilote seule, se configure en quelques clics, et vos données restent chez vous. Open source, sur votre propre matériel.",
   },
@@ -28,8 +28,8 @@ export const fr: SiteCopy = {
   },
   hero: {
     eyebrow: "Open source, sur votre propre matériel",
-    title: "Sowel connaît votre maison.",
-    lead: "Elle se pilote seule, se configure en quelques clics, et vos données restent chez vous.",
+    title: "Sowel prend soin de votre maison.",
+    lead: "Sowel connaît votre maison : elle se pilote seule, se configure en quelques clics, et vos données restent chez vous.",
     install: {
       label: "Installation avec Docker, en une ligne",
       command: "curl -fsSL https://raw.githubusercontent.com/mchacher/sowel/main/scripts/install.sh | sh",
@@ -237,7 +237,7 @@ export const fr: SiteCopy = {
     ],
   },
   footer: {
-    tagline: "Sowel connaît votre maison.",
+    tagline: "Sowel prend soin de votre maison.",
     licence: "Logiciel libre sous licence AGPL-3.0.",
     privacy: "Ce site ne dépose aucun cookie et ne charge rien depuis un autre site.",
     links: [
