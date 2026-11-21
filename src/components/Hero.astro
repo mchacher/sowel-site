@@ -41,7 +41,7 @@ const { hero } = Astro.props.copy;
         </video>
         <button class="film__play" type="button" aria-label={`${hero.film.play} ${hero.film.label} ${hero.film.duration}`} data-play hidden>
           <span class="film__playdisc"><Icon name="play" class="icon" /></span>
-          <span class="film__playtext">{hero.film.label}<span>{hero.film.duration}</span></span>
+          <span class="film__playtext">{hero.film.label}{" "}<span>{hero.film.duration}</span></span>
         </button>
       </div>
       <figcaption class="film__fallback">

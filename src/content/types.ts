@@ -94,7 +94,7 @@ export interface SiteCopy {
     items: { icon: IconName; title: string; body: string }[];
     stripSmall: Img;
     stripCaption: string;
-    modes: { title: string; body: string; image: Img };
+    activity: { caption: string; image: Img };
   };
   dashboard: {
     id: string;
@@ -133,6 +133,15 @@ export interface SiteCopy {
     lead: string;
     steps: { title: string; body: string }[];
     manual: Link;
+  };
+  modes: {
+    id: string;
+    eyebrow: string;
+    title: string;
+    titleAccent: string;
+    lead: string;
+    items: { icon: IconName; title: string; body: string }[];
+    image: Img;
   };
   community: {
     id: string;

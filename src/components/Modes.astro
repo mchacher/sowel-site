@@ -1,0 +1,128 @@
+---
+import type { SiteCopy } from "../content/types";
+import Icon from "./Icon.astro";
+import Accent from "./Accent.astro";
+
+interface Props {
+  copy: SiteCopy;
+}
+const { modes } = Astro.props.copy;
+---
+
+<section class="section section--band" id={modes.id}>
+  <div class="container modes">
+    <figure class="modes__shot" data-reveal>
+      <img
+        src={modes.image.src}
+        alt={modes.image.alt}
+        width={modes.image.width}
+        height={modes.image.height}
+        loading="lazy"
+        decoding="async"
+      />
+    </figure>
+    <div class="modes__text">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">{modes.eyebrow}</p>
+        <h2 class="h2"><Accent text={modes.title} accent={modes.titleAccent} /></h2>
+        <p class="lead">{modes.lead}</p>
+      </div>
+      <ul class="modes__facts">
+        {
+          modes.items.map((it, i) => (
+            <li class="modes__fact" data-reveal style={`--delay:${i * 60}ms`}>
+              <span class="modes__tile">
+                <Icon name={it.icon} class="icon" />
+              </span>
+              <span>
+                <strong>{it.title}</strong>
+                <span>{it.body}</span>
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .modes {
+    display: grid;
+    gap: clamp(40px, 6vw, 64px);
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .modes {
+      grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+      gap: 72px;
+    }
+  }
+  /* The panel is a real capture, taken at 2x and shown whole, on a soft well like the other product views. */
+  .modes__shot {
+    margin: 0;
+    order: 2;
+    padding: clamp(20px, 3vw, 36px);
+    border-radius: var(--r-xl);
+    background:
+      radial-gradient(70% 50% at 50% 100%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 72%),
+      var(--n-50);
+    border: 1px solid var(--border);
+  }
+  .modes__shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 520px;
+    margin-inline: auto;
+    border-radius: var(--r-md);
+    box-shadow: 0 0 0 1px var(--border), 0 24px 48px -24px rgba(17, 23, 27, 0.35);
+    filter: var(--img-dim);
+  }
+  @media (min-width: 900px) {
+    .modes__shot {
+      order: 0;
+    }
+  }
+  .modes__facts {
+    display: grid;
+    gap: 4px;
+    margin: 32px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .modes__fact {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 16px 0;
+    border-top: 1px solid var(--border);
+  }
+  .modes__fact > span:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--text-2);
+  }
+  .modes__fact strong {
+    font-weight: 600;
+    color: var(--text-strong);
+  }
+  .modes__tile {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--r-md);
+    background: var(--p-50);
+    border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+    color: var(--accent-ink);
+  }
+  .modes__tile .icon {
+    width: 20px;
+    height: 20px;
+  }
+</style>
