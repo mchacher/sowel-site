@@ -29,7 +29,7 @@ export const en: SiteCopy = {
   hero: {
     eyebrow: "Open source, on your own hardware",
     title: "Sowel looks after your home.",
-    lead: "Sowel knows your home: it runs itself, is set up in a few clicks, and your data stays at home.",
+    lead: "Tell Sowel what you need. It knows every room, runs itself, and keeps your data where it belongs: with you.",
     install: {
       label: "Install with Docker, in one line",
       command: "curl -fsSL https://raw.githubusercontent.com/mchacher/sowel/main/scripts/install.sh | sh",
