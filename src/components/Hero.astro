@@ -82,9 +82,22 @@ const { hero } = Astro.props.copy;
     padding-top: clamp(56px, 7vw, 104px);
     padding-bottom: clamp(56px, 6vw, 96px);
     overflow: hidden;
-    background: linear-gradient(180deg, var(--stage) 0%, var(--stage-2) 100%);
+    background:
+      radial-gradient(55% 38% at 50% 0%, rgba(43, 114, 153, 0.3), transparent 72%),
+      linear-gradient(180deg, var(--stage) 0%, var(--stage-2) 100%);
     border-bottom: 1px solid var(--stage-line);
     color: var(--stage-text);
+  }
+  /* A thin blue light along the lower edge of the stage, the line between night and page. */
+  .hero::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(127, 184, 212, 0.55) 50%, transparent);
+    pointer-events: none;
   }
   .hero__inner,
   .hero__intro,
@@ -183,7 +196,7 @@ const { hero } = Astro.props.copy;
   .film__light {
     position: absolute;
     z-index: -1;
-    inset: -18% -16% -26%;
+    inset: -26% -22% -40%;
     background: radial-gradient(50% 50% at 50% 52%, var(--window-light), transparent 70%);
     filter: blur(8px);
     pointer-events: none;
@@ -194,7 +207,7 @@ const { hero } = Astro.props.copy;
     padding: 8px;
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(169, 195, 211, 0.16);
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25), 0 0 90px -10px rgba(242, 188, 110, 0.28);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25), 0 0 130px -8px rgba(242, 188, 110, 0.42);
   }
   video {
     width: 100%;

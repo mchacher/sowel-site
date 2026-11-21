@@ -51,7 +51,7 @@
   --active: #f2c035;
   --active-ink: #8a6100;
   --active-bg: #fff6d6;
-  --window-light: rgba(242, 188, 110, 0.34);
+  --window-light: rgba(242, 188, 110, 0.5);
 
   /* Neutrals, ocean-tinted */
   --n-50: #ecf2f7;
@@ -139,5 +139,11 @@
     --shadow-card: none;
     --shadow-tile: 0 24px 48px -24px rgba(0, 0, 0, 0.6);
     --img-dim: brightness(0.94);
+
+    /* The stage goes deeper than the page so the hero keeps its identity at night. */
+    --stage: #050c11;
+    --stage-2: #0a1b26;
+    --stage-line: rgba(127, 184, 212, 0.28);
+    --window-light: rgba(242, 188, 110, 0.6);
   }
 }
