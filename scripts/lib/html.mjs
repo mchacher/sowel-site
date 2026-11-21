@@ -3,7 +3,7 @@
 
 const strip = (s) =>
   s
-    .replace(/<[^>]*>/g, "")
+    .replace(/<[^>]*>/g, " ")
     .replace(/&nbsp;|&#160;/g, " ")
     .replace(/\s+/g, " ")
     .trim();
@@ -37,8 +37,14 @@ export function checkPage(html, { lang }) {
     }
   }
   for (const m of html.matchAll(/<button\b([^>]*)>([\s\S]*?)<\/button>/gi)) {
-    const named = attr(m[1], "aria-label") || strip(m[2]);
-    if (!named) p.push(`a button has no accessible name: <button${m[1].slice(0, 60)}`);
+    const label = attr(m[1], "aria-label");
+    const text = strip(m[2]);
+    if (!(label || text)) p.push(`a button has no accessible name: <button${m[1].slice(0, 60)}`);
+    if (label && text && !label.toLowerCase().includes(text.toLowerCase())) {
+      p.push(
+        `a button's accessible name does not contain its visible text: "${text}" vs "${label}"`,
+      );
+    }
   }
   for (const m of html.matchAll(/<img\b([^>]*)>/gi)) {
     if (attr(m[1], "alt") === undefined)
