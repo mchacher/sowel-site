@@ -1,0 +1,72 @@
+---
+import type { Img } from "../content/types";
+
+interface Props {
+  image: Img;
+  /** The widest the device may be, in px. */
+  max?: number;
+  eager?: boolean;
+}
+const { image, max = 280, eager = false } = Astro.props;
+---
+
+<div class="device" style={`--max:${max}px`}>
+  <img
+    src={image.src}
+    alt={image.alt}
+    width={image.width}
+    height={image.height}
+    loading={eager ? "eager" : "lazy"}
+    decoding="async"
+  />
+</div>
+
+<style>
+  /* A whole phone, never a cropped one: the screenshot is a real 390 x 844 capture
+     taken at 3x, so it stays sharp at any width this frame gives it. */
+  .device {
+    position: relative;
+    width: 100%;
+    max-width: var(--max);
+    padding: 9px;
+    border-radius: 44px;
+    background: linear-gradient(160deg, #1c2830, #0b151b);
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+      0 0 0 1.5px #050b0f,
+      0 40px 70px -26px rgba(5, 11, 15, 0.55),
+      0 14px 30px -14px rgba(5, 11, 15, 0.4);
+  }
+  /* A side button on each edge, drawn with shadows so no extra element is needed. */
+  .device::before {
+    content: "";
+    position: absolute;
+    right: -3px;
+    top: 22%;
+    width: 3px;
+    height: 12%;
+    border-radius: 0 3px 3px 0;
+    background: #0b151b;
+  }
+  .device::after {
+    content: "";
+    position: absolute;
+    left: -3px;
+    top: 18%;
+    width: 3px;
+    height: 7%;
+    border-radius: 3px 0 0 3px;
+    background: #0b151b;
+    box-shadow: 0 34px 0 #0b151b, 0 66px 0 #0b151b;
+  }
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 390 / 844;
+    border-radius: 35px;
+    object-fit: cover;
+    object-position: top;
+    background: var(--surface);
+  }
+</style>

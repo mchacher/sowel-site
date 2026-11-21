@@ -2,6 +2,7 @@
 import "../styles/tokens.css";
 import "../styles/site.css";
 import type { SiteCopy } from "../content/types";
+import { withBase } from "../lib/url";
 
 interface Props {
   copy: SiteCopy;
@@ -9,7 +10,8 @@ interface Props {
 }
 
 const { copy, path } = Astro.props;
-const canonical = new URL(path, Astro.site).href;
+const canonical = new URL(withBase(path), Astro.site).href;
+const alt = (p: string) => new URL(withBase(p), Astro.site).href;
 const csp =
   "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'none'";
 ---
@@ -23,10 +25,10 @@ const csp =
     <title>{copy.meta.title}</title>
     <meta name="description" content={copy.meta.description} />
     <link rel="canonical" href={canonical} />
-    <link rel="alternate" hreflang="en" href={new URL("/en/", Astro.site).href} />
-    <link rel="alternate" hreflang="fr" href={new URL("/fr/", Astro.site).href} />
-    <link rel="alternate" hreflang="x-default" href={new URL("/en/", Astro.site).href} />
-    <link rel="icon" href="/img/logo.svg" type="image/svg+xml" />
+    <link rel="alternate" hreflang="en" href={alt("/en/")} />
+    <link rel="alternate" hreflang="fr" href={alt("/fr/")} />
+    <link rel="alternate" hreflang="x-default" href={alt("/en/")} />
+    <link rel="icon" href={withBase("/img/logo.svg")} type="image/svg+xml" />
     <meta name="theme-color" content="#0b151b" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0b151b" media="(prefers-color-scheme: dark)" />
     <meta property="og:title" content={copy.meta.title} />
@@ -34,7 +36,7 @@ const csp =
     <meta property="og:type" content="website" />
     <meta property="og:locale" content={copy.lang === "fr" ? "fr_FR" : "en_GB"} />
     <meta property="og:url" content={canonical} />
-    <link rel="preload" href="/fonts/inter-latin-wght.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={withBase("/fonts/inter-latin-wght.woff2")} as="font" type="font/woff2" crossorigin />
     <script is:inline>document.documentElement.classList.add("js");</script>
   </head>
   <body>

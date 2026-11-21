@@ -1,4 +1,5 @@
 import type { SiteCopy } from "./types";
+import { withBase } from "../lib/url.ts";
 
 const REPO = "https://github.com/mchacher/sowel";
 const DOCS = "https://docs.sowel.org/fr/";
@@ -24,7 +25,7 @@ export const fr: SiteCopy = {
       { label: "Confidentialité", href: "#privacy" },
     ],
     github: { label: "GitHub", href: REPO },
-    switch: { label: "EN", aria: "Read this site in English", href: "/en/", lang: "en" },
+    switch: { label: "EN", aria: "Read this site in English", href: withBase("/en/"), lang: "en" },
   },
   hero: {
     eyebrow: "Open source, sur votre propre matériel",
@@ -43,8 +44,8 @@ export const fr: SiteCopy = {
       secondary: { label: "Lire le manuel", href: DOCS },
     },
     film: {
-      src: "/media/sowel-launch-720p.mp4",
-      poster: "/media/sowel-launch-poster.jpg",
+      src: withBase("/media/sowel-launch-720p.mp4"),
+      poster: withBase("/media/sowel-launch-poster.jpg"),
       label: "Le film",
       duration: "1 min 43",
       fallback: "Le film ne peut pas être lu ici.",
@@ -102,16 +103,16 @@ export const fr: SiteCopy = {
     window: {
       title: "Salon",
       image: {
-        src: "/img/living-room.webp",
-        alt: "La page du salon dans Sowel : deux lumières allumées, trois volets ouverts, un mouvement il y a six minutes, le mode actif, une recette en cours et le fil d'activité en direct.",
-        width: 1920,
-        height: 1080,
+        src: withBase("/img/fr/living-room.webp"),
+        alt: "La page du salon dans Sowel : les lumières, volets et capteurs de la pièce, le mode actif, une recette en cours et le fil d'activité en direct.",
+        width: 2200,
+        height: 1238,
       },
       imageSmall: {
-        src: "/img/living-room-sm.webp",
-        alt: "La page du salon dans Sowel : deux lumières allumées, trois volets ouverts, les capteurs de la pièce et leur état.",
-        width: 740,
-        height: 760,
+        src: withBase("/img/fr/living-room-phone.webp"),
+        alt: "La page du salon sur un téléphone : les lumières, volets et capteurs de la pièce dans une seule colonne.",
+        width: 900,
+        height: 1948,
       },
       caption: "Une pièce dans Sowel : ce qui est allumé, ce qui est ouvert, qui a bougé, et les modes et recettes qui s'y appliquent.",
     },
@@ -130,26 +131,26 @@ export const fr: SiteCopy = {
       { icon: "zap", title: "Puissance", body: "Ce que la pièce consomme en ce moment." },
     ],
     stripSmall: {
-      src: "/img/living-room-strip-sm.webp",
-      alt: "La ligne de synthèse du salon : 4 102 lux, un mouvement il y a six minutes, deux lumières sur trois allumées, trois volets sur trois ouverts.",
-      width: 500,
-      height: 140,
+      src: withBase("/img/fr/living-room-strip.webp"),
+      alt: "La ligne de synthèse du salon : luminosité, mouvement, lumières allumées et volets ouverts.",
+      width: 1060,
+      height: 250,
     },
     stripCaption: "Calculé par la pièce, pas configuré",
     phone: {
-      src: "/img/dashboard-mobile.webp",
+      src: withBase("/img/fr/dashboard-phone.webp"),
       alt: "Sowel sur un téléphone : le tableau de bord avec le portail, la porte de garage, les volets de chaque étage, la pompe à chaleur et la météo.",
-      width: 390,
-      height: 844,
+      width: 900,
+      height: 1948,
     },
     modes: {
       title: "Des modes pour toute la maison",
       body: "Jour, soirée, nuit, absence. Un mode change plusieurs pièces d'un coup, sur un horaire ou d'un bouton, et chaque recette sait lequel est actif.",
       image: {
-        src: "/img/living-room-behaviors.webp",
-        alt: "Les modes du salon, avec Éclairage de jour actif, et la recette Lumière sur mouvement en cours sur deux appliques.",
-        width: 490,
-        height: 390,
+        src: withBase("/img/fr/living-room-behaviors.webp"),
+        alt: "Les modes du salon, avec Lumière jour actif, et la recette de lumière dimmable sur mouvement en cours sur deux appliques.",
+        width: 887,
+        height: 732,
       },
     },
   },

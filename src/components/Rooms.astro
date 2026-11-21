@@ -1,6 +1,7 @@
 ---
 import type { SiteCopy } from "../content/types";
 import Icon from "./Icon.astro";
+import PhoneFrame from "./PhoneFrame.astro";
 import Accent from "./Accent.astro";
 
 interface Props {
@@ -41,9 +42,7 @@ const { rooms } = Astro.props.copy;
       </figure>
 
       <figure class="card card--phone" data-reveal style="--delay:80ms">
-        <div class="phone">
-          <img src={rooms.phone.src} alt={rooms.phone.alt} width={rooms.phone.width} height={rooms.phone.height} loading="lazy" decoding="async" />
-        </div>
+        <PhoneFrame image={rooms.phone} max={250} />
       </figure>
 
       <div class="card card--modes" data-reveal style="--delay:160ms">
@@ -177,23 +176,10 @@ const { rooms } = Astro.props.copy;
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    padding: 32px 24px 0;
+    padding: 36px 24px;
     background:
       radial-gradient(80% 60% at 50% 100%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 70%),
       var(--surface);
-    height: 520px;
-  }
-  .phone {
-    width: 100%;
-    max-width: 268px;
-    border-radius: 40px 40px 0 0;
-    padding: 10px 10px 0;
-    background: #11171b;
-    box-shadow: 0 30px 60px -20px rgba(17, 23, 27, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.06) inset;
-  }
-  .phone img {
-    border-radius: 31px 31px 0 0;
-    width: 100%;
   }
   .card--modes {
     display: flex;

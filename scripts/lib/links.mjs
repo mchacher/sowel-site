@@ -16,8 +16,12 @@ export function ids(html) {
   return new Set([...html.matchAll(/\bid\s*=\s*"([^"]+)"/gi)].map((m) => m[1]));
 }
 
+/** BASE is the sub-path the site is built for (for example /sowel-site), or empty. */
+const BASE = (process.env.BASE ?? "").replace(/\/$/, "");
+
 export function resolveFile(dist, urlPath) {
-  const clean = urlPath.split("#")[0].split("?")[0];
+  let clean = urlPath.split("#")[0].split("?")[0];
+  if (BASE && clean.startsWith(BASE + "/")) clean = clean.slice(BASE.length);
   const direct = join(dist, clean);
   if (clean.endsWith("/") && existsSync(join(direct, "index.html")))
     return join(direct, "index.html");

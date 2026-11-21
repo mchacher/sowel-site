@@ -1,9 +1,11 @@
 ---
 // Language picker: French when the browser says fr, English otherwise. No cookie, no storage.
+import { withBase } from "../lib/url";
 const languages = [
-  { href: "/en/", label: "English", lang: "en" },
-  { href: "/fr/", label: "Français", lang: "fr" },
+  { href: withBase("/en/"), label: "English", lang: "en" },
+  { href: withBase("/fr/"), label: "Français", lang: "fr" },
 ];
+const go = { en: withBase("/en/"), fr: withBase("/fr/") };
 ---
 
 <!doctype html>
@@ -13,11 +15,11 @@ const languages = [
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'" />
     <title>Sowel</title>
-    <link rel="alternate" hreflang="en" href="/en/" />
-    <link rel="alternate" hreflang="fr" href="/fr/" />
-    <link rel="alternate" hreflang="x-default" href="/en/" />
-    <script is:inline>
-      location.replace(/^fr\b/i.test(navigator.language || "") ? "/fr/" : "/en/");
+    <link rel="alternate" hreflang="en" href={go.en} />
+    <link rel="alternate" hreflang="fr" href={go.fr} />
+    <link rel="alternate" hreflang="x-default" href={go.en} />
+    <script is:inline define:vars={{ go }}>
+      location.replace(/^fr\b/i.test(navigator.language || "") ? go.fr : go.en);
     </script>
     <style>
       body {

@@ -1,6 +1,7 @@
 ---
 import type { SiteCopy, TreeNode } from "../content/types";
 import ProductWindow from "./ProductWindow.astro";
+import PhoneFrame from "./PhoneFrame.astro";
 import Icon from "./Icon.astro";
 import Accent from "./Accent.astro";
 
@@ -92,7 +93,12 @@ walk(t, 0);
     </div>
 
     <figure class="shot" data-reveal>
-      <ProductWindow title={home.window.title} image={home.window.image} imageSmall={home.window.imageSmall} />
+      <div class="shot__desktop">
+        <ProductWindow title={home.window.title} image={home.window.image} />
+      </div>
+      <div class="shot__phone">
+        <PhoneFrame image={home.window.imageSmall} max={300} />
+      </div>
       <figcaption>{home.window.caption}</figcaption>
     </figure>
   </div>
@@ -303,6 +309,18 @@ walk(t, 0);
 
   .shot {
     margin-top: clamp(56px, 7vw, 96px);
+  }
+  .shot__phone {
+    display: none;
+    justify-content: center;
+  }
+  @media (max-width: 639px) {
+    .shot__desktop {
+      display: none;
+    }
+    .shot__phone {
+      display: flex;
+    }
   }
   .shot figcaption {
     margin-top: 18px;
