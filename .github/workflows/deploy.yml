@@ -1,9 +1,15 @@
 name: Deploy
 
-# Manual until GitHub Pages is enabled for this repository and the DNS of
-# sowel.org points at it (spec 001, step 6). Then switch the trigger to
-# `push: branches: [main]`.
+# Publishes the site to GitHub Pages on every push to main.
+#
+# Until the DNS of sowel.org points at GitHub Pages the site lives at
+# https://mchacher.github.io/sowel-site/, hence the SITE_URL and SITE_BASE below.
+# To switch to sowel.org: add public/CNAME containing `sowel.org`, set SITE_URL to
+# https://sowel.org and SITE_BASE to /, point the DNS (spec 001, architecture),
+# then enforce HTTPS in the Pages settings.
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -23,12 +29,22 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
       - run: npm ci
       - run: npm run validate
+      - name: Build for GitHub Pages
+        env:
+          SITE_URL: https://mchacher.github.io
+          SITE_BASE: /sowel-site
+        run: |
+          npm run build
+          node scripts/check-external-requests.mjs dist
+          BASE=/sowel-site node scripts/check-links.mjs dist
       - uses: actions/upload-pages-artifact@v4
         with:
           path: dist
