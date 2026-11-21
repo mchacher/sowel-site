@@ -112,7 +112,7 @@ export const fr: SiteCopy = {
         src: withBase("/img/fr/living-room-phone.webp"),
         alt: "La page du salon sur un téléphone : les lumières, volets et capteurs de la pièce dans une seule colonne.",
         width: 900,
-        height: 1948,
+        height: 1800,
       },
       caption: "Une pièce dans Sowel : ce qui est allumé, ce qui est ouvert, qui a bougé, et les modes et recettes qui s'y appliquent.",
     },
@@ -141,7 +141,7 @@ export const fr: SiteCopy = {
       src: withBase("/img/fr/dashboard-phone.webp"),
       alt: "Sowel sur un téléphone : le tableau de bord avec le portail, la porte de garage, les volets de chaque étage, la pompe à chaleur et la météo.",
       width: 900,
-      height: 1948,
+      height: 1800,
     },
     modes: {
       title: "Des modes pour toute la maison",
@@ -234,9 +234,9 @@ export const fr: SiteCopy = {
   community: {
     id: "community",
     eyebrow: "Communauté",
-    title: "Construit au grand jour",
-    titleAccent: "au grand jour",
-    lead: "Sowel se développe en public. Questions, idées et signalements de bugs sont les bienvenus.",
+    title: "Construit avec ceux qui l'utilisent",
+    titleAccent: "ceux qui l'utilisent",
+    lead: "Sowel est open source. Posez une question, proposez une idée, signalez un bug ou montrez-nous votre maison : tout se passe sur GitHub.",
     links: [
       { icon: "git-fork", title: "GitHub", body: "Code, tickets et versions", href: REPO },
       { icon: "messages-square", title: "Discussions", body: "Questions, idées, montrez votre maison", href: `${REPO}/discussions` },
