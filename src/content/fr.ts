@@ -196,10 +196,10 @@ export const fr: SiteCopy = {
       },
     ],
     ai: {
-      tag: "Possible dès aujourd'hui avec un assistant IA",
+      tag: "Bientôt disponible",
       title: "Votre propre recette, en langage courant",
-      body: "Décrivez ce que vous voulez. Un assistant IA écrit la recette sous forme de code, vous la lisez, et vous l'installez comme les autres.",
-      steps: ["La décrire", "Lire le code", "L'installer"],
+      body: "Décrivez ce dont vous avez besoin avec vos mots. Un assistant IA construit la recette et la teste, puis vous l'installez comme les autres.",
+      steps: ["La décrire", "L'IA la construit et la teste", "L'installer"],
     },
   },
   privacy: {

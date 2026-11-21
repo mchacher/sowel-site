@@ -196,10 +196,10 @@ export const en: SiteCopy = {
       },
     ],
     ai: {
-      tag: "Possible today with an AI assistant",
+      tag: "Coming soon",
       title: "Your own recipe, in plain words",
-      body: "Describe what you want. An AI assistant writes the recipe as code, you read it, and you install it like any other.",
-      steps: ["Describe it", "Read the code", "Install it"],
+      body: "Describe what you need in your own words. An AI assistant builds the recipe and tests it, then you install it like any other.",
+      steps: ["Describe it", "The AI builds and tests it", "Install it"],
     },
   },
   privacy: {

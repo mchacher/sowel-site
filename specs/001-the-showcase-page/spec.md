@@ -52,7 +52,7 @@ It reads public facts only and adds nothing to the product.
 3. **Rooms that know**: what a room computes alone (temperature, presence, open windows, lights, power) and the
    modes over the whole home.
 4. **Recipes**: ready-made, placed on a room, each a real program; one example per row (thermostat, watering,
-   ventilation, safety). The AI line: « possible today with an AI assistant ».
+   ventilation, safety). The AI line: « coming soon » (the tool is not shipped, nobody is asked to read code).
 5. **Energy** (hidden until step 3 supplies one real, numbered case): the arbiter sends the solar surplus to the
    water heater then the car.
 6. **Your data stays at home**: runs on your hardware, no account, no Sowel cloud, no telemetry, plugins checked
