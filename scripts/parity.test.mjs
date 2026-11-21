@@ -22,3 +22,18 @@ test("an array of different length is a missing key", () => {
   const p = compareCopy({ l: ["a", "b"] }, { l: ["a"] });
   assert.ok(p.some((m) => m.includes("l[1]")));
 });
+
+test("a titleAccent must be words of its title", () => {
+  assert.deepEqual(
+    compareCopy(
+      { title: "Every room", titleAccent: "room" },
+      { title: "Chaque pièce", titleAccent: "pièce" },
+    ),
+    [],
+  );
+  const p = compareCopy(
+    { title: "Every room", titleAccent: "home" },
+    { title: "Chaque pièce", titleAccent: "pièce" },
+  );
+  assert.ok(p.some((m) => m.startsWith("titleAccent not found") && m.includes("first")));
+});

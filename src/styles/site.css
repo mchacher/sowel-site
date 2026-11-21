@@ -53,7 +53,7 @@ ol {
 }
 
 a {
-  color: var(--p-500);
+  color: var(--accent-ink);
   text-decoration: none;
 }
 
@@ -62,7 +62,7 @@ a:hover {
 }
 
 :focus-visible {
-  outline: 2px solid var(--p-500);
+  outline: 2px solid var(--accent-mark);
   outline-offset: 3px;
   border-radius: 4px;
 }
@@ -86,28 +86,32 @@ a:hover {
 .eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 650;
   letter-spacing: 0;
-  color: var(--p-500);
+  color: var(--accent-ink);
 }
 
 .eyebrow::before {
   content: "";
-  width: 18px;
-  height: 2px;
+  width: 20px;
+  height: 3px;
   border-radius: 2px;
-  background: currentColor;
-  opacity: 0.6;
+  background: var(--accent-mark);
+}
+
+/* The one word of a title that wears the accent (src/components/Accent.astro). */
+.accent {
+  color: var(--accent-ink);
 }
 
 .h2 {
-  margin-top: 16px;
-  font-size: clamp(2rem, 1.3rem + 2.8vw, 3.25rem);
-  line-height: 1.08;
-  font-weight: 680;
-  letter-spacing: -0.028em;
+  margin-top: 14px;
+  font-size: clamp(2.125rem, 1.3rem + 3vw, 3.5rem);
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: -0.034em;
   color: var(--text-strong);
   text-wrap: balance;
 }
@@ -141,7 +145,7 @@ a:hover {
   gap: 8px;
   height: 46px;
   padding-inline: 20px;
-  border-radius: var(--r-md);
+  border-radius: 999px;
   font-size: 15px;
   font-weight: 600;
   white-space: nowrap;
@@ -165,8 +169,8 @@ a:hover {
 }
 
 .btn--ghost:hover {
-  border-color: var(--p-500);
-  color: var(--p-500);
+  border-color: var(--accent-mark);
+  color: var(--accent-ink);
 }
 
 .icon {

@@ -1,4 +1,5 @@
 import type { SiteCopy } from "./types";
+import { withBase } from "../lib/url.ts";
 
 const REPO = "https://github.com/mchacher/sowel";
 const DOCS = "https://docs.sowel.org/";
@@ -6,7 +7,7 @@ const DOCS = "https://docs.sowel.org/";
 export const en: SiteCopy = {
   lang: "en",
   meta: {
-    title: "Sowel: the home automation that knows your home",
+    title: "Sowel: home automation that looks after your home",
     description:
       "Sowel knows your home: it runs itself, is set up in a few clicks, and your data stays at home. Open source, on your own hardware.",
   },
@@ -24,12 +25,13 @@ export const en: SiteCopy = {
       { label: "Privacy", href: "#privacy" },
     ],
     github: { label: "GitHub", href: REPO },
-    switch: { label: "FR", aria: "Lire ce site en français", href: "/fr/", lang: "fr" },
+    switch: { label: "FR", aria: "Lire ce site en français", href: withBase("/fr/"), lang: "fr" },
   },
   hero: {
     eyebrow: "Open source, on your own hardware",
-    title: "Sowel knows your home.",
-    lead: "So it runs itself, is set up in a few clicks, and your data stays at home.",
+    title: "Sowel looks after your home.",
+    titleAccent: "your home",
+    lead: "Tell Sowel what you need. It knows every room, runs itself, and keeps your data where it belongs: with you.",
     install: {
       label: "Install with Docker, in one line",
       command: "curl -fsSL https://raw.githubusercontent.com/mchacher/sowel/main/scripts/install.sh | sh",
@@ -42,8 +44,8 @@ export const en: SiteCopy = {
       secondary: { label: "Read the manual", href: DOCS },
     },
     film: {
-      src: "/media/sowel-launch-720p.mp4",
-      poster: "/media/sowel-launch-poster.jpg",
+      src: withBase("/media/sowel-launch-720p.mp4"),
+      poster: withBase("/media/sowel-launch-poster.jpg"),
       label: "The film",
       duration: "1 min 43",
       fallback: "The film cannot play here.",
@@ -54,6 +56,7 @@ export const en: SiteCopy = {
     id: "home",
     eyebrow: "The model",
     title: "Everything starts from your home",
+    titleAccent: "your home",
     lead: "You describe your home once: its floors, its rooms, what is in each of them. Sowel builds everything else on that description.",
     topology: {
       title: "Zones inside zones",
@@ -100,16 +103,16 @@ export const en: SiteCopy = {
     window: {
       title: "Living room",
       image: {
-        src: "/img/living-room.webp",
-        alt: "The living room page in Sowel: two lights on, three shutters open, motion six minutes ago, the active mode and a running recipe, and a live activity feed.",
-        width: 1920,
-        height: 1080,
+        src: withBase("/img/en/living-room.webp"),
+        alt: "The living room page in Sowel: the lights, shutters and sensors of the room, the active mode, a running recipe and the live activity feed.",
+        width: 2200,
+        height: 1238,
       },
       imageSmall: {
-        src: "/img/living-room-sm.webp",
-        alt: "The living room page in Sowel: two lights on, three shutters open, the sensors of the room and their state.",
-        width: 740,
-        height: 760,
+        src: withBase("/img/en/living-room-phone.webp"),
+        alt: "The living room page on a phone: the lights, shutters and sensors of the room in a single column.",
+        width: 900,
+        height: 1948,
       },
       caption: "One room in Sowel: what is on, what is open, who moved, and the modes and recipes placed on it.",
     },
@@ -118,6 +121,7 @@ export const en: SiteCopy = {
     id: "rooms",
     eyebrow: "Rooms that know",
     title: "Every room works out its own state",
+    titleAccent: "Every room",
     lead: "Put equipment in a room and the room computes the rest by itself. Natively, with nothing to configure.",
     items: [
       { icon: "thermometer", title: "Temperature", body: "The average of the sensors in the room." },
@@ -127,26 +131,26 @@ export const en: SiteCopy = {
       { icon: "zap", title: "Power", body: "What the room draws right now." },
     ],
     stripSmall: {
-      src: "/img/living-room-strip-sm.webp",
-      alt: "The summary line of the living room: 4,102 lux, motion six minutes ago, two of three lights on, three of three shutters open.",
-      width: 500,
-      height: 140,
+      src: withBase("/img/en/living-room-strip.webp"),
+      alt: "The summary line of the living room: light level, motion, lights on and shutters open.",
+      width: 1060,
+      height: 250,
     },
     stripCaption: "Computed by the room, not configured",
     phone: {
-      src: "/img/dashboard-mobile.webp",
+      src: withBase("/img/en/dashboard-phone.webp"),
       alt: "Sowel on a phone: the dashboard with the gate, the garage door, the shutters of each floor, the heat pump and the weather.",
-      width: 390,
-      height: 844,
+      width: 900,
+      height: 1948,
     },
     modes: {
       title: "Modes for the whole home",
       body: "Day, evening, night, away. A mode switches many rooms at once, from a schedule or a button, and every recipe knows which one is active.",
       image: {
-        src: "/img/living-room-behaviors.webp",
-        alt: "The modes of the living room, with Day lights active, and the Motion light recipe running on two sconces.",
-        width: 490,
-        height: 390,
+        src: withBase("/img/en/living-room-behaviors.webp"),
+        alt: "The modes of the living room, with Day lights active, and the dimmable motion light recipe running on two sconces.",
+        width: 887,
+        height: 732,
       },
     },
   },
@@ -154,6 +158,7 @@ export const en: SiteCopy = {
     id: "recipes",
     eyebrow: "Recipes",
     title: "Ready-made automations, placed on a room",
+    titleAccent: "Ready-made",
     lead: "A recipe is a real program, written and tested once. You place it on a room, answer a few questions, and it runs.",
     placedOn: "Placed on",
     asks: "Asks for",
@@ -200,6 +205,7 @@ export const en: SiteCopy = {
     id: "privacy",
     eyebrow: "Privacy",
     title: "Your data stays at home",
+    titleAccent: "at home",
     lead: "Sowel runs on your own hardware: a small server, a NAS, a spare computer. The history of your home lives there.",
     items: [
       { icon: "user-x", title: "No account", body: "You sign up nowhere to use Sowel." },
@@ -216,6 +222,7 @@ export const en: SiteCopy = {
     id: "install",
     eyebrow: "Install",
     title: "Up and running in a few minutes",
+    titleAccent: "a few minutes",
     lead: "One command on a machine with Docker, then everything happens in the browser.",
     steps: [
       { title: "Run the command", body: "It fetches Sowel, starts it and waits until it answers." },
@@ -228,6 +235,7 @@ export const en: SiteCopy = {
     id: "community",
     eyebrow: "Community",
     title: "Built in the open",
+    titleAccent: "in the open",
     lead: "Sowel is developed in public. Questions, ideas and bug reports are all welcome.",
     links: [
       { icon: "git-fork", title: "GitHub", body: "Code, issues and releases", href: REPO },
@@ -237,7 +245,7 @@ export const en: SiteCopy = {
     ],
   },
   footer: {
-    tagline: "Sowel knows your home.",
+    tagline: "Sowel looks after your home.",
     licence: "Free software under the AGPL-3.0 licence.",
     privacy: "This site sets no cookie and loads nothing from another site.",
     links: [

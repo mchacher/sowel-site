@@ -1,6 +1,7 @@
 ---
 import type { SiteCopy } from "../content/types";
 import Icon from "./Icon.astro";
+import Accent from "./Accent.astro";
 
 interface Props {
   copy: SiteCopy;
@@ -12,7 +13,7 @@ const { recipes } = Astro.props.copy;
   <div class="container">
     <div class="section-head section-head--center" data-reveal>
       <p class="eyebrow">{recipes.eyebrow}</p>
-      <h2 class="h2">{recipes.title}</h2>
+      <h2 class="h2"><Accent text={recipes.title} accent={recipes.titleAccent} /></h2>
       <p class="lead">{recipes.lead}</p>
     </div>
 
@@ -120,7 +121,7 @@ const { recipes } = Astro.props.copy;
     height: 44px;
     border-radius: var(--r-md);
     background: var(--p-50);
-    color: var(--p-500);
+    color: var(--accent-ink);
   }
   .run {
     display: inline-flex;
@@ -194,7 +195,7 @@ const { recipes } = Astro.props.copy;
     padding: 0 10px;
     border-radius: var(--r-sm);
     background: var(--p-50);
-    color: var(--p-500);
+    color: var(--accent-ink);
     font-size: 13px;
     font-weight: 600;
   }
@@ -214,22 +215,24 @@ const { recipes } = Astro.props.copy;
     color: var(--text-2);
   }
 
+  /* The saturated block of the section: a recipe written in plain words. */
   .ai {
+    position: relative;
+    overflow: hidden;
     margin-top: 20px;
     display: grid;
     gap: 28px;
-    padding: clamp(24px, 4vw, 40px);
-    border-radius: var(--r-lg);
-    background:
-      radial-gradient(70% 140% at 100% 0%, color-mix(in srgb, var(--p-mid) 18%, transparent), transparent 60%),
-      var(--p-50);
-    border: 1px solid color-mix(in srgb, var(--p-mid) 30%, var(--border));
+    padding: clamp(28px, 4vw, 48px);
+    border-radius: var(--r-xl);
+    background: var(--tile);
+    color: var(--tile-text);
+    box-shadow: var(--shadow-tile);
   }
   @media (min-width: 900px) {
     .ai {
-      grid-template-columns: 1.2fr 1fr;
+      grid-template-columns: 1.15fr 1fr;
       align-items: center;
-      gap: 48px;
+      gap: 56px;
     }
   }
   .ai__tag {
@@ -238,29 +241,30 @@ const { recipes } = Astro.props.copy;
     gap: 8px;
     padding: 5px 12px 5px 10px;
     border-radius: 999px;
-    background: var(--surface);
-    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--tile-line);
     font-size: 13px;
     font-weight: 600;
-    color: var(--p-500);
+    color: var(--tile-text);
   }
   .ai__tag .icon {
     width: 16px;
     height: 16px;
+    color: var(--accent);
   }
   .ai h3 {
     margin-top: 18px;
-    font-size: clamp(1.4rem, 1.1rem + 1vw, 1.875rem);
-    line-height: 1.2;
-    font-weight: 650;
-    letter-spacing: -0.02em;
-    color: var(--text-strong);
+    font-size: clamp(1.5rem, 1.1rem + 1.2vw, 2.125rem);
+    line-height: 1.15;
+    font-weight: 680;
+    letter-spacing: -0.025em;
+    color: var(--tile-text);
   }
   .ai p {
-    margin-top: 10px;
+    margin-top: 12px;
     font-size: 16.5px;
     line-height: 1.6;
-    color: var(--text-2);
+    color: var(--tile-text-2);
     max-width: 36em;
   }
   .ai__steps {
@@ -273,22 +277,23 @@ const { recipes } = Astro.props.copy;
     gap: 14px;
     padding: 14px 16px;
     border-radius: var(--r-md);
-    background: var(--surface);
-    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--tile-line);
     font-size: 16px;
     font-weight: 550;
-    color: var(--text-strong);
+    color: var(--tile-text);
   }
   .ai__n {
+    flex: none;
     display: grid;
     place-items: center;
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    background: var(--p-fill);
-    color: #fff;
+    background: var(--accent);
+    color: #0b151b;
     font-size: 13px;
-    font-weight: 650;
+    font-weight: 700;
     font-variant-numeric: tabular-nums;
   }
 </style>

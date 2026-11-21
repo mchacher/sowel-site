@@ -1,0 +1,12 @@
+---
+// A title with one run of words in the accent colour. The words come from the
+// copy (titleAccent); the check-i18n-parity script fails when they are not in the title.
+interface Props {
+  text: string;
+  accent: string;
+}
+const { text, accent } = Astro.props;
+const at = accent ? text.indexOf(accent) : -1;
+---
+
+{at < 0 ? text : <>{text.slice(0, at)}<span class="accent">{accent}</span>{text.slice(at + accent.length)}</>}

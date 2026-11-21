@@ -1,7 +1,9 @@
 ---
 import type { SiteCopy, TreeNode } from "../content/types";
 import ProductWindow from "./ProductWindow.astro";
+import PhoneFrame from "./PhoneFrame.astro";
 import Icon from "./Icon.astro";
+import Accent from "./Accent.astro";
 
 interface Props {
   copy: SiteCopy;
@@ -22,7 +24,7 @@ walk(t, 0);
   <div class="container">
     <div class="section-head" data-reveal>
       <p class="eyebrow">{home.eyebrow}</p>
-      <h2 class="h2">{home.title}</h2>
+      <h2 class="h2"><Accent text={home.title} accent={home.titleAccent} /></h2>
       <p class="lead">{home.lead}</p>
     </div>
 
@@ -44,7 +46,7 @@ walk(t, 0);
         <p class="pillar__body">{home.topology.body}</p>
       </article>
 
-      <article class="pillar" data-reveal style="--delay:80ms">
+      <article class="pillar pillar--tile" data-reveal style="--delay:80ms">
         <div class="pillar__visual pillar__visual--eq" aria-hidden="true">
           <div class="eq">
             <div class="eq__col">
@@ -91,7 +93,12 @@ walk(t, 0);
     </div>
 
     <figure class="shot" data-reveal>
-      <ProductWindow title={home.window.title} image={home.window.image} imageSmall={home.window.imageSmall} />
+      <div class="shot__desktop">
+        <ProductWindow title={home.window.title} image={home.window.image} />
+      </div>
+      <div class="shot__phone">
+        <PhoneFrame image={home.window.imageSmall} max={300} />
+      </div>
       <figcaption>{home.window.caption}</figcaption>
     </figure>
   </div>
@@ -99,11 +106,15 @@ walk(t, 0);
 
 <style>
   .pillars {
-    margin-top: clamp(48px, 6vw, 72px);
+    margin-top: clamp(40px, 5vw, 64px);
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: 20px;
   }
   @media (min-width: 900px) {
+    .pillar__visual {
+      height: 288px;
+    }
     .pillars {
       grid-template-columns: repeat(3, 1fr);
       gap: 24px;
@@ -118,7 +129,7 @@ walk(t, 0);
     border: 1px solid var(--border);
   }
   .pillar__visual {
-    height: 288px;
+    min-height: 200px;
     margin-bottom: 24px;
     border-radius: var(--r-md);
     background: var(--surface);
@@ -146,7 +157,7 @@ walk(t, 0);
     font-size: 16px;
     line-height: 1.5;
     font-weight: 550;
-    color: var(--p-500);
+    color: var(--accent-ink);
   }
   .pillar__body {
     margin-top: 10px;
@@ -190,11 +201,11 @@ walk(t, 0);
   }
   .tree__row.is-hl {
     background: var(--p-50);
-    color: var(--p-500);
+    color: var(--accent-ink);
     font-weight: 600;
   }
   .tree__row.is-hl .tree__i {
-    color: var(--p-500);
+    color: var(--accent-ink);
   }
 
   /* Device to equipment */
@@ -259,8 +270,8 @@ walk(t, 0);
     width: 34px;
     height: 34px;
     border-radius: 8px;
-    background: var(--active);
-    color: #1c1a14;
+    background: var(--accent);
+    color: #0b151b;
   }
   .eqcard__tile .icon {
     width: 18px;
@@ -299,10 +310,55 @@ walk(t, 0);
   .shot {
     margin-top: clamp(56px, 7vw, 96px);
   }
+  .shot__phone {
+    display: none;
+    justify-content: center;
+  }
+  @media (max-width: 639px) {
+    .shot__desktop {
+      display: none;
+    }
+    .shot__phone {
+      display: flex;
+    }
+  }
   .shot figcaption {
     margin-top: 18px;
     text-align: center;
     font-size: 14px;
     color: var(--text-3);
+  }
+
+  /* The saturated block of the section: the idea Sowel is built on. */
+  .pillar--tile {
+    --text-strong: var(--tile-text);
+    --text-2: var(--tile-text-2);
+    --text-3: var(--tile-text-2);
+    --border: var(--tile-line);
+    --border-strong: rgba(255, 255, 255, 0.28);
+    --surface-sunk: rgba(255, 255, 255, 0.08);
+    background: var(--tile);
+    border-color: transparent;
+    box-shadow: var(--shadow-tile);
+  }
+  .pillar--tile .pillar__visual {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: var(--tile-line);
+  }
+  .pillar--tile .pillar__quote {
+    color: var(--tile-text);
+  }
+  .pillar--tile .eq__link {
+    color: var(--accent);
+  }
+  .pillar--tile .chip__i {
+    color: var(--accent);
+  }
+  .pillar--tile .eqcard {
+    --text-strong: #11171b;
+    --text-3: #4a545b;
+    background: #ffffff;
+    border-color: transparent;
+    box-shadow: 0 16px 32px -16px rgba(0, 0, 0, 0.45);
   }
 </style>
