@@ -1,6 +1,13 @@
 /*
- * Tokens copied from the Sowel core: design-system/tokens.md (2026-11-21).
+ * Tokens copied from the Sowel core: design-system/tokens.md and tokens.css (2026-11-21).
  * A change of identity is a copy, not a link (spec 001, architecture).
+ *
+ * One accent, the ocean blue, in three strengths:
+ *   --accent       the logo mid-blue (#7FB8D4): marks, borders, fills, and text on night only
+ *   --accent-ink   the blue that text may wear: ocean ink in light, the mid-blue in dark
+ *   --tile         a solid blue block carrying white text (p-fill)
+ * Amber (#F2BC6E) is « on, running now »: the lit window behind the film and the
+ * running pill. Nothing else.
  */
 
 @font-face {
@@ -22,67 +29,63 @@
 :root {
   color-scheme: light dark;
 
-  /* Primary, ocean blue */
+  /* Primary, ocean blue (design system) */
   --p-50: #eef5f8;
   --p-100: #d9e7ef;
   --p-500: #1a4f6e; /* ink */
   --p-600: #144159; /* ink hover */
-  --p-700: #0f3146;
   --p-fill: #1a4f6e;
   --p-fill-hover: #144159;
-  --p-mid: #7fb8d4;
+  --p-mid: #7fb8d4; /* the logo smile and eyes */
+
+  /* The accent */
+  --accent: #7fb8d4;
+  --accent-ink: #1a4f6e;
+  --accent-mark: #2b7299; /* a dot, a bar, a border on a light surface */
+  --tile: #1a4f6e;
+  --tile-text: #ffffff;
+  --tile-text-2: #d9e7ef;
+  --tile-line: rgba(255, 255, 255, 0.14);
 
   /* Amber: on or running now, nothing else */
   --active: #f2c035;
   --active-ink: #8a6100;
   --active-bg: #fff6d6;
-
-  --success: #13794a;
+  --window-light: rgba(242, 188, 110, 0.34);
 
   /* Neutrals, ocean-tinted */
-  --n-0: #ffffff;
-  --n-25: #f6fafc;
   --n-50: #ecf2f7;
-  --n-100: #e0e8ed;
   --n-200: #ccd5db;
-  --n-300: #9aa4ab;
-  --n-400: #626c73;
-  --n-500: #4a545b;
-  --n-600: #394249;
-  --n-700: #21282d;
-  --n-800: #11171b;
 
-  /* Site roles */
-  --bg: var(--n-0);
-  --bg-band: #fff6f0;
-  --surface: var(--n-0);
-  --surface-sunk: var(--n-50);
+  /* Site roles, design system « hybrid » */
+  --bg: #f6fafc;
+  --bg-band: #ecf2f7;
+  --surface: #ffffff;
+  --surface-sunk: #f2f6f9;
   --border: #dde5eb;
-  --border-strong: var(--n-200);
-  --text: var(--n-700);
-  --text-strong: var(--n-800);
-  --text-2: var(--n-600);
-  --text-3: var(--n-400);
+  --border-strong: #ccd5db;
+  --text: #21282d;
+  --text-strong: #11171b;
+  --text-2: #4a545b;
+  --text-3: #626c73;
+
+  /* Night stage: the hero and the privacy band, in both themes */
+  --stage: #0b151b;
+  --stage-2: #0e1f29;
+  --stage-text: #f3f7fa;
+  --stage-text-2: #a9c3d3;
+  --stage-line: rgba(169, 195, 211, 0.16);
+  --stage-fill: #2b7299;
+  --stage-fill-hover: #3381ab;
+
   --code-bg: #0f2433;
   --code-text: #e4eef4;
   --code-dim: #7fb8d4;
-  --glow: rgba(26, 79, 110, 0.16);
 
-  /* Warm accents (spec 001, palette A): peach and coral, used as light, never as an « on » signal */
-  --warm-sky: #cfe7f3;
-  --warm-peach: #ffd9c2;
-  --warm-sun: rgba(255, 230, 168, 0.67);
-  --coral: #e8704a;
-  --coral-ink: #c4522d;
-  --title-from: #1a4f6e;
-  --title-mid: #e8704a;
-  --title-to: #f2a33a;
-  --shadow-window: 0 1px 2px rgba(17, 23, 27, 0.06), 0 12px 32px -8px rgba(17, 23, 27, 0.12),
-    0 40px 80px -24px rgba(26, 79, 110, 0.22);
-  --shadow-card: 0 1px 2px rgba(17, 23, 27, 0.05), 0 8px 24px -12px rgba(17, 23, 27, 0.12);
-  --band-deep: #0f3146;
-  --band-deep-text: #e4eef4;
-  --band-deep-2: #a8cee6;
+  --shadow-window: 0 1px 2px rgba(15, 42, 60, 0.05), 0 18px 40px -16px rgba(15, 42, 60, 0.14),
+    0 60px 120px -40px rgba(26, 79, 110, 0.2);
+  --shadow-card: 0 1px 2px rgba(15, 42, 60, 0.04), 0 1px 3px rgba(15, 42, 60, 0.06);
+  --shadow-tile: 0 24px 48px -24px rgba(26, 79, 110, 0.55);
   --img-dim: none;
 
   /* Shape and rhythm */
@@ -92,7 +95,7 @@
   --r-xl: 24px;
   --container: 1200px;
   --gutter: clamp(20px, 4vw, 40px);
-  --section-y: clamp(80px, 11vw, 152px);
+  --section-y: clamp(64px, 8vw, 112px);
 
   --font: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
@@ -104,49 +107,37 @@
     --p-100: #243b4e;
     --p-500: #5ba5cc;
     --p-600: #82bcdd;
-    --p-700: #a8cee6;
     --p-fill: #2b7299;
     --p-fill-hover: #276b8f;
+
+    --accent-ink: #7fb8d4;
+    --accent-mark: #7fb8d4;
+    --tile: #2b7299;
+    --tile-text-2: #eef5f8;
+    --tile-line: rgba(255, 255, 255, 0.18);
 
     --active: #f2bc6e;
     --active-ink: #f2bc6e;
     --active-bg: #332715;
-    --success: #3ddb89;
 
-    --n-0: #17232b;
-    --n-25: #0e191f;
     --n-50: #0e191f;
-    --n-100: #212d35;
     --n-200: #303c45;
-    --n-300: #515d65;
-    --n-400: #939da4;
-    --n-500: #a8b1b7;
-    --n-600: #c9cfd3;
-    --n-700: #e4e8eb;
-    --n-800: #f1f4f6;
 
-    --bg: #0b151b;
-    --bg-band: #12191d;
+    --bg: #0e191f;
+    --bg-band: #111e25;
     --surface: #17232b;
-    --surface-sunk: #0e191f;
-    --border: #24323b;
+    --surface-sunk: #13202a;
+    --border: #212d35;
     --border-strong: #303c45;
+    --text: #e4e8eb;
+    --text-strong: #f1f4f6;
+    --text-2: #c2c9ce;
+    --text-3: #939da4;
     --code-bg: #08121a;
-    --code-text: #e4eef4;
-    --code-dim: #7fb8d4;
-    --glow: rgba(91, 165, 204, 0.14);
-    --warm-sky: rgba(91, 165, 204, 0.16);
-    --warm-peach: rgba(232, 112, 74, 0.2);
-    --warm-sun: rgba(242, 188, 110, 0.14);
-    --coral: #ff9a76;
-    --coral-ink: #ff9a76;
-    --title-from: #8fc7e6;
-    --title-mid: #ff9a76;
-    --title-to: #f2bc6e;
-    --shadow-window: 0 1px 2px rgba(0, 0, 0, 0.4), 0 24px 64px -16px rgba(0, 0, 0, 0.6),
+    --shadow-window: 0 1px 2px rgba(0, 0, 0, 0.4), 0 30px 80px -20px rgba(0, 0, 0, 0.65),
       0 0 0 1px rgba(255, 255, 255, 0.04);
-    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3);
-    --band-deep: #102634;
+    --shadow-card: none;
+    --shadow-tile: 0 24px 48px -24px rgba(0, 0, 0, 0.6);
     --img-dim: brightness(0.94);
   }
 }

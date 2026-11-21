@@ -29,6 +29,7 @@ export const en: SiteCopy = {
   hero: {
     eyebrow: "Open source, on your own hardware",
     title: "Sowel looks after your home.",
+    titleAccent: "your home",
     lead: "Tell Sowel what you need. It knows every room, runs itself, and keeps your data where it belongs: with you.",
     install: {
       label: "Install with Docker, in one line",
@@ -54,6 +55,7 @@ export const en: SiteCopy = {
     id: "home",
     eyebrow: "The model",
     title: "Everything starts from your home",
+    titleAccent: "your home",
     lead: "You describe your home once: its floors, its rooms, what is in each of them. Sowel builds everything else on that description.",
     topology: {
       title: "Zones inside zones",
@@ -118,6 +120,7 @@ export const en: SiteCopy = {
     id: "rooms",
     eyebrow: "Rooms that know",
     title: "Every room works out its own state",
+    titleAccent: "Every room",
     lead: "Put equipment in a room and the room computes the rest by itself. Natively, with nothing to configure.",
     items: [
       { icon: "thermometer", title: "Temperature", body: "The average of the sensors in the room." },
@@ -154,6 +157,7 @@ export const en: SiteCopy = {
     id: "recipes",
     eyebrow: "Recipes",
     title: "Ready-made automations, placed on a room",
+    titleAccent: "Ready-made",
     lead: "A recipe is a real program, written and tested once. You place it on a room, answer a few questions, and it runs.",
     placedOn: "Placed on",
     asks: "Asks for",
@@ -200,6 +204,7 @@ export const en: SiteCopy = {
     id: "privacy",
     eyebrow: "Privacy",
     title: "Your data stays at home",
+    titleAccent: "at home",
     lead: "Sowel runs on your own hardware: a small server, a NAS, a spare computer. The history of your home lives there.",
     items: [
       { icon: "user-x", title: "No account", body: "You sign up nowhere to use Sowel." },
@@ -216,6 +221,7 @@ export const en: SiteCopy = {
     id: "install",
     eyebrow: "Install",
     title: "Up and running in a few minutes",
+    titleAccent: "a few minutes",
     lead: "One command on a machine with Docker, then everything happens in the browser.",
     steps: [
       { title: "Run the command", body: "It fetches Sowel, starts it and waits until it answers." },
@@ -228,6 +234,7 @@ export const en: SiteCopy = {
     id: "community",
     eyebrow: "Community",
     title: "Built in the open",
+    titleAccent: "in the open",
     lead: "Sowel is developed in public. Questions, ideas and bug reports are all welcome.",
     links: [
       { icon: "git-fork", title: "GitHub", body: "Code, issues and releases", href: REPO },

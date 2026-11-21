@@ -2,6 +2,7 @@
 import type { SiteCopy } from "../content/types";
 import InstallCommand from "./InstallCommand.astro";
 import Icon from "./Icon.astro";
+import Accent from "./Accent.astro";
 
 interface Props {
   copy: SiteCopy;
@@ -9,11 +10,11 @@ interface Props {
 const { install, hero } = Astro.props.copy;
 ---
 
-<section class="section" id={install.id}>
+<section class="section install" id={install.id}>
   <div class="container">
     <div class="section-head section-head--center" data-reveal>
       <p class="eyebrow">{install.eyebrow}</p>
-      <h2 class="h2">{install.title}</h2>
+      <h2 class="h2"><Accent text={install.title} accent={install.titleAccent} /></h2>
       <p class="lead">{install.lead}</p>
     </div>
     <div class="cmdwrap" data-reveal>
@@ -45,13 +46,16 @@ const { install, hero } = Astro.props.copy;
 </section>
 
 <style>
+  .install {
+    padding-top: clamp(56px, 7vw, 88px);
+  }
   .cmdwrap {
-    margin-top: 40px;
+    margin-top: 32px;
     display: flex;
     justify-content: center;
   }
   .steps {
-    margin-top: clamp(48px, 6vw, 64px);
+    margin-top: clamp(32px, 4vw, 44px);
     display: grid;
     gap: 16px;
     counter-reset: s;
@@ -86,8 +90,8 @@ const { install, hero } = Astro.props.copy;
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background: var(--p-50);
-    color: var(--p-500);
+    background: var(--p-fill);
+    color: #fff;
     font-size: 14px;
     font-weight: 700;
     font-variant-numeric: tabular-nums;
@@ -106,8 +110,25 @@ const { install, hero } = Astro.props.copy;
     color: var(--text-2);
   }
   .more {
-    margin-top: 32px;
+    margin-top: 24px;
     display: flex;
     justify-content: center;
+  }
+  @media (max-width: 799px) {
+    .steps {
+      gap: 10px;
+    }
+    .step {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      column-gap: 16px;
+      padding: 20px;
+    }
+    .step__n {
+      grid-row: span 2;
+    }
+    .step h3 {
+      margin-top: 2px;
+    }
   }
 </style>

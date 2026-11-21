@@ -1,6 +1,7 @@
 ---
 import type { SiteCopy } from "../content/types";
 import Icon from "./Icon.astro";
+import Accent from "./Accent.astro";
 
 interface Props {
   copy: SiteCopy;
@@ -13,7 +14,7 @@ const { rooms } = Astro.props.copy;
     <div class="rooms__text">
       <div class="section-head" data-reveal>
         <p class="eyebrow">{rooms.eyebrow}</p>
-        <h2 class="h2">{rooms.title}</h2>
+        <h2 class="h2"><Accent text={rooms.title} accent={rooms.titleAccent} /></h2>
         <p class="lead">{rooms.lead}</p>
       </div>
       <ul class="facts">
@@ -94,9 +95,9 @@ const { rooms } = Astro.props.copy;
     width: 40px;
     height: 40px;
     border-radius: var(--r-md);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    color: var(--p-500);
+    background: var(--p-50);
+    border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+    color: var(--accent-ink);
   }
   .fact > span:last-child {
     display: flex;
@@ -169,8 +170,8 @@ const { rooms } = Astro.props.copy;
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background: var(--success);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--success) 18%, transparent);
+    background: var(--accent-mark);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-mark) 20%, transparent);
   }
   .card--phone {
     display: flex;
@@ -178,7 +179,7 @@ const { rooms } = Astro.props.copy;
     align-items: flex-start;
     padding: 32px 24px 0;
     background:
-      radial-gradient(80% 60% at 50% 100%, var(--glow), transparent 70%),
+      radial-gradient(80% 60% at 50% 100%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 70%),
       var(--surface);
     height: 520px;
   }
@@ -210,19 +211,18 @@ const { rooms } = Astro.props.copy;
   .modes__text {
     margin-top: auto;
     padding: 24px 24px 28px;
-    background: var(--surface);
-    border-top: 1px solid var(--border);
+    background: var(--tile);
   }
   .modes__text h3 {
     font-size: 19px;
     font-weight: 650;
     letter-spacing: -0.01em;
-    color: var(--text-strong);
+    color: var(--tile-text);
   }
   .modes__text p {
     margin-top: 8px;
     font-size: 15.5px;
     line-height: 1.6;
-    color: var(--text-2);
+    color: var(--tile-text-2);
   }
 </style>

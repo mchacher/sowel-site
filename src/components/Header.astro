@@ -44,14 +44,19 @@ const { copy } = Astro.props;
   .skip:focus {
     top: 12px;
   }
+  /* The header belongs to the night stage, in both themes. */
   .header {
+    --p-500: #f3f7fa;
+    --text-2: #b9cfdc;
+    --text-3: #8eabbd;
+    --text-strong: #ffffff;
+    --surface-sunk: rgba(255, 255, 255, 0.06);
+    --border: rgba(169, 195, 211, 0.2);
     position: sticky;
     top: 0;
     z-index: 50;
-    background: color-mix(in srgb, var(--bg) 80%, transparent);
-    backdrop-filter: saturate(1.6) blur(14px);
-    -webkit-backdrop-filter: saturate(1.6) blur(14px);
-    border-bottom: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+    background: var(--stage);
+    border-bottom: 1px solid rgba(169, 195, 211, 0.08);
   }
   .header__inner {
     display: flex;
@@ -63,13 +68,13 @@ const { copy } = Astro.props;
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    color: var(--p-500);
+    color: var(--accent);
   }
   .brand__word {
     font-size: 21px;
     font-weight: 650;
     letter-spacing: -0.02em;
-    color: var(--p-500);
+    color: #fff;
     transform: translateY(-1px);
   }
   .nav {
@@ -129,6 +134,10 @@ const { copy } = Astro.props;
     height: 38px;
     padding-inline: 16px;
     font-size: 14px;
+    background: var(--stage-fill);
+  }
+  .btn--sm:hover {
+    background: var(--stage-fill-hover);
   }
   @media (min-width: 640px) {
     .gh {

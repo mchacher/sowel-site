@@ -1,6 +1,7 @@
 ---
 import type { SiteCopy } from "../content/types";
 import Icon from "./Icon.astro";
+import Accent from "./Accent.astro";
 
 interface Props {
   copy: SiteCopy;
@@ -8,18 +9,18 @@ interface Props {
 const { community } = Astro.props.copy;
 ---
 
-<section class="section" id={community.id}>
+<section class="section community" id={community.id}>
   <div class="container">
     <div class="section-head section-head--center" data-reveal>
       <p class="eyebrow">{community.eyebrow}</p>
-      <h2 class="h2">{community.title}</h2>
+      <h2 class="h2"><Accent text={community.title} accent={community.titleAccent} /></h2>
       <p class="lead">{community.lead}</p>
     </div>
     <ul class="links">
       {
         community.links.map((l, i) => (
           <li data-reveal style={`--delay:${i * 60}ms`}>
-            <a class="lk" href={l.href}>
+            <a class:list={["lk", { "lk--tile": i === 0 }]} href={l.href}>
               <span class="lk__tile">
                 <Icon name={l.icon} class="icon" />
               </span>
@@ -37,8 +38,12 @@ const { community } = Astro.props.copy;
 </section>
 
 <style>
+  /* Follows Install on the same ground: one gap between them, not two. */
+  .community {
+    padding-top: clamp(24px, 3vw, 40px);
+  }
   .links {
-    margin-top: clamp(40px, 5vw, 56px);
+    margin-top: clamp(32px, 4vw, 44px);
     display: grid;
     gap: 14px;
   }
@@ -68,7 +73,26 @@ const { community } = Astro.props.copy;
   }
   .lk:hover {
     color: inherit;
-    border-color: var(--p-500);
+    border-color: var(--accent-mark);
+  }
+  /* The saturated block of the section: the code itself. */
+  .lk--tile {
+    --text-strong: var(--tile-text);
+    --text-3: var(--tile-text-2);
+    background: var(--tile);
+    border-color: transparent;
+    box-shadow: var(--shadow-tile);
+  }
+  .lk--tile:hover {
+    border-color: var(--accent);
+  }
+  .lk--tile .lk__tile {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+  }
+  .lk--tile .lk__arrow,
+  .lk--tile:hover .lk__arrow {
+    color: #fff;
   }
   .lk__tile {
     display: grid;
@@ -78,7 +102,7 @@ const { community } = Astro.props.copy;
     height: 44px;
     border-radius: var(--r-md);
     background: var(--p-50);
-    color: var(--p-500);
+    color: var(--accent-ink);
   }
   .lk__text {
     display: flex;
@@ -104,6 +128,6 @@ const { community } = Astro.props.copy;
   }
   .lk:hover .lk__arrow {
     transform: translateX(3px);
-    color: var(--p-500);
+    color: var(--accent-ink);
   }
 </style>

@@ -56,6 +56,8 @@ export interface SiteCopy {
   hero: {
     eyebrow: string;
     title: string;
+    /** The words of the title that wear the accent colour; must appear in title. */
+    titleAccent: string;
     lead: string;
     install: { label: string; command: string; copy: string; copied: string; note: string };
     ctas: { primary: Link; secondary: Link };
@@ -65,6 +67,7 @@ export interface SiteCopy {
     id: string;
     eyebrow: string;
     title: string;
+    titleAccent: string;
     lead: string;
     topology: { title: string; body: string; tree: TreeNode };
     equipment: {
@@ -84,6 +87,7 @@ export interface SiteCopy {
     id: string;
     eyebrow: string;
     title: string;
+    titleAccent: string;
     lead: string;
     items: { icon: IconName; title: string; body: string }[];
     stripSmall: Img;
@@ -95,6 +99,7 @@ export interface SiteCopy {
     id: string;
     eyebrow: string;
     title: string;
+    titleAccent: string;
     lead: string;
     placedOn: string;
     asks: string;
@@ -106,6 +111,7 @@ export interface SiteCopy {
     id: string;
     eyebrow: string;
     title: string;
+    titleAccent: string;
     lead: string;
     items: { icon: IconName; title: string; body: string }[];
   };
@@ -113,6 +119,7 @@ export interface SiteCopy {
     id: string;
     eyebrow: string;
     title: string;
+    titleAccent: string;
     lead: string;
     steps: { title: string; body: string }[];
     manual: Link;
@@ -121,6 +128,7 @@ export interface SiteCopy {
     id: string;
     eyebrow: string;
     title: string;
+    titleAccent: string;
     lead: string;
     links: { icon: IconName; title: string; body: string; href: string }[];
   };

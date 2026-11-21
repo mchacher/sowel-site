@@ -38,5 +38,16 @@ export function compareCopy(a, b) {
       }
     }
   }
+  for (const [side, f] of [
+    ["first", fa],
+    ["second", fb],
+  ]) {
+    for (const [k, v] of Object.entries(f)) {
+      if (!k.endsWith("titleAccent")) continue;
+      const title = f[k.slice(0, -"titleAccent".length) + "title"];
+      if (typeof title !== "string" || !title.includes(v))
+        problems.push(`titleAccent not found in its title, ${side} language: ${k}`);
+    }
+  }
   return problems;
 }

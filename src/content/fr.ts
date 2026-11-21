@@ -29,6 +29,7 @@ export const fr: SiteCopy = {
   hero: {
     eyebrow: "Open source, sur votre propre matériel",
     title: "Sowel prend soin de votre maison.",
+    titleAccent: "votre maison",
     lead: "Dites à Sowel ce dont vous avez besoin. Il connaît chaque pièce, tourne tout seul et garde vos données là où elles doivent rester : chez vous.",
     install: {
       label: "Installation avec Docker, en une ligne",
@@ -54,6 +55,7 @@ export const fr: SiteCopy = {
     id: "home",
     eyebrow: "Le modèle",
     title: "Tout part de votre maison",
+    titleAccent: "votre maison",
     lead: "Vous décrivez votre maison une fois : ses étages, ses pièces, ce qu'il y a dans chacune. Sowel construit tout le reste sur cette description.",
     topology: {
       title: "Des zones dans des zones",
@@ -118,6 +120,7 @@ export const fr: SiteCopy = {
     id: "rooms",
     eyebrow: "Des pièces qui savent",
     title: "Chaque pièce calcule son propre état",
+    titleAccent: "Chaque pièce",
     lead: "Placez des équipements dans une pièce et elle calcule le reste toute seule. De façon native, sans rien à configurer.",
     items: [
       { icon: "thermometer", title: "Température", body: "La moyenne des capteurs de la pièce." },
@@ -154,6 +157,7 @@ export const fr: SiteCopy = {
     id: "recipes",
     eyebrow: "Recettes",
     title: "Des automatismes prêts à l'emploi, posés sur une pièce",
+    titleAccent: "prêts à l'emploi",
     lead: "Une recette est un vrai programme, écrit et testé une fois. Vous la posez sur une pièce, vous répondez à quelques questions, et elle tourne.",
     placedOn: "Posée sur",
     asks: "Demande",
@@ -200,6 +204,7 @@ export const fr: SiteCopy = {
     id: "privacy",
     eyebrow: "Confidentialité",
     title: "Vos données restent chez vous",
+    titleAccent: "chez vous",
     lead: "Sowel tourne sur votre propre matériel : un petit serveur, un NAS, un ordinateur de rechange. L'historique de votre maison y vit.",
     items: [
       { icon: "user-x", title: "Aucun compte", body: "Vous ne vous inscrivez nulle part pour utiliser Sowel." },
@@ -216,6 +221,7 @@ export const fr: SiteCopy = {
     id: "install",
     eyebrow: "Installation",
     title: "Prêt en quelques minutes",
+    titleAccent: "quelques minutes",
     lead: "Une commande sur une machine avec Docker, puis tout se passe dans le navigateur.",
     steps: [
       { title: "Lancer la commande", body: "Elle récupère Sowel, le démarre et attend qu'il réponde." },
@@ -228,6 +234,7 @@ export const fr: SiteCopy = {
     id: "community",
     eyebrow: "Communauté",
     title: "Construit au grand jour",
+    titleAccent: "au grand jour",
     lead: "Sowel se développe en public. Questions, idées et signalements de bugs sont les bienvenus.",
     links: [
       { icon: "git-fork", title: "GitHub", body: "Code, tickets et versions", href: REPO },
