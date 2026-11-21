@@ -1,0 +1,107 @@
+---
+import type { SiteCopy } from "../content/types";
+import Icon from "./Icon.astro";
+import PhoneFrame from "./PhoneFrame.astro";
+import Accent from "./Accent.astro";
+
+interface Props {
+  copy: SiteCopy;
+}
+const { dashboard } = Astro.props.copy;
+---
+
+<section class="section" id={dashboard.id}>
+  <div class="container dash">
+    <div class="dash__text">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">{dashboard.eyebrow}</p>
+        <h2 class="h2"><Accent text={dashboard.title} accent={dashboard.titleAccent} /></h2>
+        <p class="lead">{dashboard.lead}</p>
+      </div>
+      <ul class="dash__facts">
+        {
+          dashboard.items.map((it, i) => (
+            <li class="dash__fact" data-reveal style={`--delay:${i * 60}ms`}>
+              <span class="dash__tile">
+                <Icon name={it.icon} class="icon" />
+              </span>
+              <span>
+                <strong>{it.title}</strong>
+                <span>{it.body}</span>
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <figure class="dash__stage" data-reveal style="--delay:80ms">
+      <PhoneFrame image={dashboard.phone} max={290} />
+    </figure>
+  </div>
+</section>
+
+<style>
+  .dash {
+    display: grid;
+    gap: clamp(40px, 6vw, 64px);
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .dash {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      gap: 72px;
+    }
+  }
+  .dash__facts {
+    display: grid;
+    gap: 4px;
+    margin: 32px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .dash__fact {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 16px 0;
+    border-top: 1px solid var(--border);
+  }
+  .dash__fact > span:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--text-2);
+  }
+  .dash__fact strong {
+    font-weight: 600;
+    color: var(--text-strong);
+  }
+  .dash__tile {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--r-md);
+    background: var(--p-50);
+    border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+    color: var(--accent-ink);
+  }
+  .dash__tile .icon {
+    width: 20px;
+    height: 20px;
+  }
+  .dash__stage {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    padding: clamp(28px, 4vw, 44px) 20px;
+    border-radius: var(--r-xl);
+    background:
+      radial-gradient(70% 50% at 50% 100%, color-mix(in srgb, var(--accent) 24%, transparent), transparent 72%),
+      var(--n-50);
+    border: 1px solid var(--border);
+  }
+</style>

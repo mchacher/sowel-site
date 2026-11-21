@@ -21,6 +21,7 @@ export const en: SiteCopy = {
     links: [
       { label: "Your home", href: "#home" },
       { label: "Rooms", href: "#rooms" },
+      { label: "Dashboard", href: "#dashboard" },
       { label: "Recipes", href: "#recipes" },
       { label: "Privacy", href: "#privacy" },
     ],
@@ -74,12 +75,13 @@ export const en: SiteCopy = {
     equipment: {
       title: "Equipment, not devices",
       quote: "A device is what is on the network. An equipment is what is in the room.",
-      body: "The ceiling light is one equipment, even when it rests on a relay and a wall switch from two brands. Replace the relay, the light stays.",
+      body: "The garage door is one equipment, even when it rests on a dry contact that triggers it and a contact that says whether it is closed. Replace a contact, the door stays.",
       devicesLabel: "Devices",
-      devices: ["Zigbee relay", "Wall switch"],
+      devices: ["Dry contact", "Door-closed contact"],
       equipmentLabel: "Equipment",
-      equipment: "Ceiling light",
-      room: "Living room",
+      equipment: "Garage door",
+      icon: "warehouse",
+      room: "Garage",
     },
     types: {
       title: "About thirty equipment types",
@@ -115,7 +117,7 @@ export const en: SiteCopy = {
         width: 900,
         height: 1800,
       },
-      caption: "One room in Sowel: what is on, what is open, who moved, and the modes and recipes placed on it.",
+      caption: "The same room on your computer and on your phone. Sowel is a web app (PWA): you install it on your home screen straight from the browser, with no store.",
     },
   },
   rooms: {
@@ -138,12 +140,6 @@ export const en: SiteCopy = {
       height: 250,
     },
     stripCaption: "Computed by the room, not configured",
-    phone: {
-      src: withBase("/img/en/dashboard-phone.webp"),
-      alt: "Sowel on a phone: the dashboard with the gate, the garage door, the shutters of each floor, the heat pump and the weather.",
-      width: 900,
-      height: 1800,
-    },
     modes: {
       title: "Modes for the whole home",
       body: "Day, evening, night, away. A mode switches many rooms at once, from a schedule or a button, and every recipe knows which one is active.",
@@ -153,6 +149,24 @@ export const en: SiteCopy = {
         width: 887,
         height: 732,
       },
+    },
+  },
+  dashboard: {
+    id: "dashboard",
+    eyebrow: "Dashboard",
+    title: "Everything at your fingertips",
+    titleAccent: "at your fingertips",
+    lead: "A dashboard view puts the controls you use every day one tap away: the gate, the garage door, the shutters of each floor, the heating.",
+    items: [
+      { icon: "zap", title: "One tap", body: "Open the gate, close the shutters, switch the pool pump." },
+      { icon: "layers", title: "Your tiles", body: "You choose what appears, room by room or across the whole home." },
+      { icon: "thermometer", title: "The state at a glance", body: "Temperatures, weather, what is open and what is closed, live." },
+    ],
+    phone: {
+      src: withBase("/img/en/dashboard-phone.webp"),
+      alt: "Sowel on a phone: the dashboard with the gate, the garage door, the shutters of each floor, the heat pump and the weather.",
+      width: 900,
+      height: 1800,
     },
   },
   recipes: {

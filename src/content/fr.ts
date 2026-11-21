@@ -21,6 +21,7 @@ export const fr: SiteCopy = {
     links: [
       { label: "Votre maison", href: "#home" },
       { label: "Pièces", href: "#rooms" },
+      { label: "Tableau de bord", href: "#dashboard" },
       { label: "Recettes", href: "#recipes" },
       { label: "Confidentialité", href: "#privacy" },
     ],
@@ -74,12 +75,13 @@ export const fr: SiteCopy = {
     equipment: {
       title: "Des équipements, pas des appareils",
       quote: "Un appareil, c'est ce qui est sur le réseau. Un équipement, c'est ce qui est dans la pièce.",
-      body: "Le plafonnier est un seul équipement, même s'il repose sur un relais et un interrupteur de deux marques. Changez le relais, le plafonnier reste.",
+      body: "La porte de garage est un seul équipement, même quand elle repose sur un contact sec qui la déclenche et un contact de fermeture qui dit si elle est fermée. Changez un contact, la porte reste.",
       devicesLabel: "Appareils",
-      devices: ["Relais Zigbee", "Interrupteur mural"],
+      devices: ["Contact sec", "Contact de fermeture"],
       equipmentLabel: "Équipement",
-      equipment: "Plafonnier",
-      room: "Salon",
+      equipment: "Porte de garage",
+      icon: "warehouse",
+      room: "Garage",
     },
     types: {
       title: "Une trentaine de types d'équipements",
@@ -115,7 +117,7 @@ export const fr: SiteCopy = {
         width: 900,
         height: 1800,
       },
-      caption: "Une pièce dans Sowel : ce qui est allumé, ce qui est ouvert, qui a bougé, et les modes et recettes qui s'y appliquent.",
+      caption: "La même pièce sur ordinateur et sur téléphone. Sowel est une appli web (PWA) : vous l'installez sur l'écran d'accueil depuis le navigateur, sans passer par un store.",
     },
   },
   rooms: {
@@ -138,12 +140,6 @@ export const fr: SiteCopy = {
       height: 250,
     },
     stripCaption: "Calculé par la pièce, pas configuré",
-    phone: {
-      src: withBase("/img/fr/dashboard-phone.webp"),
-      alt: "Sowel sur un téléphone : le tableau de bord avec le portail, la porte de garage, les volets de chaque étage, la pompe à chaleur et la météo.",
-      width: 900,
-      height: 1800,
-    },
     modes: {
       title: "Des modes pour toute la maison",
       body: "Jour, soirée, nuit, absence. Un mode change plusieurs pièces d'un coup, sur un horaire ou d'un bouton, et chaque recette sait lequel est actif.",
@@ -153,6 +149,24 @@ export const fr: SiteCopy = {
         width: 887,
         height: 732,
       },
+    },
+  },
+  dashboard: {
+    id: "dashboard",
+    eyebrow: "Tableau de bord",
+    title: "Tout sous la main",
+    titleAccent: "sous la main",
+    lead: "Une vue tableau de bord met sous vos doigts les commandes de tous les jours : le portail, la porte de garage, les volets de chaque étage, le chauffage.",
+    items: [
+      { icon: "zap", title: "Un geste", body: "Ouvrir le portail, fermer les volets, lancer la pompe de la piscine." },
+      { icon: "layers", title: "Vos tuiles", body: "Vous choisissez ce qui s'affiche, pièce par pièce ou pour toute la maison." },
+      { icon: "thermometer", title: "L'état d'un coup d'œil", body: "Températures, météo, ce qui est ouvert et ce qui est fermé, en direct." },
+    ],
+    phone: {
+      src: withBase("/img/fr/dashboard-phone.webp"),
+      alt: "Sowel sur un téléphone : le tableau de bord avec le portail, la porte de garage, les volets de chaque étage, la pompe à chaleur et la météo.",
+      width: 900,
+      height: 1800,
     },
   },
   recipes: {

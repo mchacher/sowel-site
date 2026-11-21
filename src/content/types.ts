@@ -25,7 +25,8 @@ export type IconName =
   | "scroll-text"
   | "house"
   | "radio"
-  | "box";
+  | "box"
+  | "warehouse";
 
 export interface Link {
   label: string;
@@ -78,6 +79,7 @@ export interface SiteCopy {
       devices: string[];
       equipmentLabel: string;
       equipment: string;
+      icon: IconName;
       room: string;
     };
     types: { title: string; body: string; count: string; list: string[]; more: string };
@@ -92,8 +94,16 @@ export interface SiteCopy {
     items: { icon: IconName; title: string; body: string }[];
     stripSmall: Img;
     stripCaption: string;
-    phone: Img;
     modes: { title: string; body: string; image: Img };
+  };
+  dashboard: {
+    id: string;
+    eyebrow: string;
+    title: string;
+    titleAccent: string;
+    lead: string;
+    items: { icon: IconName; title: string; body: string }[];
+    phone: Img;
   };
   recipes: {
     id: string;
