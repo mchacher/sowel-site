@@ -1,0 +1,71 @@
+---
+import "../styles/tokens.css";
+import "../styles/site.css";
+import type { SiteCopy } from "../content/types";
+
+interface Props {
+  copy: SiteCopy;
+  path: string;
+}
+
+const { copy, path } = Astro.props;
+const canonical = new URL(path, Astro.site).href;
+const csp =
+  "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'none'";
+---
+
+<!doctype html>
+<html lang={copy.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="Content-Security-Policy" content={csp} />
+    <title>{copy.meta.title}</title>
+    <meta name="description" content={copy.meta.description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/img/logo.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0b151b" media="(prefers-color-scheme: dark)" />
+    <meta property="og:title" content={copy.meta.title} />
+    <meta property="og:description" content={copy.meta.description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <link rel="preload" href="/fonts/inter-latin-wght.woff2" as="font" type="font/woff2" crossorigin />
+    <script is:inline>document.documentElement.classList.add("js");</script>
+  </head>
+  <body>
+    <slot />
+    <script is:inline>
+      (() => {
+        // Copy buttons: Clipboard API on click only.
+        document.querySelectorAll("[data-copy]").forEach((btn) => {
+          const label = btn.querySelector("[data-copy-label]");
+          const live = document.getElementById("copy-live");
+          btn.addEventListener("click", async () => {
+            try {
+              await navigator.clipboard.writeText(btn.getAttribute("data-copy"));
+              btn.classList.add("is-done");
+              if (label) label.textContent = btn.getAttribute("data-done");
+              if (live) live.textContent = live.getAttribute("data-msg");
+              setTimeout(() => {
+                btn.classList.remove("is-done");
+                if (label) label.textContent = btn.getAttribute("data-idle");
+              }, 2000);
+            } catch (e) {}
+          });
+        });
+        // Scroll reveal.
+        const els = document.querySelectorAll("[data-reveal]");
+        if (!("IntersectionObserver" in window) || matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          els.forEach((el) => el.classList.add("is-in"));
+          return;
+        }
+        const io = new IntersectionObserver(
+          (entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); } }),
+          { rootMargin: "0px 0px -8% 0px" }
+        );
+        els.forEach((el) => io.observe(el));
+      })();
+    </script>
+  </body>
+</html>

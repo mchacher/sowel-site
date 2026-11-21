@@ -1,0 +1,308 @@
+---
+import type { SiteCopy, TreeNode } from "../content/types";
+import ProductWindow from "./ProductWindow.astro";
+import Icon from "./Icon.astro";
+
+interface Props {
+  copy: SiteCopy;
+}
+const { home } = Astro.props.copy;
+const t = home.topology.tree;
+const highlight = home.equipment.room;
+const depthIcon = ["house", "layers", "box"] as const;
+const rows: { node: TreeNode; depth: number }[] = [];
+const walk = (n: TreeNode, d: number) => {
+  rows.push({ node: n, depth: d });
+  n.children?.forEach((c) => walk(c, d + 1));
+};
+walk(t, 0);
+---
+
+<section class="section" id={home.id}>
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow">{home.eyebrow}</p>
+      <h2 class="h2">{home.title}</h2>
+      <p class="lead">{home.lead}</p>
+    </div>
+
+    <div class="pillars">
+      <article class="pillar" data-reveal>
+        <div class="pillar__visual pillar__visual--tree" aria-hidden="true">
+          <ul class="tree">
+            {
+              rows.map(({ node, depth }) => (
+                <li class:list={["tree__row", { "is-hl": node.label === highlight }]} style={`--d:${depth}`}>
+                  <Icon name={node.children || depth === 0 ? depthIcon[Math.min(depth, 1)] : "box"} class="icon tree__i" />
+                  {node.label}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <h3 class="pillar__title">{home.topology.title}</h3>
+        <p class="pillar__body">{home.topology.body}</p>
+      </article>
+
+      <article class="pillar" data-reveal style="--delay:80ms">
+        <div class="pillar__visual pillar__visual--eq" aria-hidden="true">
+          <div class="eq">
+            <div class="eq__col">
+              <span class="eq__label">{home.equipment.devicesLabel}</span>
+              {
+                home.equipment.devices.map((d) => (
+                  <span class="chip chip--device">
+                    <Icon name="radio" class="icon chip__i" />
+                    {d}
+                  </span>
+                ))
+              }
+            </div>
+            <svg class="eq__link" viewBox="0 0 40 80" preserveAspectRatio="none">
+              <path d="M0 22 C 22 22, 18 40, 40 40 M0 58 C 22 58, 18 40, 40 40" fill="none" stroke="currentColor" stroke-width="1.5" vector-effect="non-scaling-stroke"></path>
+            </svg>
+            <div class="eq__col">
+              <span class="eq__label">{home.equipment.equipmentLabel}</span>
+              <span class="eqcard">
+                <span class="eqcard__tile"><Icon name="lightbulb" class="icon" /></span>
+                <span class="eqcard__text">
+                  <strong>{home.equipment.equipment}</strong>
+                  <span>{home.equipment.room}</span>
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <h3 class="pillar__title">{home.equipment.title}</h3>
+        <blockquote class="pillar__quote">{home.equipment.quote}</blockquote>
+        <p class="pillar__body">{home.equipment.body}</p>
+      </article>
+
+      <article class="pillar" data-reveal style="--delay:160ms">
+        <div class="pillar__visual pillar__visual--types" aria-hidden="true">
+          <div class="types">
+            {home.types.list.map((x) => <span class="chip">{x}</span>)}
+            <span class="chip chip--more">{home.types.more}</span>
+          </div>
+        </div>
+        <h3 class="pillar__title">{home.types.title}</h3>
+        <p class="pillar__body">{home.types.body}</p>
+      </article>
+    </div>
+
+    <figure class="shot" data-reveal>
+      <ProductWindow title={home.window.title} image={home.window.image} imageSmall={home.window.imageSmall} />
+      <figcaption>{home.window.caption}</figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .pillars {
+    margin-top: clamp(48px, 6vw, 72px);
+    display: grid;
+    gap: 20px;
+  }
+  @media (min-width: 900px) {
+    .pillars {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+  }
+  .pillar {
+    display: flex;
+    flex-direction: column;
+    padding: 12px 12px 28px;
+    border-radius: var(--r-lg);
+    background: var(--bg-band);
+    border: 1px solid var(--border);
+  }
+  .pillar__visual {
+    height: 288px;
+    margin-bottom: 24px;
+    border-radius: var(--r-md);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 20px;
+  }
+  .pillar__title,
+  .pillar__body,
+  .pillar__quote {
+    padding-inline: 12px;
+  }
+  .pillar__title {
+    font-size: 20px;
+    line-height: 1.3;
+    font-weight: 650;
+    letter-spacing: -0.012em;
+    color: var(--text-strong);
+  }
+  .pillar__quote {
+    margin-top: 10px;
+    font-size: 16px;
+    line-height: 1.5;
+    font-weight: 550;
+    color: var(--p-500);
+  }
+  .pillar__body {
+    margin-top: 10px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-2);
+  }
+
+  /* Topology tree */
+  .tree {
+    width: 100%;
+    max-width: 240px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .tree__row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 29px;
+    margin-left: calc(var(--d) * 20px);
+    padding: 0 10px;
+    border-radius: var(--r-sm);
+    font-size: 14px;
+    color: var(--text);
+  }
+  .tree__row:not([style*="--d:0"])::before {
+    content: "";
+    position: absolute;
+    left: -10px;
+    top: 50%;
+    width: 10px;
+    border-top: 1px solid var(--border-strong);
+  }
+  .tree__i {
+    width: 16px;
+    height: 16px;
+    color: var(--text-3);
+  }
+  .tree__row.is-hl {
+    background: var(--p-50);
+    color: var(--p-500);
+    font-weight: 600;
+  }
+  .tree__row.is-hl .tree__i {
+    color: var(--p-500);
+  }
+
+  /* Device to equipment */
+  .eq {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .eq__col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .eq__label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-3);
+  }
+  .eq__link {
+    width: 34px;
+    height: 80px;
+    margin-top: 22px;
+    color: var(--border-strong);
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 30px;
+    padding: 0 11px;
+    border-radius: 999px;
+    background: var(--surface-sunk);
+    border: 1px solid var(--border);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+  }
+  .chip--device {
+    border-radius: var(--r-sm);
+    font-family: var(--font);
+    color: var(--text-2);
+  }
+  .chip__i {
+    width: 14px;
+    height: 14px;
+    color: var(--text-3);
+  }
+  .eqcard {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px 10px 10px;
+    border-radius: var(--r-md);
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    box-shadow: var(--shadow-card);
+  }
+  .eqcard__tile {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: var(--active);
+    color: #1c1a14;
+  }
+  .eqcard__tile .icon {
+    width: 18px;
+    height: 18px;
+  }
+  .eqcard__text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+  }
+  .eqcard__text strong {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-strong);
+    white-space: nowrap;
+  }
+  .eqcard__text span {
+    font-size: 12px;
+    color: var(--text-3);
+  }
+
+  /* Types */
+  .types {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 7px;
+    max-width: 320px;
+  }
+  .chip--more {
+    background: transparent;
+    border-style: dashed;
+    color: var(--text-3);
+  }
+
+  .shot {
+    margin-top: clamp(56px, 7vw, 96px);
+  }
+  .shot figcaption {
+    margin-top: 18px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--text-3);
+  }
+</style>

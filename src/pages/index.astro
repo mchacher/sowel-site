@@ -1,0 +1,51 @@
+---
+// Language picker: French when the browser says fr, English otherwise. No cookie, no storage.
+// FR is not built yet in this draft, so the script sends everyone to /en/ until /fr/ exists.
+// The French link joins this list with /fr/.
+const languages = [{ href: "/en/", label: "English", lang: "en" }];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'" />
+    <title>Sowel</title>
+    <link rel="alternate" hreflang="en" href="/en/" />
+    <link rel="alternate" hreflang="x-default" href="/en/" />
+    <script is:inline>
+      location.replace("/en/");
+    </script>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        font-family: system-ui, sans-serif;
+        background: #ffffff;
+        color: #21282d;
+      }
+      a {
+        color: #1a4f6e;
+        margin: 0 12px;
+        font-weight: 600;
+      }
+      @media (prefers-color-scheme: dark) {
+        body {
+          background: #0b151b;
+          color: #e4e8eb;
+        }
+        a {
+          color: #5ba5cc;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>
+      <p>{languages.map((l) => <a href={l.href} lang={l.lang}>{l.label}</a>)}</p>
+    </noscript>
+  </body>
+</html>

@@ -1,0 +1,116 @@
+---
+import type { SiteCopy } from "../content/types";
+import Icon from "./Icon.astro";
+import Logo from "./Logo.astro";
+
+interface Props {
+  copy: SiteCopy;
+}
+const { privacy } = Astro.props.copy;
+---
+
+<section class="privacy" id={privacy.id}>
+  <div class="privacy__mark" aria-hidden="true"><Logo size={560} /></div>
+  <div class="container privacy__inner">
+    <div class="privacy__head" data-reveal>
+      <p class="eyebrow">{privacy.eyebrow}</p>
+      <h2 class="h2">{privacy.title}</h2>
+      <p class="lead">{privacy.lead}</p>
+    </div>
+    <ul class="pv">
+      {
+        privacy.items.map((it, i) => (
+          <li class="pv__item" data-reveal style={`--delay:${i * 70}ms`}>
+            <span class="pv__tile">
+              <Icon name={it.icon} class="icon" />
+            </span>
+            <h3>{it.title}</h3>
+            <p>{it.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .privacy {
+    position: relative;
+    overflow: hidden;
+    padding-block: var(--section-y);
+    background:
+      radial-gradient(60% 80% at 0% 0%, rgba(127, 184, 212, 0.16), transparent 60%),
+      var(--band-deep);
+    color: var(--band-deep-text);
+  }
+  .privacy__mark {
+    position: absolute;
+    right: -120px;
+    bottom: -140px;
+    opacity: 0.05;
+    pointer-events: none;
+  }
+  .privacy__mark :global(.logo path) {
+    stroke: #fff;
+  }
+  .privacy__inner {
+    position: relative;
+    display: grid;
+    gap: clamp(40px, 5vw, 64px);
+  }
+  @media (min-width: 1024px) {
+    .privacy__inner {
+      grid-template-columns: 5fr 7fr;
+      gap: 72px;
+      align-items: center;
+    }
+  }
+  .eyebrow {
+    color: var(--band-deep-2);
+  }
+  .h2 {
+    color: #fff;
+  }
+  .lead {
+    color: var(--band-deep-2);
+  }
+  .pv {
+    display: grid;
+    gap: 16px;
+  }
+  @media (min-width: 640px) {
+    .pv {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+  }
+  .pv__item {
+    padding: 24px;
+    border-radius: var(--r-lg);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(4px);
+  }
+  .pv__tile {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--r-md);
+    background: rgba(127, 184, 212, 0.16);
+    color: #cfe5f2;
+  }
+  .pv__item h3 {
+    margin-top: 18px;
+    font-size: 18px;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    color: #fff;
+  }
+  .pv__item p {
+    margin-top: 6px;
+    font-size: 15.5px;
+    line-height: 1.6;
+    color: var(--band-deep-2);
+  }
+</style>

@@ -1,0 +1,109 @@
+---
+import Icon from "./Icon.astro";
+
+interface Props {
+  command: string;
+  copy: string;
+  copied: string;
+  label: string;
+}
+const { command, copy, copied, label } = Astro.props;
+---
+
+<div class="cmd">
+  <span class="sr-only">{label}</span>
+  <div class="cmd__line" tabindex="0">
+    <span class="cmd__prompt" aria-hidden="true">$</span><code>{command}</code>
+  </div>
+  <button class="cmd__btn" type="button" data-copy={command} data-idle={copy} data-done={copied}>
+    <Icon name="copy" class="icon cmd__i cmd__i--copy" />
+    <Icon name="check" class="icon cmd__i cmd__i--done" />
+    <span data-copy-label>{copy}</span>
+  </button>
+</div>
+
+<style>
+  .cmd {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+    max-width: 940px;
+    border-radius: var(--r-md);
+    background: var(--code-bg);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06) inset, 0 12px 32px -12px rgba(15, 49, 70, 0.45);
+    overflow: hidden;
+  }
+  .cmd__line {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 4px 15px 18px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  @media (max-width: 959px) {
+    .cmd__line {
+      mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+    }
+  }
+  .cmd__line::-webkit-scrollbar {
+    display: none;
+  }
+  .cmd__prompt {
+    font-family: var(--mono);
+    color: var(--code-dim);
+    user-select: none;
+  }
+  code {
+    font-family: var(--mono);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--code-text);
+    white-space: nowrap;
+    padding-right: 24px;
+  }
+  .cmd__btn {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 18px;
+    border: 0;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--code-text);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+  }
+  .cmd__btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  .cmd__btn:focus-visible {
+    outline-offset: -3px;
+  }
+  .cmd__i {
+    width: 17px;
+    height: 17px;
+  }
+  .cmd__i--done,
+  .cmd__btn:global(.is-done) .cmd__i--copy {
+    display: none;
+  }
+  .cmd__btn:global(.is-done) .cmd__i--done {
+    display: block;
+    color: #3ddb89;
+  }
+  @media (max-width: 480px) {
+    .cmd__btn span {
+      display: none;
+    }
+    .cmd__btn {
+      padding: 0 16px;
+    }
+  }
+</style>

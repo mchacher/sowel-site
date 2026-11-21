@@ -1,0 +1,109 @@
+---
+import type { SiteCopy } from "../content/types";
+import Icon from "./Icon.astro";
+
+interface Props {
+  copy: SiteCopy;
+}
+const { community } = Astro.props.copy;
+---
+
+<section class="section" id={community.id}>
+  <div class="container">
+    <div class="section-head section-head--center" data-reveal>
+      <p class="eyebrow">{community.eyebrow}</p>
+      <h2 class="h2">{community.title}</h2>
+      <p class="lead">{community.lead}</p>
+    </div>
+    <ul class="links">
+      {
+        community.links.map((l, i) => (
+          <li data-reveal style={`--delay:${i * 60}ms`}>
+            <a class="lk" href={l.href}>
+              <span class="lk__tile">
+                <Icon name={l.icon} class="icon" />
+              </span>
+              <span class="lk__text">
+                <strong>{l.title}</strong>
+                <span>{l.body}</span>
+              </span>
+              <Icon name="arrow-right" class="icon lk__arrow" />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .links {
+    margin-top: clamp(40px, 5vw, 56px);
+    display: grid;
+    gap: 14px;
+  }
+  @media (min-width: 640px) {
+    .links {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+  }
+  @media (min-width: 1100px) {
+    .links {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .lk {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 18px 18px 18px;
+    border-radius: var(--r-lg);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-card);
+    color: inherit;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .lk:hover {
+    color: inherit;
+    border-color: var(--p-500);
+  }
+  .lk__tile {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--r-md);
+    background: var(--p-50);
+    color: var(--p-500);
+  }
+  .lk__text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.4;
+  }
+  .lk__text strong {
+    font-size: 16px;
+    font-weight: 650;
+    color: var(--text-strong);
+  }
+  .lk__text span {
+    font-size: 14px;
+    color: var(--text-3);
+  }
+  .lk__arrow {
+    margin-left: auto;
+    width: 18px;
+    height: 18px;
+    color: var(--text-3);
+    transition: transform 0.15s ease, color 0.15s ease;
+  }
+  .lk:hover .lk__arrow {
+    transform: translateX(3px);
+    color: var(--p-500);
+  }
+</style>

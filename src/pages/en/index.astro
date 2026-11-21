@@ -1,0 +1,30 @@
+---
+import Base from "../../layouts/Base.astro";
+import Header from "../../components/Header.astro";
+import Hero from "../../components/Hero.astro";
+import Home from "../../components/Home.astro";
+import Rooms from "../../components/Rooms.astro";
+import Recipes from "../../components/Recipes.astro";
+import Privacy from "../../components/Privacy.astro";
+import Install from "../../components/Install.astro";
+import Compare from "../../components/Compare.astro";
+import Community from "../../components/Community.astro";
+import Footer from "../../components/Footer.astro";
+import { en as copy } from "../../content/en";
+---
+
+<Base copy={copy} path="/en/">
+  <Header copy={copy} />
+  <main id="main">
+    <Hero copy={copy} />
+    <Home copy={copy} />
+    <Rooms copy={copy} />
+    <Recipes copy={copy} />
+    <Privacy copy={copy} />
+    <Install copy={copy} />
+    <Compare copy={copy} />
+    <Community copy={copy} />
+  </main>
+  <Footer copy={copy} />
+  <p id="copy-live" class="sr-only" aria-live="polite" data-msg={copy.a11y.copyDone}></p>
+</Base>

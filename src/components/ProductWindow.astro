@@ -1,0 +1,75 @@
+---
+import type { Img } from "../content/types";
+import Logo from "./Logo.astro";
+
+interface Props {
+  title: string;
+  image: Img;
+  imageSmall?: Img;
+  eager?: boolean;
+}
+const { title, image, imageSmall, eager = false } = Astro.props;
+---
+
+<div class="win">
+  <div class="win__bar" aria-hidden="true">
+    <span class="win__dots"><i></i><i></i><i></i></span>
+    <span class="win__title"><Logo size={14} />{title}</span>
+    <span class="win__dots win__dots--ghost"><i></i><i></i><i></i></span>
+  </div>
+  <picture>
+  {imageSmall && <source media="(max-width: 639px)" srcset={imageSmall.src} width={imageSmall.width} height={imageSmall.height} />}
+  <img
+    src={image.src}
+    alt={image.alt}
+    width={image.width}
+    height={image.height}
+    loading={eager ? "eager" : "lazy"}
+    decoding="async"
+  />
+  </picture>
+</div>
+
+<style>
+  .win {
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-window);
+  }
+  .win__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 38px;
+    padding-inline: 14px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .win__dots {
+    display: flex;
+    gap: 7px;
+  }
+  .win__dots i {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--n-200);
+  }
+  .win__dots--ghost {
+    visibility: hidden;
+  }
+  .win__title {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text-3);
+  }
+  img {
+    width: 100%;
+    filter: var(--img-dim);
+  }
+</style>
