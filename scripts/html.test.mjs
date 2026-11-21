@@ -19,6 +19,17 @@ test("a button without a name is reported", () => {
   assert.ok(p.some((m) => m.includes("no accessible name")));
 });
 
+test("a button whose label drops its visible text is reported", () => {
+  const p = checkPage(
+    good.replace(
+      '<button aria-label="Copy"><svg></svg></button>',
+      '<button aria-label="Play">The film 1 min 43</button>',
+    ),
+    { lang: "en" },
+  );
+  assert.ok(p.some((m) => m.includes("button's accessible name does not contain")));
+});
+
 test("an image without alt is reported, an empty alt is fine", () => {
   assert.ok(
     checkPage(good.replace(' alt=""', ""), { lang: "en" }).some((m) => m.includes("no alt")),

@@ -47,7 +47,7 @@ export const en: SiteCopy = {
       src: withBase("/media/sowel-launch-720p.mp4"),
       poster: withBase("/media/sowel-launch-poster.jpg"),
       label: "The film",
-      play: "Play the film",
+      play: "Play:",
       duration: "1 min 43",
       fallback: "The film cannot play here.",
       fallbackLink: "Download it (MP4, 9 MB)",
