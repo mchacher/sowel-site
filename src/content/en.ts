@@ -25,7 +25,7 @@ export const en: SiteCopy = {
       { label: "Privacy", href: "#privacy" },
     ],
     github: { label: "GitHub", href: REPO },
-    switch: { label: "FR", aria: "Lire ce site en français", href: withBase("/fr/"), lang: "fr" },
+    switch: { label: "FR", aria: "FR, lire ce site en français", href: withBase("/fr/"), lang: "fr" },
   },
   hero: {
     eyebrow: "Open source, on your own hardware",
@@ -47,6 +47,7 @@ export const en: SiteCopy = {
       src: withBase("/media/sowel-launch-720p.mp4"),
       poster: withBase("/media/sowel-launch-poster.jpg"),
       label: "The film",
+      play: "Play the film",
       duration: "1 min 43",
       fallback: "The film cannot play here.",
       fallbackLink: "Download it (MP4, 9 MB)",
@@ -195,10 +196,10 @@ export const en: SiteCopy = {
       },
     ],
     ai: {
-      tag: "Possible today with an AI assistant",
+      tag: "Coming soon",
       title: "Your own recipe, in plain words",
-      body: "Describe what you want. An AI assistant writes the recipe as code, you read it, and you install it like any other.",
-      steps: ["Describe it", "Read the code", "Install it"],
+      body: "Describe what you need in your own words. An AI assistant builds the recipe and tests it, then you install it like any other.",
+      steps: ["Describe it", "The AI builds and tests it", "Install it"],
     },
   },
   privacy: {

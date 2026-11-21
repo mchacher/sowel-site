@@ -29,7 +29,7 @@ The launch plan this site belongs to is spec 209 in the core: `specs/209-launch-
 - **No third-party request.** No script, font, image, frame or analytics from another host. `npm run lint:built` fails the build on one. Plain `<a href>` links are navigation, not loads.
 - **No cookie, no storage, no tracker.** The site practises what it promises.
 - **Copy lives in `src/content/en.ts` and `fr.ts` only**, typed by `SiteCopy`. Components hold no text. A key present in one language and not the other fails `npm run lint:i18n`.
-- **Wording**: never « unique », never « sandboxed », never « no network traffic ». Say « about twenty integrations ». AI recipes are « possible today with an AI assistant ». Privacy is « no Sowel cloud, no telemetry, your data stays at home ».
+- **Wording**: never « unique », never « sandboxed », never « no network traffic ». Say « about twenty integrations ». AI recipes are « coming soon »: the dedicated tool is not shipped, so never say it is possible today, never promise one click, and never ask anyone to read code (the audience is not developers). Privacy is « no Sowel cloud, no telemetry, your data stays at home ».
 - **No em dash and no middle dot** in visible text. Sentence-case labels. In French, a non-breaking space before `:` `;` `?` `!` and inside « guillemets ».
 - **Amber** is for « on, running now » only. Ocean blue `#1A4F6E` carries ink and fills.
 - **Nothing about another product is published without a source and a date**, and the maintainer has read it.

@@ -15,7 +15,7 @@ const { command, copy, copied, label } = Astro.props;
   <div class="cmd__line" tabindex="0">
     <span class="cmd__prompt" aria-hidden="true">$</span><code>{command}</code>
   </div>
-  <button class="cmd__btn" type="button" data-copy={command} data-idle={copy} data-done={copied}>
+  <button class="cmd__btn" type="button" aria-label={copy} data-copy={command} data-idle={copy} data-done={copied}>
     <Icon name="copy" class="icon cmd__i cmd__i--copy" />
     <Icon name="check" class="icon cmd__i cmd__i--done" />
     <span data-copy-label>{copy}</span>

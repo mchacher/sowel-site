@@ -13,7 +13,7 @@
     "format": "prettier --write \"**/*.{md,yml,yaml,json,mjs}\"",
     "format:check": "prettier --check \"**/*.{md,yml,yaml,json,mjs}\"",
     "lint:i18n": "node scripts/check-i18n-parity.mjs",
-    "lint:built": "node scripts/check-external-requests.mjs dist && node scripts/check-links.mjs dist",
+    "lint:built": "node scripts/check-external-requests.mjs dist && node scripts/check-links.mjs dist && node scripts/check-built-html.mjs dist",
     "test": "node --test scripts/*.test.mjs",
     "prepare": "husky",
     "validate": "npm run format:check && npm run check && npm run lint:i18n && npm test && npm run build && npm run lint:built && bash scripts/check-specs-complete.sh"
