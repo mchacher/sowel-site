@@ -1,12 +1,10 @@
 name: Deploy
 
-# Publishes the site to GitHub Pages on every push to main.
-#
-# Until the DNS of sowel.org points at GitHub Pages the site lives at
-# https://mchacher.github.io/sowel-site/, hence the SITE_URL and SITE_BASE below.
-# To switch to sowel.org: add public/CNAME containing `sowel.org`, set SITE_URL to
-# https://sowel.org and SITE_BASE to /, point the DNS (spec 001, architecture),
-# then enforce HTTPS in the Pages settings.
+# Publishes the site to GitHub Pages on every push to main, at https://sowel.org (the custom domain of
+# this repository, set in its Pages settings; the DNS lives in Cloudflare, records in « DNS only »).
+# The default Astro config already builds for sowel.org at the root, so `npm run validate` builds the
+# exact artifact that is published. To serve the site under a sub-path again (for example the
+# github.io address), set SITE_URL and SITE_BASE for the build.
 on:
   push:
     branches: [main]
@@ -37,14 +35,6 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run validate
-      - name: Build for GitHub Pages
-        env:
-          SITE_URL: https://mchacher.github.io
-          SITE_BASE: /sowel-site
-        run: |
-          npm run build
-          node scripts/check-external-requests.mjs dist
-          BASE=/sowel-site node scripts/check-links.mjs dist
       - uses: actions/upload-pages-artifact@v4
         with:
           path: dist
