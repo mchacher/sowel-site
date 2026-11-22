@@ -64,7 +64,7 @@ export const fr: SiteCopy = {
     lead: "Vous décrivez votre maison une fois : ses étages, ses pièces, ce qu'il y a dans chacune. Sowel construit tout le reste sur cette description.",
     topology: {
       title: "Des zones dans des zones",
-      body: "La maison, les étages, les pièces, le jardin. Chaque zone additionne ce qu'elle contient : un étage sait ce que savent ses pièces.",
+      body: "Une zone peut en contenir d'autres : la maison, un étage, une pièce. Chaque zone remonte à celle du dessus ce qu'elle mesure.",
       tree: {
         label: "Maison",
         children: [
@@ -77,7 +77,7 @@ export const fr: SiteCopy = {
     equipment: {
       title: "Des équipements, pas des appareils",
       quote: "Un appareil, c'est ce qui est sur le réseau. Un équipement, c'est ce qui est dans la pièce.",
-      body: "La porte de garage est un seul équipement, même quand elle repose sur un contact sec qui la déclenche et un contact de fermeture qui dit si elle est fermée. Changez un contact, la porte reste.",
+      body: "La porte de garage est un seul équipement, construit sur deux appareils : un contact sec qui la déclenche et un contact de fermeture qui dit si elle est fermée. Vous voyez une porte, que vous ouvrez et dont vous lisez l'état. Changez un contact, la porte reste.",
       devicesLabel: "Appareils",
       devices: ["Contact sec", "Contact de fermeture"],
       equipmentLabel: "Équipement",
