@@ -21,7 +21,7 @@ export const fr: SiteCopy = {
   nav: {
     links: [
       { label: "Le modèle", href: "#home" },
-      { label: "Pièces", href: "#rooms" },
+      { label: "Zones", href: "#rooms" },
       { label: "Tableau de bord", href: "#dashboard" },
       { label: "Recettes", href: "#recipes" },
       { label: "Modes", href: "#modes" },
@@ -125,16 +125,16 @@ export const fr: SiteCopy = {
   },
   rooms: {
     id: "rooms",
-    eyebrow: "Des pièces qui savent",
-    title: "Chaque pièce calcule son propre état",
-    titleAccent: "Chaque pièce",
-    lead: "Placez des équipements dans une pièce et elle calcule le reste toute seule, sans rien à configurer.",
+    eyebrow: "Zones",
+    title: "Chaque zone calcule son propre état",
+    titleAccent: "Chaque zone",
+    lead: "Placez des équipements dans une zone et elle calcule le reste toute seule, sans rien à configurer.",
     items: [
-      { icon: "thermometer", title: "Température", body: "La moyenne des capteurs de la pièce." },
-      { icon: "person-standing", title: "Présence", body: "Un mouvement n'importe où dans la pièce, et depuis combien de temps." },
+      { icon: "thermometer", title: "Température", body: "La moyenne des capteurs de la zone." },
+      { icon: "person-standing", title: "Présence", body: "Un mouvement n'importe où dans la zone, et depuis combien de temps." },
       { icon: "app-window", title: "Ouvertures", body: "Quelles fenêtres et quels volets sont ouverts." },
       { icon: "lightbulb", title: "Lumières", body: "Combien sont allumées, d'un coup d'œil." },
-      { icon: "zap", title: "Puissance", body: "Ce que la pièce consomme en ce moment." },
+      { icon: "zap", title: "Puissance", body: "Ce que la zone consomme en ce moment." },
     ],
     stripSmall: {
       src: withBase("/img/fr/living-room-strip.webp"),
