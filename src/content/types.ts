@@ -57,6 +57,7 @@ export interface SiteCopy {
   nav: {
     links: Link[];
     github: Link;
+    docs: Link;
     switch: { label: string; aria: string; href: string; lang: "en" | "fr" };
   };
   hero: {
