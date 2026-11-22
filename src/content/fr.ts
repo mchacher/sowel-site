@@ -59,9 +59,9 @@ export const fr: SiteCopy = {
   home: {
     id: "home",
     eyebrow: "Le modèle",
-    title: "Tout part de votre maison",
-    titleAccent: "votre maison",
-    lead: "Vous décrivez votre maison une fois : ses étages, ses pièces, ce qu'il y a dans chacune. Sowel construit tout le reste sur cette description.",
+    title: "Tout commence par le plan de votre maison",
+    titleAccent: "plan de votre maison",
+    lead: "Vous décrivez votre maison une fois : ses étages, ses pièces, ce qu'il y a dans chacune. Sowel organise tout le reste autour de cette description.",
     topology: {
       title: "Des zones dans des zones",
       body: "Une zone peut en contenir d'autres : la maison, un étage, une pièce. Chaque zone remonte à celle du dessus ce qu'elle mesure.",
@@ -155,8 +155,8 @@ export const fr: SiteCopy = {
   dashboard: {
     id: "dashboard",
     eyebrow: "Tableau de bord",
-    title: "Tout sous la main",
-    titleAccent: "sous la main",
+    title: "Tout à portée de main",
+    titleAccent: "à portée de main",
     lead: "Une vue tableau de bord met sous vos doigts les commandes de tous les jours : le portail, la porte de garage, les volets de chaque étage, le chauffage.",
     items: [
       { icon: "zap", title: "Un geste", body: "Ouvrir le portail, fermer les volets, lancer la pompe de la piscine." },
@@ -250,9 +250,9 @@ export const fr: SiteCopy = {
   energy: {
     id: "energy",
     eyebrow: "Énergie",
-    title: "Chaque watt de soleil mis au travail",
-    titleAccent: "mis au travail",
-    lead: "Sowel suit en direct ce que vous produisez et ce que vous consommez, et son arbitre envoie le surplus solaire là où il sert : d'abord le ballon d'eau chaude, puis la voiture. Aucune règle à écrire.",
+    title: "Votre soleil en trop ne se perd plus",
+    titleAccent: "ne se perd plus",
+    lead: "Sowel suit votre production et votre consommation en direct, et chiffre ce qu'elles vous coûtent. Pour faire baisser cette facture, les recettes s'appuient sur l'arbitre énergétique, qui répartit le surplus solaire par priorité : d'abord le ballon d'eau chaude, puis la voiture. Vous n'avez aucune règle à écrire.",
     flow: {
       title: "Flux en direct",
       body: "Ce que vous produisez, consommez et échangez avec le réseau, à l'instant.",

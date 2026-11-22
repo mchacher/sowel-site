@@ -59,9 +59,9 @@ export const en: SiteCopy = {
   home: {
     id: "home",
     eyebrow: "The model",
-    title: "Everything starts from your home",
-    titleAccent: "your home",
-    lead: "You describe your home once: its floors, its rooms, what is in each of them. Sowel builds everything else on that description.",
+    title: "Everything starts from the layout of your home",
+    titleAccent: "layout of your home",
+    lead: "You describe your home once: its floors, its rooms, what is in each of them. Sowel organises everything else around that description.",
     topology: {
       title: "Zones inside zones",
       body: "A zone can hold other zones: the home, a floor, a room. Each zone passes up to the zone above what it measures.",
@@ -252,7 +252,7 @@ export const en: SiteCopy = {
     eyebrow: "Energy",
     title: "Every watt of sun, put to work",
     titleAccent: "put to work",
-    lead: "Sowel follows what you produce and what you consume, live, and its arbiter sends the solar surplus where it helps: the water heater first, then the car. No rule to write.",
+    lead: "Sowel follows your production and your consumption as they happen, and tracks what they cost you. To lower that cost, recipes rely on the energy arbiter, which shares the solar surplus by priority: the water heater first, then the car. You have no rule to write.",
     flow: {
       title: "Live flow",
       body: "Production, consumption and the grid, as they happen.",
