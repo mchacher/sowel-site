@@ -1,0 +1,232 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "./Header.astro";
+import Footer from "./Footer.astro";
+import type { SiteCopy } from "../content/types";
+import type { Article } from "../content/articles/types";
+import { withBase } from "../lib/url";
+
+interface Props {
+  copy: SiteCopy;
+  article: Article;
+}
+const { copy, article } = Astro.props;
+const abs = (p: string) => new URL(withBase(p), Astro.site).href;
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: article.title,
+  description: article.meta.description,
+  author: { "@type": "Person", name: "Marc Chachereau" },
+  publisher: { "@type": "Organization", name: "Sowel", url: abs("/en/") },
+  inLanguage: article.lang,
+  datePublished: article.datePublished,
+  mainEntityOfPage: abs(article.path),
+  image: abs(`/og/sowel-card-${article.lang}.png`),
+};
+const alternates =
+  article.lang === "en"
+    ? { en: article.path, fr: article.otherPath }
+    : { en: article.otherPath, fr: article.path };
+---
+
+<Base
+  copy={copy}
+  path={article.path}
+  page={{ meta: article.meta, alternates, jsonLd }}
+>
+  <Header copy={copy} inner={{ home: `/${article.lang}/`, switchHref: withBase(article.otherPath) }} />
+  <main id="main" class="article">
+    <header class="article__head">
+      <h1 class="article__title">{article.title}</h1>
+      <p class="article__byline">{article.byline}</p>
+    </header>
+    <div class="prose">
+      {
+        article.blocks.map((b, i) => {
+          if (b.kind === "p")
+            return (
+              <p>
+                {b.runs.map((r) => ("bold" in r ? <strong>{r.bold}</strong> : r.text))}
+              </p>
+            );
+          if (b.kind === "h2") return <h2>{b.text}</h2>;
+          if (b.kind === "list")
+            return (
+              <ul class="list">
+                {b.items.map((t) => <li>{t}</li>)}
+              </ul>
+            );
+          if (b.kind === "links")
+            return (
+              <ul class="list list--links">
+                {b.items.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+              </ul>
+            );
+          if (b.kind === "pull")
+            return (
+              <blockquote class="pull">
+                <p>{b.text}</p>
+              </blockquote>
+            );
+          return (
+            <figure class={`fig fig--${b.id}`}>
+              <div
+                class="fig__shot"
+                role={b.id === "arbiter" ? "region" : undefined}
+                tabindex={b.id === "arbiter" ? 0 : undefined}
+                aria-labelledby={b.id === "arbiter" ? `cap-${i}` : undefined}
+              >
+                <img
+                  src={b.image.src}
+                  alt={b.image.alt}
+                  width={b.image.width}
+                  height={b.image.height}
+                  decoding="async"
+                  loading={i < 4 ? "eager" : "lazy"}
+                />
+              </div>
+              <figcaption id={`cap-${i}`}>{b.caption}</figcaption>
+            </figure>
+          );
+        })
+      }
+    </div>
+  </main>
+  <Footer copy={copy} />
+</Base>
+
+<style>
+  .article {
+    --col: 46rem; /* about 68 characters at 18px */
+    padding-block: clamp(40px, 6vw, 88px) clamp(56px, 8vw, 112px);
+    font-size: 1.125rem;
+    line-height: 1.7;
+  }
+  .article__head,
+  .prose > * {
+    width: min(var(--col), calc(100% - 2 * var(--gutter)));
+    margin-inline: auto;
+  }
+  .article__title {
+    font-size: clamp(2.25rem, 1.4rem + 3.4vw, 3.75rem);
+    line-height: 1.05;
+    font-weight: 750;
+    letter-spacing: -0.035em;
+    color: var(--text-strong);
+    text-wrap: balance;
+  }
+  .article__byline {
+    margin-top: 20px;
+    font-size: 1rem;
+    color: var(--text-3);
+  }
+  .prose {
+    margin-top: clamp(28px, 4vw, 48px);
+  }
+  .prose > * + * {
+    margin-top: 1.25em;
+  }
+  .prose p,
+  .prose li {
+    color: var(--text);
+    text-wrap: pretty;
+  }
+  .prose strong {
+    font-weight: 650;
+    color: var(--text-strong);
+  }
+  .prose h2 {
+    margin-top: 2.6em;
+    font-size: clamp(1.6rem, 1.3rem + 1.2vw, 2.1rem);
+    line-height: 1.15;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: var(--text-strong);
+    text-wrap: balance;
+  }
+  .prose h2 + * {
+    margin-top: 0.9em;
+  }
+  .list {
+    display: grid;
+    gap: 0.6em;
+  }
+  .list li {
+    position: relative;
+    padding-left: 1.5em;
+  }
+  .list li::before {
+    content: "";
+    position: absolute;
+    left: 0.15em;
+    top: 0.72em;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent-mark);
+  }
+  .list--links a {
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: color-mix(in srgb, var(--accent-mark) 50%, transparent);
+  }
+
+  /* The exergue: wider than the text on large screens, the full width on a phone. */
+  .prose > .pull {
+    width: min(64rem, calc(100% - 2 * var(--gutter)));
+    margin-block: clamp(2.5rem, 6vw, 4.5rem);
+    padding: clamp(1.25rem, 2.5vw, 2rem) 0 0;
+    border-top: 2px solid var(--accent-mark);
+  }
+  .pull p {
+    font-size: clamp(2rem, 1.1rem + 3.8vw, 3.9rem);
+    line-height: 1.04;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    color: var(--accent-ink);
+    text-wrap: balance;
+  }
+  @media (max-width: 639px) {
+    .prose > .pull {
+      width: 100%;
+      padding-inline: var(--gutter);
+      border-top-width: 2px;
+    }
+  }
+
+  .fig {
+    display: block;
+  }
+  .fig__shot {
+    border-radius: var(--r-md);
+    box-shadow: 0 0 0 1px var(--border), var(--shadow-card);
+    overflow: hidden;
+    background: var(--surface);
+  }
+  .fig img {
+    width: 100%;
+    height: auto;
+    filter: var(--img-dim);
+  }
+  .fig figcaption {
+    margin-top: 12px;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--text-3);
+  }
+  /* The arbiter's table is wide: a breakout on large screens, a sideways scroll inside its frame on a phone. */
+  .prose > .fig--arbiter {
+    width: min(64rem, calc(100% - 2 * var(--gutter)));
+  }
+  @media (max-width: 959px) {
+    .fig--arbiter .fig__shot {
+      overflow-x: auto;
+    }
+    .fig--arbiter img {
+      width: 720px;
+      max-width: none;
+    }
+  }
+</style>

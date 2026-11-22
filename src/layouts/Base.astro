@@ -7,19 +7,27 @@ import { withBase } from "../lib/url";
 interface Props {
   copy: SiteCopy;
   path: string;
+  /** An inner page (the articles): its own title and description, its own language pair, its own structured data. */
+  page?: {
+    meta: { title: string; description: string };
+    alternates: { en: string; fr: string };
+    jsonLd: Record<string, unknown>;
+  };
 }
 
-const { copy, path } = Astro.props;
+const { copy, path, page } = Astro.props;
+const meta = page?.meta ?? copy.meta;
+const alternates = page?.alternates ?? { en: "/en/", fr: "/fr/" };
 const canonical = new URL(withBase(path), Astro.site).href;
 const alt = (p: string) => new URL(withBase(p), Astro.site).href;
 const ogImage = alt(`/og/sowel-card-${copy.lang}.png`);
-const jsonLd = JSON.stringify({
+const jsonLd = JSON.stringify(page?.jsonLd ?? {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   name: "Sowel",
   applicationCategory: "HomeAutomationApplication",
   operatingSystem: "Linux, macOS, Windows (Docker)",
-  description: copy.meta.description,
+  description: meta.description,
   url: canonical,
   inLanguage: copy.lang,
   license: "https://www.gnu.org/licenses/agpl-3.0.html",
@@ -37,30 +45,30 @@ const csp =
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="Content-Security-Policy" content={csp} />
-    <title>{copy.meta.title}</title>
-    <meta name="description" content={copy.meta.description} />
+    <title>{meta.title}</title>
+    <meta name="description" content={meta.description} />
     <link rel="canonical" href={canonical} />
-    <link rel="alternate" hreflang="en" href={alt("/en/")} />
-    <link rel="alternate" hreflang="fr" href={alt("/fr/")} />
-    <link rel="alternate" hreflang="x-default" href={alt("/en/")} />
+    <link rel="alternate" hreflang="en" href={alt(alternates.en)} />
+    <link rel="alternate" hreflang="fr" href={alt(alternates.fr)} />
+    <link rel="alternate" hreflang="x-default" href={alt(alternates.en)} />
     <link rel="icon" href={withBase("/img/logo.svg")} type="image/svg+xml" />
     <meta name="theme-color" content="#0b151b" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0b151b" media="(prefers-color-scheme: dark)" />
-    <meta property="og:title" content={copy.meta.title} />
-    <meta property="og:description" content={copy.meta.description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:title" content={meta.title} />
+    <meta property="og:description" content={meta.description} />
+    <meta property="og:type" content={page ? "article" : "website"} />
     <meta property="og:locale" content={copy.lang === "fr" ? "fr_FR" : "en_GB"} />
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content="Sowel" />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={copy.meta.title} />
+    <meta property="og:image:alt" content={meta.title} />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={copy.meta.title} />
-    <meta name="twitter:description" content={copy.meta.description} />
+    <meta name="twitter:title" content={meta.title} />
+    <meta name="twitter:description" content={meta.description} />
     <meta name="twitter:image" content={ogImage} />
-    <link rel="preload" href={copy.hero.film.poster} as="image" fetchpriority="high" />
+    {!page && <link rel="preload" href={copy.hero.film.poster} as="image" fetchpriority="high" />}
     <script type="application/ld+json" set:html={jsonLd} />
     <link rel="preload" href={withBase("/fonts/inter-latin-wght.woff2")} as="font" type="font/woff2" crossorigin />
     <script is:inline>document.documentElement.classList.add("js");</script>

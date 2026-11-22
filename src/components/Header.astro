@@ -2,25 +2,30 @@
 import type { SiteCopy } from "../content/types";
 import Logo from "./Logo.astro";
 import Icon from "./Icon.astro";
+import { withBase } from "../lib/url";
 
 interface Props {
   copy: SiteCopy;
+  /** On an inner page: the home page of the language (section anchors lead back to it) and the other-language twin of this page. */
+  inner?: { home: string; switchHref: string };
 }
-const { copy } = Astro.props;
+const { copy, inner } = Astro.props;
+const to = (hash: string) => (inner ? withBase(inner.home) + hash : hash);
+const switchHref = inner?.switchHref ?? copy.nav.switch.href;
 ---
 
 <a class="skip" href="#main">{copy.a11y.skip}</a>
 <header class="header">
   <div class="container header__inner">
-    <a class="brand" href="#top" aria-label={copy.a11y.home}>
+    <a class="brand" href={to("#top")} aria-label={copy.a11y.home}>
       <Logo size={30} />
       <span class="brand__word">sowel</span>
     </a>
     <nav class="nav" aria-label={copy.a11y.nav}>
-      {copy.nav.links.map((l) => <a href={l.href}>{l.label}</a>)}
+      {copy.nav.links.map((l) => <a href={to(l.href)}>{l.label}</a>)}
     </nav>
     <div class="header__actions">
-      <a class="lang" href={copy.nav.switch.href} hreflang={copy.nav.switch.lang} lang={copy.nav.switch.lang} aria-label={copy.nav.switch.aria}>{copy.nav.switch.label}</a>
+      <a class="lang" href={switchHref} hreflang={copy.nav.switch.lang} lang={copy.nav.switch.lang} aria-label={copy.nav.switch.aria}>{copy.nav.switch.label}</a>
       <a class="gh" href={copy.nav.docs.href}>
         <Icon name="book-open" class="icon icon--sm" />
         <span>{copy.nav.docs.label}</span>
@@ -29,7 +34,7 @@ const { copy } = Astro.props;
         <Icon name="git-fork" class="icon icon--sm" />
         <span class="gh__label">{copy.nav.github.label}</span>
       </a>
-      <a class="btn btn--fill btn--sm" href={copy.hero.ctas.primary.href}>{copy.hero.ctas.primary.label}</a>
+      <a class="btn btn--fill btn--sm" href={to(copy.hero.ctas.primary.href)}>{copy.hero.ctas.primary.label}</a>
     </div>
   </div>
 </header>

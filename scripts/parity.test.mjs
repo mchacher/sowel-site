@@ -37,3 +37,79 @@ test("a titleAccent must be words of its title", () => {
   );
   assert.ok(p.some((m) => m.startsWith("titleAccent not found") && m.includes("first")));
 });
+
+import { compareArticles } from "./lib/parity.mjs";
+
+const art = (over = {}) => ({
+  lang: "en",
+  path: "/en/a/",
+  otherPath: "/fr/b/",
+  meta: { title: "T", description: "D" },
+  datePublished: "2026-11-22",
+  title: "Title",
+  byline: "By",
+  blocks: [
+    { kind: "h2", text: "H" },
+    { kind: "p", runs: [{ bold: "B." }, { text: " rest" }] },
+    { kind: "list", items: ["a", "b"] },
+    {
+      kind: "figure",
+      id: "flow",
+      image: { src: "/x", alt: "alt", width: 10, height: 5 },
+      caption: "c",
+    },
+    { kind: "pull", text: "Q" },
+    { kind: "links", items: [{ label: "l", href: "/h" }] },
+  ],
+  ...over,
+});
+const other = (over = {}) => art({ lang: "fr", path: "/fr/b/", otherPath: "/en/a/", ...over });
+
+test("articles with the same blocks: no problem", () => {
+  assert.deepEqual(compareArticles(art(), other()), []);
+});
+
+test("a missing block is reported", () => {
+  const b = other();
+  b.blocks = b.blocks.slice(0, -1);
+  assert.ok(compareArticles(art(), b).some((m) => m.startsWith("article blocks")));
+});
+
+test("blocks in another order are reported by kind", () => {
+  const b = other();
+  [b.blocks[0], b.blocks[1]] = [b.blocks[1], b.blocks[0]];
+  assert.ok(compareArticles(art(), b).some((m) => m.includes("kind")));
+});
+
+test("a list with fewer items is reported", () => {
+  const b = other();
+  b.blocks[2] = { kind: "list", items: ["a"] };
+  assert.ok(compareArticles(art(), b).some((m) => m.includes("items")));
+});
+
+test("a paragraph that loses its bold lead-in is reported", () => {
+  const b = other();
+  b.blocks[1] = { kind: "p", runs: [{ text: "B. rest" }] };
+  assert.ok(compareArticles(art(), b).some((m) => m.includes("runs")));
+});
+
+test("a figure without alt text or with another id is reported", () => {
+  const b = other();
+  b.blocks[3] = {
+    kind: "figure",
+    id: "arbiter",
+    image: { src: "/x", alt: "", width: 10, height: 5 },
+    caption: "c",
+  };
+  const p = compareArticles(art(), b);
+  assert.ok(p.some((m) => m.includes("figure flow vs arbiter")));
+  assert.ok(p.some((m) => m.includes("empty alt text")));
+});
+
+test("an empty pull quote and a wrong twin path are reported", () => {
+  const b = other({ otherPath: "/en/zzz/" });
+  b.blocks[4] = { kind: "pull", text: " " };
+  const p = compareArticles(art(), b);
+  assert.ok(p.some((m) => m.includes("empty text")));
+  assert.ok(p.some((m) => m.includes("otherPath")));
+});

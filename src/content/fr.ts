@@ -255,6 +255,7 @@ export const fr: SiteCopy = {
     title: "Votre énergie, suivie et optimisée",
     titleAccent: "optimisée",
     lead: "Sowel suit votre production et votre consommation en direct, et chiffre ce qu'elles vous coûtent. Pour faire baisser cette facture, les recettes s'appuient sur l'arbitre énergétique, qui répartit le surplus solaire par priorité : d'abord le ballon d'eau chaude, puis la voiture. Vous n'avez aucune règle à écrire.",
+    article: { label: "Lire l'article\u00a0: Qui décide d'utiliser votre soleil\u00a0?", href: withBase("/fr/articles/qui-decide-d-utiliser-votre-soleil/") },
     flow: {
       title: "Flux en direct",
       body: "Ce que vous produisez, consommez et échangez avec le réseau, à l'instant.",

@@ -255,6 +255,7 @@ export const en: SiteCopy = {
     title: "Your energy, tracked and optimised",
     titleAccent: "optimised",
     lead: "Sowel follows your production and your consumption as they happen, and tracks what they cost you. To lower that cost, recipes rely on the energy arbiter, which shares the solar surplus by priority: the water heater first, then the car. You have no rule to write.",
+    article: { label: "Read the article: Who decides how your sun gets used?", href: withBase("/en/articles/who-decides-how-your-sun-gets-used/") },
     flow: {
       title: "Live flow",
       body: "Production, consumption and the grid, as they happen.",

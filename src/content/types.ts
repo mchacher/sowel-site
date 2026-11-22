@@ -146,6 +146,8 @@ export interface SiteCopy {
     title: string;
     titleAccent: string;
     lead: string;
+    /** One line under the lead: the article on the arbiter (spec 002). */
+    article: Link;
     flow: { title: string; body: string; image: Img };
     bilan: { title: string; body: string; image: Img; savings: Img };
     arbiter: { title: string; body: string; image: Img };
