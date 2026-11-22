@@ -14,7 +14,7 @@ export const en: Article = {
   title: "Optimise your solar power production",
   byline: "Marc Chachereau, creator of Sowel.",
   blocks: [
-    { kind: "p", runs: [{ text: "Every kWh of sun your home uses is a kWh you do not buy. The unused surplus goes to the grid." }] },
+    { kind: "p", runs: [{ text: "Every kWh your solar panels produce and your home uses is a kWh you do not buy. The unused surplus goes to the grid." }] },
     { kind: "p", runs: [{ text: "Your water heater, your car, your heat pump and your pool all want that sun. The obvious fix: each of these loads watches the meter and starts as soon as there is a surplus. It fails for a simple reason: they all read the same meter, start together and fight over the same watts." }] },
     { kind: "p", runs: [{ text: "Adding priorities is not enough: sharing a surplus that never stops moving takes algorithms that are hard to get right. Sowel solves this in a very original way: it centralises the intelligence of energy and decentralises the intelligence of control. One arbiter distributes the sun, and each of your automations asks it for its share while keeping control of its own appliance." }] },
     { kind: "figure", id: "flow", image: { src: withBase("/img/en/article-flow.webp"), alt: "The Live flows view of the Sowel demo house on a sunny afternoon: solar production, the house and the grid, with 4.2 kW produced, 2.7 kW consumed and 1.5 kW exported.", width: 1300, height: 1026 }, caption: "The live flow of the demo house on a simulated sunny afternoon: 4.2 kW produced, 2.7 kW consumed, 1.5 kW exported." },
