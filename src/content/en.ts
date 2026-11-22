@@ -175,7 +175,7 @@ export const en: SiteCopy = {
     eyebrow: "Recipes",
     title: "Ready-made automations, placed on a room",
     titleAccent: "Ready-made",
-    lead: "A recipe is a real program, written and tested once. You place it on a room, answer a few questions, and it runs.",
+    lead: "A recipe is a real program, validated before it is delivered. You place it on a room, answer a few questions, and it runs.",
     placedOn: "Placed on",
     asks: "Asks for",
     running: "Running now",
