@@ -9,7 +9,7 @@ export const fr: SiteCopy = {
   meta: {
     title: "Sowel : la domotique qui prend soin de votre maison",
     description:
-      "Sowel connaît votre maison : elle se pilote seule, se configure en quelques clics, et vos données restent chez vous. Open source, sur votre propre matériel.",
+      "Sowel connaît votre maison : elle se pilote seule, se configure dans le navigateur, et vos données restent chez vous. Open source, sur votre propre matériel.",
   },
   a11y: {
     skip: "Aller au contenu",
@@ -87,7 +87,7 @@ export const fr: SiteCopy = {
     },
     types: {
       title: "Une trentaine de types d'équipements",
-      body: "Chaque type sait ce qu'il mesure et quels ordres il accepte : tous les écrans et toutes les recettes parlent la même langue.",
+      body: "Chaque type sait ce qu'il mesure et quels ordres il accepte : les écrans et les recettes utilisent les mêmes noms et les mêmes ordres.",
       count: "~30",
       list: [
         "Éclairage",
@@ -127,7 +127,7 @@ export const fr: SiteCopy = {
     eyebrow: "Des pièces qui savent",
     title: "Chaque pièce calcule son propre état",
     titleAccent: "Chaque pièce",
-    lead: "Placez des équipements dans une pièce et elle calcule le reste toute seule. De façon native, sans rien à configurer.",
+    lead: "Placez des équipements dans une pièce et elle calcule le reste toute seule, sans rien à configurer.",
     items: [
       { icon: "thermometer", title: "Température", body: "La moyenne des capteurs de la pièce." },
       { icon: "person-standing", title: "Présence", body: "Un mouvement n'importe où dans la pièce, et depuis combien de temps." },
@@ -255,7 +255,7 @@ export const fr: SiteCopy = {
     lead: "Sowel suit en direct ce que vous produisez et ce que vous consommez, et son arbitre envoie le surplus solaire là où il sert : d'abord le ballon d'eau chaude, puis la voiture. Aucune règle à écrire.",
     flow: {
       title: "Flux en direct",
-      body: "Production, consommation et réseau, en direct.",
+      body: "Ce que vous produisez, consommez et échangez avec le réseau, à l'instant.",
       image: {
         src: withBase("/img/fr/energy-flow.webp"),
         alt: "Le flux d'énergie en direct d'une maison par temps ensoleillé : 4,6 kW produits, 2,7 kW consommés, 1,9 kW envoyés au réseau.",
@@ -299,7 +299,7 @@ export const fr: SiteCopy = {
     items: [
       { icon: "timer", title: "Un horaire ou un bouton", body: "Passez en Jour, Soirée, Nuit ou Absence depuis le calendrier, ou d'un geste." },
       { icon: "layers", title: "Plusieurs pièces d'un coup", body: "Un mode lance ses actions dans plusieurs pièces et plusieurs étages." },
-      { icon: "house", title: "Des recettes qui s'adaptent", body: "Chaque recette connaît le mode actif : elle peut se comporter autrement la nuit ou en votre absence." },
+      { icon: "house", title: "Des recettes qui s'adaptent", body: "Une recette peut se comporter autrement la nuit ou en votre absence." },
     ],
     image: {
       src: withBase("/img/fr/living-room-behaviors.webp"),
@@ -311,8 +311,8 @@ export const fr: SiteCopy = {
   community: {
     id: "community",
     eyebrow: "Communauté",
-    title: "Construit avec ceux qui l'utilisent",
-    titleAccent: "ceux qui l'utilisent",
+    title: "Questions, idées, bugs : GitHub",
+    titleAccent: "GitHub",
     lead: "Sowel est open source. Posez une question, proposez une idée, signalez un bug ou montrez-nous votre maison : tout se passe sur GitHub.",
     links: [
       { icon: "git-fork", title: "GitHub", body: "Code, tickets et versions", href: REPO },
