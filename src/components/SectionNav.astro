@@ -34,14 +34,13 @@ const items = copy.nav.links.filter((l) => ICONS[l.href]).map((l) => ({ ...l, ic
       ))
     }
   </ol>
-  <!-- Phones and tablets: a dock at the bottom, the active icon names its section. -->
+  <!-- Phones and tablets: a translucent dock at the bottom, icons only (the names are the accessible labels). -->
   <ol class="snav__dock">
     {
       items.map((l) => (
         <li>
           <a href={l.href} data-snav-link aria-label={l.label}>
             <Icon name={l.icon} class="snav__icon" />
-            <span class="snav__label">{l.label}</span>
           </a>
         </li>
       ))
@@ -130,10 +129,12 @@ const items = copy.nav.links.filter((l) => ICONS[l.href]).map((l) => ({ ...l, ic
     gap: 4px;
     padding: 6px;
     border-radius: 20px;
-    background: rgba(11, 20, 25, 0.92);
-    box-shadow: 0 14px 30px -10px rgba(0, 0, 0, 0.5);
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
+    background: rgba(11, 20, 25, 0.66);
+    box-shadow:
+      0 14px 30px -10px rgba(0, 0, 0, 0.45),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    backdrop-filter: blur(16px) saturate(1.4);
   }
   .snav {
     left: 50%;
@@ -150,22 +151,11 @@ const items = copy.nav.links.filter((l) => ICONS[l.href]).map((l) => ({ ...l, ic
     min-width: 40px;
     justify-content: center;
     border-radius: 14px;
-    color: #9fb3c0;
+    color: #d3e0e8;
   }
   .snav__dock a[aria-current="true"] {
     background: var(--accent);
     color: #0b1419;
-    padding: 0 14px 0 11px;
-    gap: 7px;
-    font-size: 13px;
-    font-weight: 700;
-  }
-  .snav__dock .snav__label {
-    display: none;
-    white-space: nowrap;
-  }
-  .snav__dock a[aria-current="true"] .snav__label {
-    display: inline;
   }
   .snav :global(.snav__icon) {
     width: 18px;
