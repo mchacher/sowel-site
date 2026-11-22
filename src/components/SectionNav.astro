@@ -204,15 +204,6 @@ const items = copy.nav.links.filter((l) => ICONS[l.href]).map((l) => ({ ...l, ic
       gap: 6px;
       position: relative;
     }
-    .snav__rail::before {
-      content: "";
-      position: absolute;
-      right: 11.75px; /* centre of the dots (8px padding + 4.5px) minus half the line */
-      top: 8px;
-      bottom: 8px;
-      width: 1.5px;
-      background: color-mix(in srgb, var(--text-2) 25%, transparent);
-    }
     .snav__rail a {
       position: relative;
       display: flex;
@@ -220,6 +211,16 @@ const items = copy.nav.links.filter((l) => ICONS[l.href]).map((l) => ({ ...l, ic
       gap: 10px;
       height: 28px;
       padding-right: 8px;
+    }
+    /* The line is drawn in segments from each dot's own box: whole pixels, so it sits exactly on the dots' axis. */
+    .snav__rail li:not(:last-child) a::before {
+      content: "";
+      position: absolute;
+      right: 12px; /* 8px padding + half the dot (5px) - half the line (1px) */
+      top: 50%;
+      width: 2px;
+      height: 34px; /* the link (28px) + the gap (6px) */
+      background: color-mix(in srgb, var(--text-2) 25%, transparent);
     }
     .snav__name {
       padding: 4px 10px;
@@ -244,8 +245,9 @@ const items = copy.nav.links.filter((l) => ICONS[l.href]).map((l) => ({ ...l, ic
     }
     .snav__dot {
       position: relative;
-      width: 9px;
-      height: 9px;
+      z-index: 1;
+      width: 10px;
+      height: 10px;
       border-radius: 50%;
       background: color-mix(in srgb, var(--text-2) 45%, var(--surface));
       transition:
