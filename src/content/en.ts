@@ -30,7 +30,19 @@ export const en: SiteCopy = {
       { label: "Privacy", href: "#privacy" },
     ],
     github: { label: "GitHub", href: REPO },
-    docs: { label: "Docs", href: DOCS },
+    docs: {
+      label: "Docs",
+      menu: "Articles and manual",
+      articles: "Articles",
+      manual: "Manual",
+      links: [
+        { icon: "rocket", title: "Getting started", body: "Install Sowel and add your first devices", href: `${DOCS}user/getting-started/` },
+        { icon: "book-open", title: "User guide", body: "Devices, zones, modes, recipes, plugins", href: `${DOCS}user/` },
+        { icon: "zap", title: "Energy", body: "Where the energy goes, the surplus arbiter", href: `${DOCS}deep-dives/energy-tour/` },
+        { icon: "code-xml", title: "Technical guide", body: "Architecture, API, writing a plugin", href: `${DOCS}technical/` },
+        { icon: "scroll-text", title: "Release notes", body: "What changed in each version", href: `${DOCS}release-notes/` },
+      ],
+    },
     switch: { label: "FR", aria: "FR, lire ce site en français", href: withBase("/fr/"), lang: "fr" },
   },
   hero: {
@@ -325,20 +337,13 @@ export const en: SiteCopy = {
       { icon: "scroll-text", title: "Release notes", body: "What changed in each version", href: `${DOCS}release-notes/` },
     ],
   },
-  articles: {
-    id: "articles",
-    eyebrow: "Articles",
-    title: "The ideas behind Sowel",
-    titleAccent: "behind Sowel",
-    lead: "In-depth articles, signed by its creator.",
-    read: "Read the article",
-  },
   footer: {
     tagline: "Sowel looks after your home.",
     licence: "Free software under the AGPL-3.0 licence.",
     privacy: "This site sets no cookie and loads nothing from another site.",
     links: [
-      { label: "Articles", href: withBase("/en/#articles") },
+      // One article today: « Articles » leads to it. Once there are several, it leads to an index page of the articles.
+      { label: "Articles", href: withBase("/en/articles/the-energy-brain-of-your-home/") },
       { label: "GitHub", href: REPO },
       { label: "Manual", href: DOCS },
       { label: "Licence", href: `${REPO}/blob/main/LICENSE` },

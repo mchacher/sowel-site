@@ -144,8 +144,8 @@ export function compareArticles(a, b) {
 
 /**
  * The registry of articles (spec 002, src/content/articles/index.ts): each entry pairs an English and a French
- * article with the same blocks, both under /{lang}/articles/<slug>/, with a sized thumbnail per language, and no
- * two entries share a path.
+ * article with the same blocks, both under /{lang}/articles/<slug>/, opening on a paragraph (the standfirst), and
+ * no two entries share a path.
  */
 export function compareRegistry(entries) {
   const problems = [];
@@ -164,13 +164,38 @@ export function compareRegistry(entries) {
         problems.push(`${at}: ${lang} path is not /${lang}/articles/<slug>/: ${a.path}`);
       if (seen.has(a.path)) problems.push(`${at}: the path ${a.path} is used twice`);
       seen.add(a.path);
-      const t = entry.thumbnail?.[lang];
-      if (!text(t?.src) || !(t?.width > 0 && t?.height > 0))
-        problems.push(`${at}: no sized ${lang} thumbnail`);
       const first = a.blocks?.[0];
       if (first?.kind !== "p")
         problems.push(`${at}: the ${lang} article does not open on a paragraph`);
     }
+  });
+  return problems;
+}
+
+/**
+ * The manual's entries of the Docs menu (spec 002): the same pages in both languages, in the same order, with the
+ * same icons; the English ones on https://docs.sowel.org/ without a language prefix, the French ones under /fr/.
+ */
+export function compareDocsMenu(en, fr) {
+  const problems = [];
+  const a = en?.nav?.docs?.links ?? [];
+  const b = fr?.nav?.docs?.links ?? [];
+  if (!a.length) problems.push("the Docs menu has no manual entry");
+  if (a.length !== b.length)
+    problems.push(`the Docs menu has ${a.length} manual entries in English, ${b.length} in French`);
+  const root = "https://docs.sowel.org/";
+  a.forEach((l, i) => {
+    const o = b[i];
+    if (!o) return;
+    if (!l.href?.startsWith(root) || l.href.startsWith(`${root}fr/`))
+      problems.push(`the English manual entry ${i + 1} is not on ${root} without /fr/: ${l.href}`);
+    if (!o.href?.startsWith(`${root}fr/`))
+      problems.push(`the French manual entry ${i + 1} is not under ${root}fr/: ${o.href}`);
+    else if (o.href.replace(`${root}fr/`, root) !== l.href)
+      problems.push(
+        `manual entry ${i + 1} points at another page in each language: ${l.href} ${o.href}`,
+      );
+    if (l.icon !== o.icon) problems.push(`manual entry ${i + 1} has another icon in each language`);
   });
   return problems;
 }

@@ -22,7 +22,7 @@ shares the solar surplus. This spec adds a reading page for such texts, in Engli
 
 ## Non-goals
 
-- No article index page, no tags, no feed, no comments. The Articles section of the home page is the list.
+- No article index page, no tags, no feed, no comments. The header's Docs menu is the list.
 - No JavaScript framework, no new dependency, no third-party request. One small inline script highlights the current
   section in the contents.
 
@@ -62,8 +62,30 @@ shares the solar surplus. This spec adds a reading page for such texts, in Engli
   date and reading time as on the article page, the title, the first paragraph clamped to three lines, and « Lire
   l'article » with an arrow. One column on a phone, the picture beside the text once the card is about 680px wide
   (from about 760px of window), a grid that takes more cards later. A slight lift on hover, none under reduced motion.
-- The footer gains « Articles », to `/{lang}/#articles`, on every page. The section rail and the header menu are
-  unchanged.
+- The footer gains « Articles », on every page. The section rail and the header menu are unchanged.
+
+Superseded by the Docs menu below: the zone is removed.
+
+## Docs menu (maintainer's review, 2026-11-22)
+
+« Un menu en haut, sur docs, qui renvoie aux articles, aux user guide etc. » The Articles zone of the home page is
+removed; a « Docs » menu in the header gives access to the articles and the manual.
+
+- The header's « Manuel » / « Docs » link becomes a disclosure labelled « Docs » in both languages (book icon, chevron),
+  from 640px between the language switch and GitHub; below 640px an icon-only book button (accessible name « Docs »)
+  between the language switch and Install.
+- The panel is a named `nav` with two groups: « Articles » (one entry per article of the registry, title and reading
+  time, `aria-current="page"` on the article being read) and « Manuel » / « Manual », five entries of
+  docs.sowel.org in the page's language (`/fr/` in French), in this order: Getting started (`user/getting-started/`),
+  User guide (`user/`), Energy (`deep-dives/energy-tour/`), Technical guide (`technical/`), Release notes
+  (`release-notes/`), each with an icon and a one-line description. The manual opens in the same tab.
+- It is a `<details>` element, so it opens and closes without script; a small inline script adds `aria-expanded` and
+  closes it on Escape (focus back on the button), on a click outside and when focus leaves it.
+- Look: a night card under the button (23rem, 14px radius, soft border, restrained shadow, scrolling inside if too
+  tall), the article row tinted with the accent; on a phone the panel hangs from the header across the screen width.
+  A short fade and slide, none under reduced motion.
+- The footer's « Articles » leads to the article of the language (one article today; an index page once there are
+  several). The line under the Energy section's lead stays.
 
 ## Approval
 

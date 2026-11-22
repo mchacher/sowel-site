@@ -130,41 +130,81 @@ export function checkSitemap(xml, pairs) {
 }
 
 /**
- * The Articles section of a home page (spec 002): section#articles holds exactly one card link per article, each
- * named by a heading of the section and carrying a lazy thumbnail with its size.
+ * The Docs menu of the header (spec 002): a details disclosure whose summary is named « Docs » and controls a named
+ * nav panel inside it, with one link per article of the language (the current one marked aria-current="page"), then
+ * the manual's links, in order, every one on docs.sowel.org under the prefix of the language.
  */
-export function checkArticlesSection(html, paths) {
+export function checkDocsMenu(html, { lang, articles, manual, current }) {
   const p = [];
-  const sec = /<section\b[^>]*\bid="articles"[^>]*>([\s\S]*?)<\/section>/i.exec(html);
-  if (!sec) return ["no #articles section"];
-  const body = sec[1];
-  const links = [...body.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)];
-  for (const path of paths) {
-    const hits = links.filter((m) => (attr(m[1], "href") ?? "").endsWith(path));
-    if (hits.length !== 1) p.push(`the Articles section links ${hits.length} times to ${path}`);
+  const det = /<details\b[^>]*\bdata-docs\b[^>]*>([\s\S]*?)<\/details>/i.exec(html);
+  if (!det) return ["no Docs menu in the header"];
+  const body = det[1];
+  const sum = /<summary\b([^>]*)>([\s\S]*?)<\/summary>/i.exec(body);
+  if (!sum) p.push("the Docs menu has no summary");
+  else {
+    if (strip(sum[2]) !== "Docs") p.push(`the Docs button is named "${strip(sum[2])}", not "Docs"`);
+    const controls = attr(sum[1], "aria-controls");
+    const nav = /<nav\b([^>]*)>/i.exec(body);
+    if (!nav) p.push("the Docs panel is not a nav");
+    else {
+      if (!controls || attr(nav[1], "id") !== controls)
+        p.push("the Docs button does not control the panel");
+      if (!(attr(nav[1], "aria-label") ?? "").trim())
+        p.push("the Docs panel has no accessible name");
+    }
   }
-  if (links.length !== paths.length)
-    p.push(`the Articles section has ${links.length} links for ${paths.length} articles`);
-  for (const [, a, inner] of links) {
-    const by = attr(a, "aria-labelledby");
-    if (!by || !new RegExp(`<h3\\b[^>]*\\bid="${by}"`, "i").test(inner))
-      p.push(`an article card is not named by its title: ${attr(a, "href")}`);
-    const img = /<img\b([^>]*)>/i.exec(inner);
-    if (!img) p.push(`an article card has no thumbnail: ${attr(a, "href")}`);
-    else if (
-      attr(img[1], "loading") !== "lazy" ||
-      !attr(img[1], "width") ||
-      !attr(img[1], "height")
-    )
-      p.push(`an article thumbnail is not lazy with a size: ${attr(a, "href")}`);
+  const groups = [
+    ...body.matchAll(/<p\b[^>]*class="[^"]*\bdocs__group\b[^"]*"[^>]*>([\s\S]*?)<\/p>/gi),
+  ];
+  if (groups.length !== 2 || groups.some((g) => !strip(g[1])))
+    p.push(`the Docs panel has ${groups.length} named groups, not 2`);
+  const links = [...body.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)];
+  for (const [, a, inner] of links)
+    if (!strip(inner)) p.push(`a Docs entry has no text: ${attr(a, "href")}`);
+  const arts = links.filter((m) => /\bdata-docs-article\b/.test(m[1]));
+  for (const path of articles) {
+    const hits = arts.filter((m) => (attr(m[1], "href") ?? "").endsWith(path));
+    if (hits.length !== 1) p.push(`the Docs menu links ${hits.length} times to ${path}`);
+  }
+  if (arts.length !== articles.length)
+    p.push(`the Docs menu has ${arts.length} articles for ${articles.length}`);
+  for (const [, a] of arts) {
+    const isCurrent = !!current && (attr(a, "href") ?? "").endsWith(current);
+    const marked = attr(a, "aria-current") === "page";
+    if (isCurrent && !marked)
+      p.push(`the current article is not marked in the Docs menu: ${current}`);
+    if (!isCurrent && marked) p.push(`a Docs entry is marked current wrongly: ${attr(a, "href")}`);
+  }
+  const man = links.filter((m) => /\bdata-docs-manual\b/.test(m[1])).map((m) => attr(m[1], "href"));
+  if (JSON.stringify(man) !== JSON.stringify(manual))
+    p.push(`the manual's links are not the expected ones: ${man.join(" ")}`);
+  for (const href of man) {
+    let u;
+    try {
+      u = new URL(href);
+    } catch {
+      p.push(`a manual link is not a URL: ${href}`);
+      continue;
+    }
+    if (u.protocol !== "https:" || u.host !== "docs.sowel.org")
+      p.push(`a manual link is not on https://docs.sowel.org: ${href}`);
+    if ((lang === "fr") !== u.pathname.startsWith("/fr/"))
+      p.push(`a manual link has the wrong language prefix for ${lang}: ${href}`);
   }
   return p;
 }
 
-/** The footer of every page links to the Articles section of the home page of its language. */
-export function checkFooterArticles(html, lang) {
+/** The footer of every page links to the article of its language (one article: « Articles » leads to it). */
+export function checkFooterArticles(html, path) {
   const foot = /<footer\b[\s\S]*?<\/footer>/i.exec(html)?.[0] ?? "";
-  return new RegExp(`href="[^"]*/${lang}/#articles"`).test(foot)
-    ? []
-    : [`the footer has no link to /${lang}/#articles`];
+  const esc = path.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`href="[^"#]*${esc}"`).test(foot) ? [] : [`the footer has no link to ${path}`];
+}
+
+/** The Articles zone of the home page is gone (replaced by the Docs menu): nothing may point at it. */
+export function checkNoArticlesZone(html) {
+  const p = [];
+  if (/\bid="articles"/i.test(html)) p.push("an element still has id=articles");
+  if (/href="[^"]*#articles"/i.test(html)) p.push("a link still points at #articles");
+  return p;
 }

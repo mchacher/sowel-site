@@ -57,7 +57,7 @@ const byline = article.byline.replace(/\.\s*$/, "");
   path={article.path}
   page={{ meta: article.meta, alternates, jsonLd }}
 >
-  <Header copy={copy} inner={{ home: `/${article.lang}/`, switchHref: withBase(article.otherPath) }} />
+  <Header copy={copy} inner={{ home: `/${article.lang}/`, switchHref: withBase(article.otherPath), current: article.path }} />
   <div class="progress" aria-hidden="true"></div>
   <main id="main" class="article">
     <div class="article__grid">

@@ -31,7 +31,9 @@ export type IconName =
   | "terminal"
   | "radio"
   | "box"
-  | "warehouse";
+  | "warehouse"
+  | "rocket"
+  | "code-xml";
 
 export interface Link {
   label: string;
@@ -57,7 +59,19 @@ export interface SiteCopy {
   nav: {
     links: Link[];
     github: Link;
-    docs: Link;
+    /** The Docs menu of the header (spec 002): the articles of the registry, then the reading entries of the manual. */
+    docs: {
+      /** The visible label of the button, also its accessible name. */
+      label: string;
+      /** The accessible name of the panel's nav landmark. */
+      menu: string;
+      /** The heading of the articles group; the entries come from src/content/articles/index.ts. */
+      articles: string;
+      /** The heading of the manual group. */
+      manual: string;
+      /** The manual's entries, on docs.sowel.org in the language of the page. */
+      links: { icon: IconName; title: string; body: string; href: string }[];
+    };
     switch: { label: string; aria: string; href: string; lang: "en" | "fr" };
   };
   hero: {
@@ -168,16 +182,6 @@ export interface SiteCopy {
     titleAccent: string;
     lead: string;
     links: { icon: IconName; title: string; body: string; href: string }[];
-  };
-  /** The Articles section of the home page (spec 002): the cards come from src/content/articles/index.ts. */
-  articles: {
-    id: string;
-    eyebrow: string;
-    title: string;
-    titleAccent: string;
-    lead: string;
-    /** The link label at the foot of each card. */
-    read: string;
   };
   footer: { tagline: string; licence: string; privacy: string; links: Link[] };
   /** The interface around an article (spec 002): its words stay in src/content/articles/. */

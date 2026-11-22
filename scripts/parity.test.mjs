@@ -137,11 +137,10 @@ const pair = () => {
   const fr = other({ path: "/fr/articles/b/", otherPath: "/en/articles/a/" });
   en.blocks = [open, ...en.blocks];
   fr.blocks = [open, ...fr.blocks];
-  const img = { src: "/t.webp", alt: "", width: 10, height: 8 };
-  return { en, fr, thumbnail: { en: img, fr: img } };
+  return { en, fr };
 };
 
-test("a registry entry with both languages, paths and thumbnails: no problem", () => {
+test("a registry entry with both languages and paths: no problem", () => {
   assert.deepEqual(compareRegistry([pair()]), []);
 });
 
@@ -150,20 +149,59 @@ test("a registry entry without its French article is reported", () => {
   assert.ok(p.some((m) => m.includes("both an English and a French")));
 });
 
-test("a path outside /{lang}/articles/, a reused path and a missing thumbnail are reported", () => {
+test("a path outside /{lang}/articles/ and a reused path are reported", () => {
   const bad = pair();
   bad.en.path = "/en/a/";
   bad.fr.otherPath = "/en/a/";
-  bad.thumbnail.fr = { src: "", width: 0, height: 0 };
   const p = compareRegistry([bad, pair(), pair()]);
   assert.ok(p.some((m) => m.includes("en path is not")));
-  assert.ok(p.some((m) => m.includes("no sized fr thumbnail")));
   assert.ok(p.some((m) => m.includes("used twice")));
 });
 
-test("an article that does not open on a paragraph has no standfirst for its card", () => {
+test("an article that does not open on a paragraph has no standfirst", () => {
   const e = pair();
   e.en.blocks = e.en.blocks.slice(1);
   e.fr.blocks = e.fr.blocks.slice(1);
   assert.ok(compareRegistry([e]).some((m) => m.includes("does not open on a paragraph")));
+});
+
+import { compareDocsMenu } from "./lib/parity.mjs";
+
+const docsCopy = (root, titles = ["Getting started", "Release notes"]) => ({
+  nav: {
+    docs: {
+      label: "Docs",
+      menu: "m",
+      articles: "Articles",
+      manual: "M",
+      links: [
+        { icon: "rocket", title: titles[0], body: "b", href: `${root}user/getting-started/` },
+        { icon: "scroll-text", title: titles[1], body: "b", href: `${root}release-notes/` },
+      ],
+    },
+  },
+});
+
+test("the Docs menu with the same pages under the right prefixes: no problem", () => {
+  const en = docsCopy("https://docs.sowel.org/");
+  const fr = docsCopy("https://docs.sowel.org/fr/", ["Premiers pas", "Notes de version"]);
+  assert.deepEqual(compareDocsMenu(en, fr), []);
+  assert.deepEqual(compareCopy(en, fr), []);
+});
+
+test("a Docs menu entry missing, under the wrong prefix or on another page is reported", () => {
+  const en = docsCopy("https://docs.sowel.org/");
+  const fr = docsCopy("https://docs.sowel.org/fr/");
+  fr.nav.docs.links.pop();
+  assert.ok(compareDocsMenu(en, fr).some((m) => m.includes("2 manual entries in English, 1")));
+  assert.ok(compareCopy(en, fr).some((m) => m.includes("nav.docs.links[1].title")));
+  const wrong = docsCopy("https://docs.sowel.org/");
+  assert.ok(
+    compareDocsMenu(en, wrong).some((m) => m.includes("not under https://docs.sowel.org/fr/")),
+  );
+  const enFr = docsCopy("https://docs.sowel.org/fr/");
+  assert.ok(compareDocsMenu(enFr, fr).some((m) => m.includes("without /fr/")));
+  const moved = docsCopy("https://docs.sowel.org/fr/");
+  moved.nav.docs.links[0].href = "https://docs.sowel.org/fr/user/";
+  assert.ok(compareDocsMenu(en, moved).some((m) => m.includes("another page in each language")));
 });

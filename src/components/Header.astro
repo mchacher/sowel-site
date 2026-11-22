@@ -3,15 +3,22 @@ import type { SiteCopy } from "../content/types";
 import Logo from "./Logo.astro";
 import Icon from "./Icon.astro";
 import { withBase } from "../lib/url";
+import { articleLinks } from "../content/articles/index.ts";
 
 interface Props {
   copy: SiteCopy;
-  /** On an inner page: the home page of the language (section anchors lead back to it) and the other-language twin of this page. */
-  inner?: { home: string; switchHref: string };
+  /**
+   * On an inner page: the home page of the language (section anchors lead back to it), the other-language twin of
+   * this page, and its own path when it is an article (its entry in the Docs menu is then the current page).
+   */
+  inner?: { home: string; switchHref: string; current?: string };
 }
 const { copy, inner } = Astro.props;
 const to = (hash: string) => (inner ? withBase(inner.home) + hash : hash);
 const switchHref = inner?.switchHref ?? copy.nav.switch.href;
+const docs = copy.nav.docs;
+const arts = articleLinks(copy.lang);
+const readingTime = (n: number) => copy.articlePage.readingTime.replace("{n}", String(n));
 ---
 
 <a class="skip" href="#main">{copy.a11y.skip}</a>
@@ -26,10 +33,58 @@ const switchHref = inner?.switchHref ?? copy.nav.switch.href;
     </nav>
     <div class="header__actions">
       <a class="lang" href={switchHref} hreflang={copy.nav.switch.lang} lang={copy.nav.switch.lang} aria-label={copy.nav.switch.aria}>{copy.nav.switch.label}</a>
-      <a class="gh" href={copy.nav.docs.href}>
-        <Icon name="book-open" class="icon icon--sm" />
-        <span>{copy.nav.docs.label}</span>
-      </a>
+      <!-- The Docs menu (spec 002): a disclosure, a details element so it opens without script; the script below only
+           adds Escape, a click outside and focus leaving it to the ways it closes. -->
+      <details class="docs" data-docs>
+        <summary class="docs__btn" aria-controls="docs-panel">
+          <Icon name="book-open" class="icon icon--sm" />
+          <span class="docs__label">{docs.label}</span>
+          <Icon name="chevron-down" class="icon docs__chev" />
+        </summary>
+        <nav class="docs__panel" id="docs-panel" aria-label={docs.menu} data-docs-panel>
+          <p class="docs__group" id="docs-g-articles">{docs.articles}</p>
+          <ul class="docs__list" aria-labelledby="docs-g-articles">
+            {
+              arts.map((a) => (
+                <li>
+                  <a
+                    class="docs__item docs__item--article"
+                    href={a.href}
+                    aria-current={inner?.current === a.path ? "page" : undefined}
+                    data-docs-article
+                  >
+                    <span class="docs__medal" aria-hidden="true">
+                      <Icon name="newspaper" class="icon docs__icon" />
+                    </span>
+                    <span class="docs__text">
+                      <span class="docs__title">{a.title}</span>
+                      <span class="docs__desc">{readingTime(a.minutes)}</span>
+                    </span>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+          <p class="docs__group" id="docs-g-manual">{docs.manual}</p>
+          <ul class="docs__list" aria-labelledby="docs-g-manual">
+            {
+              docs.links.map((l) => (
+                <li>
+                  <a class="docs__item" href={l.href} data-docs-manual>
+                    <span class="docs__medal" aria-hidden="true">
+                      <Icon name={l.icon} class="icon docs__icon" />
+                    </span>
+                    <span class="docs__text">
+                      <span class="docs__title">{l.title}</span>
+                      <span class="docs__desc">{l.body}</span>
+                    </span>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </details>
       <a class="gh" href={copy.nav.github.href} aria-label={copy.nav.github.label}>
         <Icon name="git-fork" class="icon icon--sm" />
         <span class="gh__label">{copy.nav.github.label}</span>
@@ -38,6 +93,28 @@ const switchHref = inner?.switchHref ?? copy.nav.switch.href;
     </div>
   </div>
 </header>
+<script is:inline>
+  (() => {
+    const d = document.querySelector("[data-docs]");
+    if (!d) return;
+    const s = d.querySelector("summary");
+    const sync = () => s.setAttribute("aria-expanded", d.open ? "true" : "false");
+    sync();
+    d.addEventListener("toggle", sync);
+    d.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && d.open) {
+        d.open = false;
+        s.focus();
+      }
+    });
+    document.addEventListener("click", (e) => {
+      if (d.open && !d.contains(e.target)) d.open = false;
+    });
+    d.addEventListener("focusout", (e) => {
+      if (d.open && e.relatedTarget && !d.contains(e.relatedTarget)) d.open = false;
+    });
+  })();
+</script>
 
 <style>
   .skip {
@@ -148,6 +225,202 @@ const switchHref = inner?.switchHref ?? copy.nav.switch.href;
   }
   .btn--sm:hover {
     background: var(--stage-fill-hover);
+  }
+  /* The Docs menu: a button on the night stage, a night card under it. */
+  .docs {
+    position: relative;
+  }
+  .docs__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 38px;
+    width: 38px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    color: var(--text-2);
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+  .docs__btn::-webkit-details-marker {
+    display: none;
+  }
+  .docs__btn:hover,
+  .docs[open] > .docs__btn {
+    color: var(--text-strong);
+    border-color: var(--text-3);
+  }
+  .docs__btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  /* On a phone the button is the book alone; its label stays its accessible name. */
+  .docs__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+  .docs :global(.docs__chev) {
+    display: none;
+    width: 15px;
+    height: 15px;
+    transition: transform 0.16s ease;
+  }
+  .docs[open] :global(.docs__chev) {
+    transform: rotate(180deg);
+  }
+
+  .docs__panel {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 60;
+    max-height: calc(100dvh - 64px - 12px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 10px 8px 12px;
+    background: var(--stage-2);
+    border: 1px solid var(--stage-line);
+    border-top: 0;
+    border-radius: 0 0 14px 14px;
+    box-shadow: 0 24px 48px -16px rgba(0, 0, 0, 0.6);
+  }
+  .docs[open] > .docs__panel {
+    animation: docs-in 0.16s ease-out;
+  }
+  @keyframes docs-in {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
+  .docs__group {
+    padding: 8px 10px 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-3);
+  }
+  .docs__list + .docs__group {
+    margin-top: 6px;
+    padding-top: 14px;
+    border-top: 1px solid var(--stage-line);
+  }
+  .docs__list {
+    display: grid;
+    gap: 2px;
+  }
+  .docs__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    color: var(--text-strong);
+    text-decoration: none;
+  }
+  .docs__item:hover {
+    color: var(--text-strong);
+    background: rgba(255, 255, 255, 0.06);
+  }
+  .docs__item:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+    background: rgba(255, 255, 255, 0.06);
+  }
+  .docs__medal {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(127, 184, 212, 0.12);
+    color: var(--accent);
+  }
+  .docs :global(.docs__icon) {
+    width: 17px;
+    height: 17px;
+  }
+  .docs__text {
+    display: grid;
+    gap: 1px;
+    min-width: 0;
+  }
+  .docs__title {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  .docs__desc {
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--text-3);
+  }
+  /* The article comes first and wears a little more of the accent. */
+  .docs__item--article {
+    background: rgba(127, 184, 212, 0.07);
+    box-shadow: inset 2px 0 0 var(--accent);
+  }
+  .docs__item--article .docs__medal {
+    background: var(--accent);
+    color: var(--stage);
+  }
+  .docs__item--article:hover {
+    background: rgba(127, 184, 212, 0.13);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .docs[open] > .docs__panel {
+      animation: none;
+    }
+    .docs :global(.docs__chev) {
+      transition: none;
+    }
+  }
+  @media (max-width: 639.98px) {
+    /* On a phone the panel hangs from the whole header, the width of the screen. */
+    .docs {
+      position: static;
+    }
+  }
+  @media (min-width: 640px) {
+    .docs__btn {
+      width: auto;
+      padding: 8px 10px 8px 12px;
+      border-color: transparent;
+      font-size: 15px;
+      font-weight: 500;
+    }
+    .docs__btn:hover,
+    .docs[open] > .docs__btn {
+      border-color: transparent;
+      background: var(--surface-sunk);
+    }
+    .docs__label {
+      position: static;
+      width: auto;
+      height: auto;
+      overflow: visible;
+      clip: auto;
+    }
+    .docs :global(.docs__chev) {
+      display: block;
+    }
+    .docs__panel {
+      top: calc(100% + 18px);
+      left: auto;
+      right: 0;
+      width: 23rem;
+      max-height: calc(100dvh - 64px - 24px);
+      padding: 8px 8px 10px;
+      border-top: 1px solid var(--stage-line);
+      border-radius: 14px;
+    }
   }
   @media (min-width: 640px) {
     .gh {

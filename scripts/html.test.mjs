@@ -141,50 +141,107 @@ test("a contents that misses a section and an unnamed nav are reported", () => {
   assert.ok(p.some((m) => m.includes("nav landmark has no accessible name")));
 });
 
-import { checkArticlesSection, checkFooterArticles } from "./lib/html.mjs";
+import { checkDocsMenu, checkFooterArticles, checkNoArticlesZone } from "./lib/html.mjs";
 
-const card = (path, slug) =>
-  `<li><a class="acard" href="${path}" aria-labelledby="art-${slug}"><span><img src="/t.webp" alt="" width="10" height="8" loading="lazy"></span><h3 id="art-${slug}">T</h3></a></li>`;
-const home = (cards) =>
-  `<main><section id="privacy"></section><section class="section" id="articles"><h2>A</h2><ul>${cards}</ul></section></main>`;
+const MANUAL = {
+  en: ["https://docs.sowel.org/user/", "https://docs.sowel.org/release-notes/"],
+  fr: ["https://docs.sowel.org/fr/user/", "https://docs.sowel.org/fr/release-notes/"],
+};
+const menu = ({
+  lang = "en",
+  art = "/en/articles/a/",
+  current = false,
+  manual = MANUAL[lang],
+  label = "Docs",
+} = {}) =>
+  `<header><details class="docs" data-docs><summary class="docs__btn" aria-controls="docs-panel"><svg></svg><span>${label}</span></summary>` +
+  `<nav class="docs__panel" id="docs-panel" aria-label="Articles and manual"><p class="docs__group">Articles</p><ul>` +
+  `<li><a class="docs__item" href="${art}" data-docs-article${current ? ' aria-current="page"' : ""}><span>The article</span></a></li></ul>` +
+  `<p class="docs__group">Manual</p><ul>` +
+  manual
+    .map(
+      (h) => `<li><a class="docs__item" href="${h}" data-docs-manual><span>Entry</span></a></li>`,
+    )
+    .join("") +
+  `</ul></nav></details></header>`;
+const opts = (o = {}) => ({ lang: "en", articles: ["/en/articles/a/"], manual: MANUAL.en, ...o });
 
-test("an Articles section with one named card per article: no problem", () => {
+test("a Docs menu with its article and the manual in the language: no problem", () => {
+  assert.deepEqual(checkDocsMenu(menu(), opts()), []);
   assert.deepEqual(
-    checkArticlesSection(home(card("/en/articles/a/", "a")), ["/en/articles/a/"]),
+    checkDocsMenu(
+      menu({ lang: "fr", art: "/fr/articles/b/" }),
+      opts({ lang: "fr", articles: ["/fr/articles/b/"], manual: MANUAL.fr }),
+    ),
+    [],
+  );
+  assert.deepEqual(
+    checkDocsMenu(menu({ current: true }), opts({ current: "/en/articles/a/" })),
     [],
   );
 });
 
-test("a missing section, a missing card and a doubled card are reported", () => {
-  assert.deepEqual(checkArticlesSection("<main></main>", ["/en/articles/a/"]), [
-    "no #articles section",
-  ]);
-  const none = checkArticlesSection(home(""), ["/en/articles/a/"]);
-  assert.ok(none.some((m) => m.includes("links 0 times")));
-  const twice = checkArticlesSection(
-    home(card("/en/articles/a/", "a") + card("/en/articles/a/", "b")),
-    ["/en/articles/a/"],
+test("a missing menu, a wrong name, an unnamed or uncontrolled panel are reported", () => {
+  assert.deepEqual(checkDocsMenu("<header></header>", opts()), ["no Docs menu in the header"]);
+  assert.ok(
+    checkDocsMenu(menu({ label: "Manual" }), opts()).some((m) => m.includes('named "Manual"')),
   );
-  assert.ok(twice.some((m) => m.includes("links 2 times")));
+  assert.ok(
+    checkDocsMenu(menu().replace(' aria-label="Articles and manual"', ""), opts()).some((m) =>
+      m.includes("panel has no accessible name"),
+    ),
+  );
+  assert.ok(
+    checkDocsMenu(menu().replace(' aria-controls="docs-panel"', ""), opts()).some((m) =>
+      m.includes("does not control the panel"),
+    ),
+  );
 });
 
-test("a card not named by its title or with an eager thumbnail is reported", () => {
-  const c = card("/en/articles/a/", "a");
-  const p1 = checkArticlesSection(home(c.replace('aria-labelledby="art-a"', "")), [
-    "/en/articles/a/",
-  ]);
-  assert.ok(p1.some((m) => m.includes("not named by its title")));
-  const p2 = checkArticlesSection(home(c.replace(' loading="lazy"', "")), ["/en/articles/a/"]);
-  assert.ok(p2.some((m) => m.includes("not lazy")));
+test("a missing article, a wrong current mark and wrong manual links are reported", () => {
+  assert.ok(
+    checkDocsMenu(menu({ art: "/en/articles/z/" }), opts()).some((m) => m.includes("0 times")),
+  );
+  assert.ok(
+    checkDocsMenu(menu(), opts({ current: "/en/articles/a/" })).some((m) =>
+      m.includes("not marked"),
+    ),
+  );
+  assert.ok(
+    checkDocsMenu(menu({ current: true }), opts()).some((m) =>
+      m.includes("marked current wrongly"),
+    ),
+  );
+  // The French manual on an English page: not the expected links, and the wrong prefix.
+  const p = checkDocsMenu(menu({ manual: MANUAL.fr }), opts());
+  assert.ok(p.some((m) => m.includes("not the expected ones")));
+  assert.ok(p.some((m) => m.includes("wrong language prefix for en")));
+  const q = checkDocsMenu(
+    menu({ manual: ["http://docs.example.org/user/"] }),
+    opts({ manual: ["http://docs.example.org/user/"] }),
+  );
+  assert.ok(q.some((m) => m.includes("not on https://docs.sowel.org")));
 });
 
-test("the footer must link to the Articles section of its language", () => {
+test("the footer must link to the article of its language", () => {
   assert.deepEqual(
-    checkFooterArticles('<footer><a href="/fr/#articles">Articles</a></footer>', "fr"),
+    checkFooterArticles(
+      '<footer><a href="/fr/articles/b/">Articles</a></footer>',
+      "/fr/articles/b/",
+    ),
     [],
   );
   assert.equal(
-    checkFooterArticles('<footer><a href="/en/#articles">Articles</a></footer>', "fr").length,
+    checkFooterArticles('<footer><a href="/fr/#articles">Articles</a></footer>', "/fr/articles/b/")
+      .length,
     1,
+  );
+});
+
+test("nothing may point at the removed Articles zone", () => {
+  assert.deepEqual(checkNoArticlesZone('<a href="/en/articles/a/">A</a>'), []);
+  assert.equal(
+    checkNoArticlesZone('<a href="/en/#articles">A</a><section id="articles"></section>').length,
+    2,
   );
 });

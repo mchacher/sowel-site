@@ -30,7 +30,19 @@ export const fr: SiteCopy = {
       { label: "Confidentialité", href: "#privacy" },
     ],
     github: { label: "GitHub", href: REPO },
-    docs: { label: "Manuel", href: DOCS },
+    docs: {
+      label: "Docs",
+      menu: "Articles et manuel",
+      articles: "Articles",
+      manual: "Manuel",
+      links: [
+        { icon: "rocket", title: "Premiers pas", body: "Installer Sowel et ajouter vos premiers appareils", href: `${DOCS}user/getting-started/` },
+        { icon: "book-open", title: "Guide utilisateur", body: "Appareils, zones, modes, recettes, plugins", href: `${DOCS}user/` },
+        { icon: "zap", title: "Énergie", body: "Où va l'énergie, l'arbitre de surplus", href: `${DOCS}deep-dives/energy-tour/` },
+        { icon: "code-xml", title: "Guide technique", body: "Architecture, API, écrire un plugin", href: `${DOCS}technical/` },
+        { icon: "scroll-text", title: "Notes de version", body: "Ce qui change à chaque version", href: `${DOCS}release-notes/` },
+      ],
+    },
     switch: { label: "EN", aria: "EN, read this site in English", href: withBase("/en/"), lang: "en" },
   },
   hero: {
@@ -325,20 +337,13 @@ export const fr: SiteCopy = {
       { icon: "scroll-text", title: "Notes de version", body: "Ce qui change à chaque version", href: `${DOCS}release-notes/` },
     ],
   },
-  articles: {
-    id: "articles",
-    eyebrow: "Articles",
-    title: "Les idées derrière Sowel",
-    titleAccent: "derrière Sowel",
-    lead: "Des articles de fond, signés de son créateur.",
-    read: "Lire l'article",
-  },
   footer: {
     tagline: "Sowel prend soin de votre maison.",
     licence: "Logiciel libre sous licence AGPL-3.0.",
     privacy: "Ce site ne dépose aucun cookie et ne charge rien depuis un autre site.",
     links: [
-      { label: "Articles", href: withBase("/fr/#articles") },
+      // One article today: « Articles » leads to it. Once there are several, it leads to an index page of the articles.
+      { label: "Articles", href: withBase("/fr/articles/le-cerveau-energetique-de-la-maison/") },
       { label: "GitHub", href: REPO },
       { label: "Manuel", href: DOCS },
       { label: "Licence", href: `${REPO}/blob/main/LICENSE` },
