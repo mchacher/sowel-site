@@ -25,7 +25,7 @@ export type IconName =
   | "scroll-text"
   | "house"
   | "layout-grid"
-  | "layout-dashboard"
+  | "sliders-horizontal"
   | "chef-hat"
   | "sun-moon"
   | "terminal"
@@ -53,7 +53,7 @@ export interface TreeNode {
 export interface SiteCopy {
   lang: "en" | "fr";
   meta: { title: string; description: string };
-  a11y: { skip: string; home: string; nav: string; copyDone: string };
+  a11y: { skip: string; home: string; nav: string; sections: string; copyDone: string };
   nav: {
     links: Link[];
     github: Link;

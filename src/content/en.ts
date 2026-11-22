@@ -15,6 +15,7 @@ export const en: SiteCopy = {
     skip: "Skip to content",
     home: "Sowel, home",
     nav: "Main",
+    sections: "Sections of the page",
     copyDone: "Command copied to the clipboard",
   },
   nav: {
