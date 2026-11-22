@@ -14,7 +14,7 @@ export const fr: Article = {
   title: "Le cerveau énergétique de la maison",
   byline: "Marc Chachereau, créateur de Sowel.",
   blocks: [
-    { kind: "p", runs: [{ text: "Chaque kWh de soleil que votre maison utilise est un kWh que vous n'achetez pas. Chaque kWh qu'elle laisse filer part sur le réseau." }] },
+    { kind: "p", runs: [{ text: "Chaque kWh de soleil que votre maison utilise est un kWh que vous n'achetez pas. Celui qu'elle n'utilise pas part sur le réseau." }] },
     { kind: "p", runs: [{ text: "Votre chauffe-eau, votre voiture, votre pompe à chaleur et votre piscine réclament tous ce soleil. La solution évidente\u00a0: chacune de ces charges surveille le compteur et démarre dès qu'il y a du surplus. Elle échoue pour une raison simple\u00a0: toutes lisent le même compteur, démarrent ensemble et se disputent les mêmes watts." }] },
     { kind: "p", runs: [{ text: "Ajouter des priorités ne suffit pas\u00a0: partager un surplus qui bouge sans cesse demande des algorithmes difficiles à mettre au point. Sowel résout cela d'une manière très originale\u00a0: il centralise l'intelligence de l'énergie et décentralise l'intelligence de la commande. Un seul arbitre distribue le soleil, et chacun de vos automatismes le lui demande en gardant la main sur son appareil." }] },
     { kind: "figure", id: "flow", image: { src: withBase("/img/fr/article-flow.webp"), alt: "La vue Flux en direct de la maison de démonstration de Sowel, un après-midi ensoleillé\u00a0: la production solaire, la maison et le réseau, avec 4,2 kW produits, 2,7 kW consommés et 1,5 kW exportés.", width: 1300, height: 1026 }, caption: "Le flux en direct de la maison de démonstration, un après-midi ensoleillé simulé\u00a0: 4,2 kW produits, 2,7 kW consommés, 1,5 kW exportés." },
