@@ -29,6 +29,7 @@ export const fr: SiteCopy = {
       { label: "Confidentialité", href: "#privacy" },
     ],
     github: { label: "GitHub", href: REPO },
+    docs: { label: "Manuel", href: DOCS },
     switch: { label: "EN", aria: "EN, read this site in English", href: withBase("/en/"), lang: "en" },
   },
   hero: {

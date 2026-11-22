@@ -21,9 +21,13 @@ const { copy } = Astro.props;
     </nav>
     <div class="header__actions">
       <a class="lang" href={copy.nav.switch.href} hreflang={copy.nav.switch.lang} lang={copy.nav.switch.lang} aria-label={copy.nav.switch.aria}>{copy.nav.switch.label}</a>
-      <a class="gh" href={copy.nav.github.href}>
+      <a class="gh" href={copy.nav.docs.href}>
+        <Icon name="book-open" class="icon icon--sm" />
+        <span>{copy.nav.docs.label}</span>
+      </a>
+      <a class="gh" href={copy.nav.github.href} aria-label={copy.nav.github.label}>
         <Icon name="git-fork" class="icon icon--sm" />
-        <span>{copy.nav.github.label}</span>
+        <span class="gh__label">{copy.nav.github.label}</span>
       </a>
       <a class="btn btn--fill btn--sm" href={copy.hero.ctas.primary.href}>{copy.hero.ctas.primary.label}</a>
     </div>
@@ -61,7 +65,7 @@ const { copy } = Astro.props;
   .header__inner {
     display: flex;
     align-items: center;
-    gap: 32px;
+    gap: 24px;
     height: 64px;
   }
   .brand {
@@ -82,7 +86,8 @@ const { copy } = Astro.props;
     gap: 4px;
   }
   .nav a {
-    padding: 8px 12px;
+    padding: 8px 10px;
+    white-space: nowrap;
     border-radius: var(--r-sm);
     font-size: 15px;
     font-weight: 500;
@@ -144,9 +149,19 @@ const { copy } = Astro.props;
       display: inline-flex;
     }
   }
-  @media (min-width: 1024px) {
+  /* The GitHub label is dropped on the narrower desktops, the French menu is the longest. */
+  .gh__label {
+    display: none;
+  }
+  /* The section menu needs room: from 1200px (the French one is the longest). Below, the rail or the dock lead. */
+  @media (min-width: 1200px) {
     .nav {
       display: flex;
+    }
+  }
+  @media (min-width: 1360px) {
+    .gh__label {
+      display: inline;
     }
   }
 </style>
