@@ -15,6 +15,7 @@ export const fr: SiteCopy = {
     skip: "Aller au contenu",
     home: "Sowel, accueil",
     nav: "Principale",
+    sections: "Sections de la page",
     copyDone: "Commande copiée dans le presse-papiers",
   },
   nav: {

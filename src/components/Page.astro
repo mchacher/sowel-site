@@ -12,6 +12,7 @@ import Privacy from "./Privacy.astro";
 import Install from "./Install.astro";
 import Community from "./Community.astro";
 import Footer from "./Footer.astro";
+import SectionNav from "./SectionNav.astro";
 import type { SiteCopy } from "../content/types";
 
 interface Props {
@@ -35,6 +36,7 @@ const { copy, path } = Astro.props;
     <Install copy={copy} />
     <Community copy={copy} />
   </main>
+  <SectionNav copy={copy} />
   <Footer copy={copy} />
   <p id="copy-live" class="sr-only" aria-live="polite" data-msg={copy.a11y.copyDone}></p>
 </Base>
