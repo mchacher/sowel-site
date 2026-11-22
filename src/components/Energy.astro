@@ -1,6 +1,7 @@
 ---
 import type { SiteCopy } from "../content/types";
 import Accent from "./Accent.astro";
+import SectionTag from "./SectionTag.astro";
 
 interface Props {
   copy: SiteCopy;
@@ -11,7 +12,7 @@ const { energy } = Astro.props.copy;
 <section class="section section--band" id={energy.id}>
   <div class="container">
     <div class="section-head section-head--center" data-reveal>
-      <p class="eyebrow">{energy.eyebrow}</p>
+      <SectionTag text={energy.eyebrow} icon="zap" />
       <h2 class="h2"><Accent text={energy.title} accent={energy.titleAccent} /></h2>
       <p class="lead">{energy.lead}</p>
     </div>

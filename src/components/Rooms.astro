@@ -2,6 +2,7 @@
 import type { SiteCopy } from "../content/types";
 import Icon from "./Icon.astro";
 import Accent from "./Accent.astro";
+import SectionTag from "./SectionTag.astro";
 
 interface Props {
   copy: SiteCopy;
@@ -13,7 +14,7 @@ const { rooms } = Astro.props.copy;
   <div class="container rooms">
     <div class="rooms__text">
       <div class="section-head" data-reveal>
-        <p class="eyebrow">{rooms.eyebrow}</p>
+        <SectionTag text={rooms.eyebrow} icon="layout-grid" />
         <h2 class="h2"><Accent text={rooms.title} accent={rooms.titleAccent} /></h2>
         <p class="lead">{rooms.lead}</p>
       </div>

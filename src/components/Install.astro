@@ -3,6 +3,7 @@ import type { SiteCopy } from "../content/types";
 import InstallCommand from "./InstallCommand.astro";
 import Icon from "./Icon.astro";
 import Accent from "./Accent.astro";
+import SectionTag from "./SectionTag.astro";
 
 interface Props {
   copy: SiteCopy;
@@ -13,7 +14,7 @@ const { install, hero } = Astro.props.copy;
 <section class="section install" id={install.id}>
   <div class="container">
     <div class="section-head section-head--center" data-reveal>
-      <p class="eyebrow">{install.eyebrow}</p>
+      <SectionTag text={install.eyebrow} icon="terminal" />
       <h2 class="h2"><Accent text={install.title} accent={install.titleAccent} /></h2>
       <p class="lead">{install.lead}</p>
     </div>

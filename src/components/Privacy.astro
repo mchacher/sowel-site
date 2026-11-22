@@ -3,6 +3,7 @@ import type { SiteCopy } from "../content/types";
 import Icon from "./Icon.astro";
 import Accent from "./Accent.astro";
 import Logo from "./Logo.astro";
+import SectionTag from "./SectionTag.astro";
 
 interface Props {
   copy: SiteCopy;
@@ -14,7 +15,7 @@ const { privacy } = Astro.props.copy;
   <div class="privacy__mark" aria-hidden="true"><Logo size={560} /></div>
   <div class="container privacy__inner">
     <div class="privacy__head" data-reveal>
-      <p class="eyebrow">{privacy.eyebrow}</p>
+      <SectionTag text={privacy.eyebrow} icon="shield-check" />
       <h2 class="h2"><Accent text={privacy.title} accent={privacy.titleAccent} /></h2>
       <p class="lead">{privacy.lead}</p>
     </div>
