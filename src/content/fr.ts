@@ -252,8 +252,8 @@ export const fr: SiteCopy = {
   energy: {
     id: "energy",
     eyebrow: "Énergie",
-    title: "Votre soleil en trop ne se perd plus",
-    titleAccent: "ne se perd plus",
+    title: "Votre énergie, suivie et optimisée",
+    titleAccent: "optimisée",
     lead: "Sowel suit votre production et votre consommation en direct, et chiffre ce qu'elles vous coûtent. Pour faire baisser cette facture, les recettes s'appuient sur l'arbitre énergétique, qui répartit le surplus solaire par priorité : d'abord le ballon d'eau chaude, puis la voiture. Vous n'avez aucune règle à écrire.",
     flow: {
       title: "Flux en direct",

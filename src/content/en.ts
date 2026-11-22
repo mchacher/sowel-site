@@ -252,8 +252,8 @@ export const en: SiteCopy = {
   energy: {
     id: "energy",
     eyebrow: "Energy",
-    title: "Every watt of sun, put to work",
-    titleAccent: "put to work",
+    title: "Your energy, tracked and optimised",
+    titleAccent: "optimised",
     lead: "Sowel follows your production and your consumption as they happen, and tracks what they cost you. To lower that cost, recipes rely on the energy arbiter, which shares the solar surplus by priority: the water heater first, then the car. You have no rule to write.",
     flow: {
       title: "Live flow",
