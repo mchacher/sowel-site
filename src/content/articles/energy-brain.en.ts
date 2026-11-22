@@ -4,14 +4,14 @@ import { withBase } from "../../lib/url.ts";
 
 export const en: Article = {
   lang: "en",
-  path: "/en/articles/the-energy-brain-of-your-home/",
-  otherPath: "/fr/articles/le-cerveau-energetique-de-la-maison/",
+  path: "/en/articles/optimise-your-solar-power-production/",
+  otherPath: "/fr/articles/optimiser-votre-production-photovoltaique/",
   meta: {
-    title: "The energy brain of your home | Sowel",
+    title: "Optimise your solar power production | Sowel",
     description: "Why sharing solar surplus between a water heater, a car and a heat pump is hard, and how Sowel's energy arbiter and recipes solve it.",
   },
   datePublished: "2026-11-22",
-  title: "The energy brain of your home",
+  title: "Optimise your solar power production",
   byline: "Marc Chachereau, creator of Sowel.",
   blocks: [
     { kind: "p", runs: [{ text: "Every kWh of sun your home uses is a kWh you do not buy. The unused surplus goes to the grid." }] },

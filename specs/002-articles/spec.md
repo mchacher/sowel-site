@@ -11,8 +11,8 @@ shares the solar surplus. This spec adds a reading page for such texts, in Engli
 
 ## Goals
 
-- One article, "The energy brain of your home" / « Le cerveau énergétique de la maison », at
-  `/en/articles/the-energy-brain-of-your-home/` and `/fr/articles/le-cerveau-energetique-de-la-maison/`.
+- One article, "Optimise your solar power production" / « Optimiser votre production photovoltaïque », at
+  `/en/articles/optimise-your-solar-power-production/` and `/fr/articles/optimiser-votre-production-photovoltaique/`.
 - A reading layout in the site's design: the night header and the footer of the home page, a column of about 68
   characters, two figures with captions, and the key sentence set in exergue as a large display quote.
 - The text is the maintainer's, used as written. The two languages carry the same blocks in the same order.
@@ -114,6 +114,12 @@ shows the latest few.
   when it is long.
 - Interface strings in `SiteCopy.articlesPage` and `SiteCopy.nav.docs.all`, the same keys in both languages.
 - Rule for later: when the list passes about 20 entries, the index gets pagination or a filter, in a spec of its own.
+
+## Title (maintainer's review, 2026-11-22)
+
+« Nulle part on comprend qu'on parle de photovoltaïque. » The article is renamed « Optimiser votre production
+photovoltaïque » / "Optimise your solar power production", short and naming the subject (title, `<title>`, Open Graph,
+JSON-LD, the Energy section's link, the addresses). The text and the pull quote stay.
 
 ## Approval
 

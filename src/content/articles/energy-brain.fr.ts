@@ -4,14 +4,14 @@ import { withBase } from "../../lib/url.ts";
 
 export const fr: Article = {
   lang: "fr",
-  path: "/fr/articles/le-cerveau-energetique-de-la-maison/",
-  otherPath: "/en/articles/the-energy-brain-of-your-home/",
+  path: "/fr/articles/optimiser-votre-production-photovoltaique/",
+  otherPath: "/en/articles/optimise-your-solar-power-production/",
   meta: {
-    title: "Le cerveau énergétique de la maison | Sowel",
+    title: "Optimiser votre production photovoltaïque | Sowel",
     description: "Pourquoi partager le surplus solaire entre un chauffe-eau, une voiture et une pompe à chaleur est difficile, et comment l'arbitre énergétique et les recettes de Sowel y répondent.",
   },
   datePublished: "2026-11-22",
-  title: "Le cerveau énergétique de la maison",
+  title: "Optimiser votre production photovoltaïque",
   byline: "Marc Chachereau, créateur de Sowel.",
   blocks: [
     { kind: "p", runs: [{ text: "Chaque kWh de soleil que votre maison utilise est un kWh que vous n'achetez pas. Le surplus non consommé part sur le réseau." }] },
