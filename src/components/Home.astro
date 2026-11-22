@@ -4,6 +4,7 @@ import ProductWindow from "./ProductWindow.astro";
 import PhoneFrame from "./PhoneFrame.astro";
 import Icon from "./Icon.astro";
 import Accent from "./Accent.astro";
+import SectionTag from "./SectionTag.astro";
 
 interface Props {
   copy: SiteCopy;
@@ -23,7 +24,7 @@ walk(t, 0);
 <section class="section" id={home.id}>
   <div class="container">
     <div class="section-head" data-reveal>
-      <p class="eyebrow">{home.eyebrow}</p>
+      <SectionTag text={home.eyebrow} icon="house" />
       <h2 class="h2"><Accent text={home.title} accent={home.titleAccent} /></h2>
       <p class="lead">{home.lead}</p>
     </div>

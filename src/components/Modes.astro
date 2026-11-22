@@ -2,6 +2,7 @@
 import type { SiteCopy } from "../content/types";
 import Icon from "./Icon.astro";
 import Accent from "./Accent.astro";
+import SectionTag from "./SectionTag.astro";
 
 interface Props {
   copy: SiteCopy;
@@ -23,7 +24,7 @@ const { modes } = Astro.props.copy;
     </figure>
     <div class="modes__text">
       <div class="section-head" data-reveal>
-        <p class="eyebrow">{modes.eyebrow}</p>
+        <SectionTag text={modes.eyebrow} icon="sun-moon" />
         <h2 class="h2"><Accent text={modes.title} accent={modes.titleAccent} /></h2>
         <p class="lead">{modes.lead}</p>
       </div>

@@ -24,6 +24,11 @@ export type IconName =
   | "messages-square"
   | "scroll-text"
   | "house"
+  | "layout-grid"
+  | "layout-dashboard"
+  | "chef-hat"
+  | "sun-moon"
+  | "terminal"
   | "radio"
   | "box"
   | "warehouse";

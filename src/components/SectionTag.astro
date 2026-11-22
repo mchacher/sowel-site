@@ -1,0 +1,66 @@
+---
+import type { IconName } from "../content/types";
+import Icon from "./Icon.astro";
+
+interface Props {
+  text: string;
+  icon: IconName;
+}
+const { text, icon } = Astro.props;
+---
+
+<p class="section-tag">
+  <span class="section-tag__chip"><Icon name={icon} class="section-tag__icon" /></span>
+  {text}
+</p>
+
+<style>
+  /* The name of a section: a soft blue card with a raised white medallion carrying the section's icon. */
+  .section-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    margin: 0;
+    padding: 7px 24px 7px 7px;
+    border-radius: 18px;
+    background: color-mix(in srgb, var(--accent-mark) 13%, var(--surface));
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    color: var(--accent-ink);
+  }
+  .section-tag__chip {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 46px;
+    height: 46px;
+    border-radius: 13px;
+    background: var(--surface);
+    color: var(--accent-ink);
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--accent-mark) 20%, transparent),
+      0 8px 16px -8px color-mix(in srgb, var(--accent-ink) 55%, transparent);
+  }
+  .section-tag :global(.section-tag__icon) {
+    width: 24px;
+    height: 24px;
+  }
+  @media (max-width: 639px) {
+    .section-tag {
+      gap: 12px;
+      padding-right: 20px;
+      font-size: 17px;
+    }
+    .section-tag__chip {
+      width: 40px;
+      height: 40px;
+      border-radius: 11px;
+    }
+    .section-tag :global(.section-tag__icon) {
+      width: 21px;
+      height: 21px;
+    }
+  }
+</style>
