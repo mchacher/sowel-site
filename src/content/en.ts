@@ -64,7 +64,7 @@ export const en: SiteCopy = {
     lead: "You describe your home once: its floors, its rooms, what is in each of them. Sowel builds everything else on that description.",
     topology: {
       title: "Zones inside zones",
-      body: "Home, floors, rooms, the garden. Each zone adds up what is inside it, so a floor knows what its rooms know.",
+      body: "A zone can hold other zones: the home, a floor, a room. Each zone passes up to the zone above what it measures.",
       tree: {
         label: "Home",
         children: [
@@ -77,7 +77,7 @@ export const en: SiteCopy = {
     equipment: {
       title: "Equipment, not devices",
       quote: "A device is what is on the network. An equipment is what is in the room.",
-      body: "The garage door is one equipment, even when it rests on a dry contact that triggers it and a contact that says whether it is closed. Replace a contact, the door stays.",
+      body: "The garage door is one equipment built on two devices: a dry contact that triggers it and a door-closed contact that says whether it is shut. You see one door, which you open and whose state you read. Replace a contact, the door stays.",
       devicesLabel: "Devices",
       devices: ["Dry contact", "Door-closed contact"],
       equipmentLabel: "Equipment",
