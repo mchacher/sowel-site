@@ -23,12 +23,13 @@ const { text, icon } = Astro.props;
     margin: 0;
     padding: 7px 24px 7px 7px;
     border-radius: 18px;
-    background: color-mix(in srgb, var(--accent-mark) 13%, var(--surface));
+    background: linear-gradient(135deg, var(--tile), color-mix(in srgb, var(--tile) 72%, #0b1419));
+    box-shadow: 0 12px 24px -12px color-mix(in srgb, var(--tile) 70%, transparent);
     font-size: 19px;
     font-weight: 700;
     letter-spacing: -0.01em;
     line-height: 1.1;
-    color: var(--accent-ink);
+    color: #fff;
   }
   .section-tag__chip {
     display: grid;
@@ -37,11 +38,18 @@ const { text, icon } = Astro.props;
     width: 46px;
     height: 46px;
     border-radius: 13px;
-    background: var(--surface);
-    color: var(--accent-ink);
-    box-shadow:
-      0 0 0 1px color-mix(in srgb, var(--accent-mark) 20%, transparent),
-      0 8px 16px -8px color-mix(in srgb, var(--accent-ink) 55%, transparent);
+    background: #fff;
+    color: #1a4f6e;
+  }
+  /* On the dark privacy block a solid blue card would melt into the background: it turns light instead. */
+  :global(.privacy) .section-tag {
+    background: #e6f1f7;
+    color: #123f59;
+    box-shadow: 0 12px 24px -12px rgba(0, 0, 0, 0.6);
+  }
+  :global(.privacy) .section-tag__chip {
+    background: #1a4f6e;
+    color: #fff;
   }
   .section-tag :global(.section-tag__icon) {
     width: 24px;
