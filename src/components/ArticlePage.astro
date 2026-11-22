@@ -65,7 +65,8 @@ const byline = article.byline.replace(/\.\s*$/, "");
         <nav class="crumbs" aria-label={ui.breadcrumb.label}>
           <ol>
             <li><a href={withBase(`/${article.lang}/`)}>{ui.breadcrumb.home}</a></li>
-            <li aria-current="page">{ui.breadcrumb.current}</li>
+            <li><a href={withBase(`/${article.lang}/articles/`)} data-crumb-index>{ui.breadcrumb.articles}</a></li>
+            <li class="crumbs__here" aria-current="page">{article.title}</li>
           </ol>
         </nav>
         <SectionTag text={ui.eyebrow} icon="newspaper" small />
@@ -252,11 +253,22 @@ const byline = article.byline.replace(/\.\s*$/, "");
   /* The header of the article: breadcrumb, tag, title, standfirst, byline. */
   .crumbs ol {
     display: flex;
-    flex-wrap: wrap;
     gap: 6px;
+    min-width: 0;
     font-size: 0.875rem;
     line-height: 1.4;
     color: var(--text-3);
+  }
+  .crumbs li {
+    flex: none;
+    white-space: nowrap;
+  }
+  /* The article's title ends the trail, cut with an ellipsis when the line is too short for it. */
+  .crumbs .crumbs__here {
+    flex: 0 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .crumbs li + li::before {
     content: "/" / "";

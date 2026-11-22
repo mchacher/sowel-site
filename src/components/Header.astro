@@ -3,13 +3,14 @@ import type { SiteCopy } from "../content/types";
 import Logo from "./Logo.astro";
 import Icon from "./Icon.astro";
 import { withBase } from "../lib/url";
-import { articleLinks } from "../content/articles/index.ts";
+import { indexPath, menuLinks } from "../content/articles/index.ts";
 
 interface Props {
   copy: SiteCopy;
   /**
    * On an inner page: the home page of the language (section anchors lead back to it), the other-language twin of
-   * this page, and its own path when it is an article (its entry in the Docs menu is then the current page).
+   * this page, and its own path when it is an article or the index (its entry in the Docs menu is then the current
+   * page).
    */
   inner?: { home: string; switchHref: string; current?: string };
 }
@@ -17,7 +18,9 @@ const { copy, inner } = Astro.props;
 const to = (hash: string) => (inner ? withBase(inner.home) + hash : hash);
 const switchHref = inner?.switchHref ?? copy.nav.switch.href;
 const docs = copy.nav.docs;
-const arts = articleLinks(copy.lang);
+// The menu shows the most recent articles only; the « All articles » row leads to the index and the rest.
+const arts = menuLinks(copy.lang);
+const index = indexPath(copy.lang);
 const readingTime = (n: number) => copy.articlePage.readingTime.replace("{n}", String(n));
 ---
 
@@ -64,6 +67,17 @@ const readingTime = (n: number) => copy.articlePage.readingTime.replace("{n}", S
                 </li>
               ))
             }
+            <li>
+              <a
+                class="docs__all"
+                href={withBase(index)}
+                aria-current={inner?.current === index ? "page" : undefined}
+                data-docs-all
+              >
+                <span>{docs.all}</span>
+                <Icon name="arrow-right" class="icon docs__arrow" />
+              </a>
+            </li>
           </ul>
           <p class="docs__group" id="docs-g-manual">{docs.manual}</p>
           <ul class="docs__list" aria-labelledby="docs-g-manual">
@@ -374,12 +388,57 @@ const readingTime = (n: number) => copy.articlePage.readingTime.replace("{n}", S
   .docs__item--article:hover {
     background: rgba(127, 184, 212, 0.13);
   }
+  .docs__item--article[aria-current="page"] .docs__title::after {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin-left: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    vertical-align: middle;
+  }
+  /* The last row of the articles: a quiet link to the index, the same in every page. */
+  .docs__all {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 2px;
+    padding: 8px 10px 8px 54px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .docs__all:hover,
+  .docs__all[aria-current="page"] {
+    color: var(--text-strong);
+    background: rgba(255, 255, 255, 0.06);
+  }
+  .docs__all:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
+  .docs :global(.docs__arrow) {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.16s ease;
+  }
+  .docs__all:hover :global(.docs__arrow) {
+    transform: translateX(3px);
+  }
   @media (prefers-reduced-motion: reduce) {
     .docs[open] > .docs__panel {
       animation: none;
     }
-    .docs :global(.docs__chev) {
+    .docs :global(.docs__chev),
+    .docs :global(.docs__arrow) {
       transition: none;
+    }
+    .docs__all:hover :global(.docs__arrow) {
+      transform: none;
     }
   }
   @media (max-width: 639.98px) {

@@ -131,10 +131,11 @@ export function checkSitemap(xml, pairs) {
 
 /**
  * The Docs menu of the header (spec 002): a details disclosure whose summary is named « Docs » and controls a named
- * nav panel inside it, with one link per article of the language (the current one marked aria-current="page"), then
- * the manual's links, in order, every one on docs.sowel.org under the prefix of the language.
+ * nav panel inside it, with one link per article it should show (the few most recent, `articles`), the current one
+ * marked aria-current="page", then always a last « All articles » row leading to the index (`index`), marked when the
+ * page is the index, then the manual's links, in order, every one on docs.sowel.org under the prefix of the language.
  */
-export function checkDocsMenu(html, { lang, articles, manual, current }) {
+export function checkDocsMenu(html, { lang, articles, index, manual, current }) {
   const p = [];
   const det = /<details\b[^>]*\bdata-docs\b[^>]*>([\s\S]*?)<\/details>/i.exec(html);
   if (!det) return ["no Docs menu in the header"];
@@ -175,6 +176,21 @@ export function checkDocsMenu(html, { lang, articles, manual, current }) {
       p.push(`the current article is not marked in the Docs menu: ${current}`);
     if (!isCurrent && marked) p.push(`a Docs entry is marked current wrongly: ${attr(a, "href")}`);
   }
+  const allIdx = links.findIndex((m) => /\bdata-docs-all\b/.test(m[1]));
+  if (allIdx < 0) p.push("the Docs menu has no link to all the articles");
+  else {
+    const [, a] = links[allIdx];
+    if (index && !(attr(a, "href") ?? "").endsWith(index))
+      p.push(`the « All articles » row does not lead to ${index}: ${attr(a, "href")}`);
+    const lastArt = links.reduce((n, m, i) => (/\bdata-docs-article\b/.test(m[1]) ? i : n), -1);
+    const firstMan = links.findIndex((m) => /\bdata-docs-manual\b/.test(m[1]));
+    if (allIdx < lastArt || (firstMan >= 0 && allIdx > firstMan))
+      p.push("the « All articles » row is not the last of the articles group");
+    const marked = attr(a, "aria-current") === "page";
+    const onIndex = !!current && !!index && current === index;
+    if (onIndex && !marked) p.push("the « All articles » row is not marked on the index");
+    if (!onIndex && marked) p.push("the « All articles » row is marked current off the index");
+  }
   const man = links.filter((m) => /\bdata-docs-manual\b/.test(m[1])).map((m) => attr(m[1], "href"));
   if (JSON.stringify(man) !== JSON.stringify(manual))
     p.push(`the manual's links are not the expected ones: ${man.join(" ")}`);
@@ -194,7 +210,75 @@ export function checkDocsMenu(html, { lang, articles, manual, current }) {
   return p;
 }
 
-/** The footer of every page links to the article of its language (one article: « Articles » leads to it). */
+/**
+ * The index page of the articles (spec 002): every article of the language once, in the given order (newest first),
+ * under a heading h2 per year in that order, each entry a link named by its title (aria-labelledby on a heading) with
+ * a sized thumbnail.
+ */
+export function checkArticlesIndex(html, { articles }) {
+  const p = [];
+  const main = /<main\b[\s\S]*?<\/main>/i.exec(html)?.[0] ?? "";
+  const entries = [
+    ...main.matchAll(/<a\b([^>]*\bdata-index-article="([^"]*)"[^>]*)>([\s\S]*?)<\/a>/gi),
+  ];
+  const found = entries.map((m) => m[2]);
+  for (const a of articles) {
+    const n = found.filter((x) => x === a.path).length;
+    if (n !== 1) p.push(`the index lists ${a.path} ${n} times`);
+  }
+  if (found.length !== articles.length)
+    p.push(`the index has ${found.length} entries for ${articles.length} articles`);
+  else if (JSON.stringify(found) !== JSON.stringify(articles.map((a) => a.path)))
+    p.push("the index does not list the articles newest first");
+  const years = [...new Set(articles.map((a) => a.datePublished.slice(0, 4)))];
+  const h2 = [...main.matchAll(/<h2\b[^>]*>([\s\S]*?)<\/h2>/gi)].map((m) => strip(m[1]));
+  if (JSON.stringify(h2) !== JSON.stringify(years))
+    p.push(`the index's year headings are ${h2.join(", ") || "none"}, not ${years.join(", ")}`);
+  // Each entry sits in the section of its year.
+  for (const sec of main.matchAll(
+    /<section\b[^>]*\bdata-year="(\d{4})"[^>]*>([\s\S]*?)<\/section>/gi,
+  )) {
+    for (const m of sec[2].matchAll(/\bdata-index-article="([^"]*)"/gi)) {
+      const a = articles.find((x) => x.path === m[1]);
+      if (a && a.datePublished.slice(0, 4) !== sec[1])
+        p.push(`${a.path} is under ${sec[1]}, not ${a.datePublished.slice(0, 4)}`);
+    }
+  }
+  const ids = new Map(
+    [...main.matchAll(/<(h3)\b[^>]*\bid="([^"]+)"[^>]*>([\s\S]*?)<\/h3>/gi)].map((m) => [
+      m[2],
+      strip(m[3]),
+    ]),
+  );
+  for (const [, a, path, inner] of entries) {
+    const by = attr(a, "aria-labelledby");
+    if (!by || !ids.get(by)) p.push(`an index entry is not named by its title: ${path}`);
+    const img = /<img\b([^>]*)>/i.exec(inner);
+    if (img && !(attr(img[1], "width") && attr(img[1], "height")))
+      p.push(`an index thumbnail has no size: ${path}`);
+    if (!/\bdatetime="\d{4}-\d{2}-\d{2}"/.test(inner))
+      p.push(`an index entry has no date: ${path}`);
+  }
+  return p;
+}
+
+/** The breadcrumb of an article: the home page, a link to the index, then the article's title as the current page. */
+export function checkBreadcrumb(html, { index, title }) {
+  const p = [];
+  const nav = /<nav\b[^>]*class="[^"]*\bcrumbs\b[^"]*"[^>]*>([\s\S]*?)<\/nav>/i.exec(html);
+  if (!nav) return ["no breadcrumb"];
+  const items = [...nav[1].matchAll(/<li\b([^>]*)>([\s\S]*?)<\/li>/gi)];
+  if (items.length !== 3) p.push(`the breadcrumb has ${items.length} steps, not 3`);
+  const esc = index.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  if (!items[1] || !new RegExp(`<a\\b[^>]*href="[^"#]*${esc}"`).test(items[1][2]))
+    p.push(`the breadcrumb does not link to ${index}`);
+  const last = items[items.length - 1];
+  if (!last || attr(last[1], "aria-current") !== "page" || strip(last[2]) !== title)
+    p.push("the breadcrumb does not end on the article's title");
+  return p;
+}
+
+/** The footer of every page links to the index of the articles of its language. */
 export function checkFooterArticles(html, path) {
   const foot = /<footer\b[\s\S]*?<\/footer>/i.exec(html)?.[0] ?? "";
   const esc = path.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");

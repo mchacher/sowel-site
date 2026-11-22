@@ -141,7 +141,13 @@ test("a contents that misses a section and an unnamed nav are reported", () => {
   assert.ok(p.some((m) => m.includes("nav landmark has no accessible name")));
 });
 
-import { checkDocsMenu, checkFooterArticles, checkNoArticlesZone } from "./lib/html.mjs";
+import {
+  checkArticlesIndex,
+  checkBreadcrumb,
+  checkDocsMenu,
+  checkFooterArticles,
+  checkNoArticlesZone,
+} from "./lib/html.mjs";
 
 const MANUAL = {
   en: ["https://docs.sowel.org/user/", "https://docs.sowel.org/release-notes/"],
@@ -153,10 +159,22 @@ const menu = ({
   current = false,
   manual = MANUAL[lang],
   label = "Docs",
+  arts = [art],
+  all = `/${lang}/articles/`,
+  allCurrent = false,
 } = {}) =>
   `<header><details class="docs" data-docs><summary class="docs__btn" aria-controls="docs-panel"><svg></svg><span>${label}</span></summary>` +
   `<nav class="docs__panel" id="docs-panel" aria-label="Articles and manual"><p class="docs__group">Articles</p><ul>` +
-  `<li><a class="docs__item" href="${art}" data-docs-article${current ? ' aria-current="page"' : ""}><span>The article</span></a></li></ul>` +
+  arts
+    .map(
+      (a) =>
+        `<li><a class="docs__item" href="${a}" data-docs-article${current && a === art ? ' aria-current="page"' : ""}><span>The article</span></a></li>`,
+    )
+    .join("") +
+  (all
+    ? `<li><a class="docs__all" href="${all}" data-docs-all${allCurrent ? ' aria-current="page"' : ""}><span>All articles</span></a></li>`
+    : "") +
+  `</ul>` +
   `<p class="docs__group">Manual</p><ul>` +
   manual
     .map(
@@ -164,14 +182,25 @@ const menu = ({
     )
     .join("") +
   `</ul></nav></details></header>`;
-const opts = (o = {}) => ({ lang: "en", articles: ["/en/articles/a/"], manual: MANUAL.en, ...o });
+const opts = (o = {}) => ({
+  lang: "en",
+  articles: ["/en/articles/a/"],
+  index: "/en/articles/",
+  manual: MANUAL.en,
+  ...o,
+});
 
 test("a Docs menu with its article and the manual in the language: no problem", () => {
   assert.deepEqual(checkDocsMenu(menu(), opts()), []);
   assert.deepEqual(
     checkDocsMenu(
       menu({ lang: "fr", art: "/fr/articles/b/" }),
-      opts({ lang: "fr", articles: ["/fr/articles/b/"], manual: MANUAL.fr }),
+      opts({
+        lang: "fr",
+        articles: ["/fr/articles/b/"],
+        index: "/fr/articles/",
+        manual: MANUAL.fr,
+      }),
     ),
     [],
   );
@@ -223,18 +252,120 @@ test("a missing article, a wrong current mark and wrong manual links are reporte
   assert.ok(q.some((m) => m.includes("not on https://docs.sowel.org")));
 });
 
-test("the footer must link to the article of its language", () => {
+test("the footer must link to the index of its language", () => {
   assert.deepEqual(
-    checkFooterArticles(
-      '<footer><a href="/fr/articles/b/">Articles</a></footer>',
-      "/fr/articles/b/",
-    ),
+    checkFooterArticles('<footer><a href="/fr/articles/">Articles</a></footer>', "/fr/articles/"),
     [],
   );
   assert.equal(
-    checkFooterArticles('<footer><a href="/fr/#articles">Articles</a></footer>', "/fr/articles/b/")
+    checkFooterArticles('<footer><a href="/fr/#articles">Articles</a></footer>', "/fr/articles/")
       .length,
     1,
+  );
+});
+
+test("a capped menu ends its articles on « All articles », marked on the index only", () => {
+  const three = ["/en/articles/c/", "/en/articles/b/", "/en/articles/a/"];
+  assert.deepEqual(checkDocsMenu(menu({ arts: three }), opts({ articles: three })), []);
+  // One article too many in the menu.
+  assert.ok(
+    checkDocsMenu(menu({ arts: [...three, "/en/articles/z/"] }), opts({ articles: three })).some(
+      (m) => m.includes("4 articles for 3"),
+    ),
+  );
+  // No « All articles » row, or one leading elsewhere.
+  assert.ok(
+    checkDocsMenu(menu({ all: "" }), opts()).some((m) => m.includes("no link to all the articles")),
+  );
+  assert.ok(
+    checkDocsMenu(menu({ all: "/en/" }), opts()).some((m) => m.includes("does not lead to")),
+  );
+  // On the index: the row is marked; elsewhere it must not be.
+  assert.deepEqual(
+    checkDocsMenu(menu({ allCurrent: true }), opts({ current: "/en/articles/" })),
+    [],
+  );
+  assert.ok(
+    checkDocsMenu(menu(), opts({ current: "/en/articles/" })).some((m) =>
+      m.includes("not marked on the index"),
+    ),
+  );
+  assert.ok(
+    checkDocsMenu(menu({ allCurrent: true }), opts()).some((m) => m.includes("off the index")),
+  );
+  // An article read that is not among the three: nothing in the menu is marked, and that is right.
+  assert.deepEqual(checkDocsMenu(menu(), opts({ current: "/en/articles/old/" })), []);
+});
+
+const ART = [
+  { path: "/en/articles/b/", datePublished: "2027-02-01" },
+  { path: "/en/articles/a/", datePublished: "2026-11-22" },
+];
+const index = (items = ART, years = ["2027", "2026"]) =>
+  "<main>" +
+  years
+    .map(
+      (y) =>
+        `<section data-year="${y}"><h2 id="year-${y}">${y}</h2><ul>` +
+        items
+          .filter((a) => a.datePublished.startsWith(y))
+          .map(
+            (a, i) =>
+              `<li><a class="entry" href="${a.path}" aria-labelledby="t-${y}-${i}" data-index-article="${a.path}">` +
+              `<img src="/x.webp" alt="" width="10" height="8"><time datetime="${a.datePublished}">d</time>` +
+              `<h3 id="t-${y}-${i}">Title</h3></a></li>`,
+          )
+          .join("") +
+        `</ul></section>`,
+    )
+    .join("") +
+  "</main>";
+
+test("an index with every article under its year: no problem", () => {
+  assert.deepEqual(checkArticlesIndex(index(), { articles: ART }), []);
+});
+
+test("an index that misses an article, a year heading or a name is reported", () => {
+  const extra = [...ART, { path: "/en/articles/c/", datePublished: "2026-10-01" }];
+  assert.ok(
+    checkArticlesIndex(index(), { articles: extra }).some((m) =>
+      m.includes("/en/articles/c/ 0 times"),
+    ),
+  );
+  assert.ok(
+    checkArticlesIndex(index(ART, ["2027"]), { articles: ART }).some((m) =>
+      m.includes("year headings"),
+    ),
+  );
+  assert.ok(
+    checkArticlesIndex(index().replace(/ aria-labelledby="[^"]*"/, ""), { articles: ART }).some(
+      (m) => m.includes("not named by its title"),
+    ),
+  );
+  assert.ok(
+    checkArticlesIndex(index().replace(' width="10"', ""), { articles: ART }).some((m) =>
+      m.includes("no size"),
+    ),
+  );
+});
+
+test("the breadcrumb leads to the index and ends on the article's title", () => {
+  const crumbs = (mid) =>
+    `<nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/en/">Sowel</a></li>${mid}` +
+    `<li aria-current="page">The title</li></ol></nav>`;
+  const opt = { index: "/en/articles/", title: "The title" };
+  assert.deepEqual(
+    checkBreadcrumb(crumbs('<li><a href="/en/articles/">Articles</a></li>'), opt),
+    [],
+  );
+  assert.ok(
+    checkBreadcrumb(crumbs("<li>Articles</li>"), opt).some((m) => m.includes("does not link")),
+  );
+  assert.ok(
+    checkBreadcrumb(crumbs('<li><a href="/en/articles/">Articles</a></li>'), {
+      ...opt,
+      title: "Another",
+    }).some((m) => m.includes("does not end")),
   );
 });
 

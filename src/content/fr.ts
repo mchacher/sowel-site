@@ -34,6 +34,7 @@ export const fr: SiteCopy = {
       label: "Docs",
       menu: "Articles et manuel",
       articles: "Articles",
+      all: "Tous les articles",
       manual: "Manuel",
       links: [
         { icon: "rocket", title: "Premiers pas", body: "Installer Sowel et ajouter vos premiers appareils", href: `${DOCS}user/getting-started/` },
@@ -342,8 +343,7 @@ export const fr: SiteCopy = {
     licence: "Logiciel libre sous licence AGPL-3.0.",
     privacy: "Ce site ne dépose aucun cookie et ne charge rien depuis un autre site.",
     links: [
-      // One article today: « Articles » leads to it. Once there are several, it leads to an index page of the articles.
-      { label: "Articles", href: withBase("/fr/articles/le-cerveau-energetique-de-la-maison/") },
+      { label: "Articles", href: withBase("/fr/articles/") },
       { label: "GitHub", href: REPO },
       { label: "Manuel", href: DOCS },
       { label: "Licence", href: `${REPO}/blob/main/LICENSE` },
@@ -351,9 +351,19 @@ export const fr: SiteCopy = {
   },
   articlePage: {
     eyebrow: "Article",
-    breadcrumb: { label: "Fil d'Ariane", home: "Sowel", current: "Article" },
+    breadcrumb: { label: "Fil d'Ariane", home: "Sowel", articles: "Articles" },
     toc: "Dans cet article",
     readingTime: "{n}\u00a0min de lecture",
     anchor: "Lien vers la section\u00a0: {h}",
+  },
+  articlesPage: {
+    meta: {
+      title: "Articles | Sowel",
+      description: "Les articles sur Sowel, la domotique open source qui tourne sur votre propre matériel\u00a0: son fonctionnement et les idées qui la portent.",
+    },
+    count: { one: "1 article", other: "{n} articles" },
+    title: "Articles",
+    lead: "Les idées derrière Sowel, une à la fois.",
+    read: "Lire l'article",
   },
 };

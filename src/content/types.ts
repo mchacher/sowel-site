@@ -67,6 +67,8 @@ export interface SiteCopy {
       menu: string;
       /** The heading of the articles group; the entries come from src/content/articles/index.ts. */
       articles: string;
+      /** The last row of the articles group, always present: the link to the index page. */
+      all: string;
       /** The heading of the manual group. */
       manual: string;
       /** The manual's entries, on docs.sowel.org in the language of the page. */
@@ -188,13 +190,23 @@ export interface SiteCopy {
   articlePage: {
     /** The small tag above the title. */
     eyebrow: string;
-    /** The breadcrumb: its landmark name, the home link, the current page. */
-    breadcrumb: { label: string; home: string; current: string };
+    /** The breadcrumb: its landmark name, the home link, the link to the index; the article's title ends it. */
+    breadcrumb: { label: string; home: string; articles: string };
     /** The table of contents: its title and landmark name. */
     toc: string;
     /** The reading time; {n} is replaced by the minutes, computed at build time. */
     readingTime: string;
     /** The accessible name of a heading's anchor link; {h} is replaced by the heading. */
     anchor: string;
+  };
+  /** The index page of the articles (spec 002): /{lang}/articles/. */
+  articlesPage: {
+    meta: { title: string; description: string };
+    /** The compact tag above the title: the number of articles; {n} is replaced by it. */
+    count: { one: string; other: string };
+    title: string;
+    lead: string;
+    /** The call at the foot of each entry. */
+    read: string;
   };
 }

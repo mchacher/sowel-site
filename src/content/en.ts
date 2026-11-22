@@ -34,6 +34,7 @@ export const en: SiteCopy = {
       label: "Docs",
       menu: "Articles and manual",
       articles: "Articles",
+      all: "All articles",
       manual: "Manual",
       links: [
         { icon: "rocket", title: "Getting started", body: "Install Sowel and add your first devices", href: `${DOCS}user/getting-started/` },
@@ -342,8 +343,7 @@ export const en: SiteCopy = {
     licence: "Free software under the AGPL-3.0 licence.",
     privacy: "This site sets no cookie and loads nothing from another site.",
     links: [
-      // One article today: « Articles » leads to it. Once there are several, it leads to an index page of the articles.
-      { label: "Articles", href: withBase("/en/articles/the-energy-brain-of-your-home/") },
+      { label: "Articles", href: withBase("/en/articles/") },
       { label: "GitHub", href: REPO },
       { label: "Manual", href: DOCS },
       { label: "Licence", href: `${REPO}/blob/main/LICENSE` },
@@ -351,9 +351,19 @@ export const en: SiteCopy = {
   },
   articlePage: {
     eyebrow: "Article",
-    breadcrumb: { label: "Breadcrumb", home: "Sowel", current: "Article" },
+    breadcrumb: { label: "Breadcrumb", home: "Sowel", articles: "Articles" },
     toc: "In this article",
     readingTime: "{n} min read",
     anchor: "Link to the section: {h}",
+  },
+  articlesPage: {
+    meta: {
+      title: "Articles | Sowel",
+      description: "Articles on Sowel, the open source home automation that runs on your own hardware: how it works and the ideas behind it.",
+    },
+    count: { one: "1 article", other: "{n} articles" },
+    title: "Articles",
+    lead: "The ideas behind Sowel, one at a time.",
+    read: "Read the article",
   },
 };

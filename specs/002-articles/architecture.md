@@ -5,7 +5,7 @@
 ```
 src/content/articles/
 ├── types.ts               # Article and Block (p, h2, list, figure, pull, links)
-├── index.ts              # the registry: each article in both languages, articleLinks(lang) for the Docs menu
+├── index.ts              # the registry: each article in both languages; articleLinks, articlesByYear, menuLinks
 ├── energy-brain.en.ts    # the English article
 └── energy-brain.fr.ts    # the French article, same blocks
 ```
@@ -69,3 +69,21 @@ and scrolls sideways inside its frame (focusable, labelled by its caption) on a 
   each on https://docs.sowel.org with the language's prefix), `checkFooterArticles` (the article of the language),
   `checkNoArticlesZone` (no `id="articles"`, no `#articles` link) on the four pages, and `checkSitemap`, run by
   `scripts/check-built-html.mjs`. `scripts/check-links.mjs` resolves the menu's and the footer's internal links.
+
+## The index of the articles
+
+- `src/lib/articles.ts`: pure functions over a list of entries, so a test can feed them a registry of its own:
+  `articleList` (newest first, then by title), `menuArticles` (the first `MENU_ARTICLES`, 3), `byYear`, `indexPath`,
+  `slugOf`, `standfirstOf`, `thumbnailOf` (the first figure). `src/content/articles/index.ts` applies them to the
+  registry. Tested by `scripts/articles.test.mjs` with six fake articles over two years.
+- `src/pages/{en,fr}/articles/index.astro` render `ArticlesIndexPage.astro`: breadcrumb, compact tag (the number of
+  articles), H1, lead, then one `section[data-year]` per year with its h2 and a list of entries. An entry is an `a`
+  named by its h3 (`aria-labelledby`) and described by its standfirst; the thumbnail sits in a frame of fixed ratio
+  (2:1 on a phone, 4:3 beside the text when the entry's container is 680px wide), the first one eager, the others
+  lazy. `Base` takes `page.ogType: "website"` and JSON-LD of type CollectionPage with an ItemList.
+- The Docs menu reads `menuLinks(lang)` and ends the group on `a.docs__all[data-docs-all]`; `Header`'s
+  `inner.current` is the index path on the index, so the row carries `aria-current="page"` there.
+- Checks: `checkDocsMenu` takes the expected menu articles and the index (the row is present, last of the group, leads
+  to the index, marked on the index only), `checkArticlesIndex` (every article once, newest first, year headings in
+  order, each entry in its year, named, dated, sized thumbnail), `checkBreadcrumb` (Sowel, a link to the index, the
+  title as current page), `checkFooterArticles` with the index path, `checkSitemap` with the index pair.

@@ -9,7 +9,9 @@
 - [x] 5. Built-html checks, validate, render review, Lighthouse
 - [x] 6. Rename (title and addresses) and the Articles section of the home page, footer link
 - [x] 7. Docs menu in the header replaces the Articles zone; footer link to the article
-- [ ] 8. The maintainer reviews the rendered pages, then merge
+- [x] 8. Articles index per language, Docs menu capped at three with « All articles », footer and breadcrumb to the
+      index; checks and a test with a registry of six articles
+- [ ] 9. The maintainer reviews the rendered pages, then merge
 
 ## Test Plan
 
@@ -28,6 +30,15 @@
 | checkDocsMenu          | missing article, wrong current, wrong manual links                  | reported                           |
 | checkFooterArticles    | link to the article; to the old #articles anchor                    | none; reported                     |
 | checkNoArticlesZone    | a link to #articles, an id="articles"                               | reported                           |
+| articleList, byYear    | registry of six fake articles over two years                        | six entries, newest first, by year |
+| menuArticles           | registry of six fake articles; of two                               | the three newest; both             |
+| checkArticlesIndex     | complete index; an article missing, no year heading, unnamed entry  | none; each one reported            |
+| checkDocsMenu          | capped menu with « All articles »; one too many; no « All » row     | none; each one reported            |
+| checkDocsMenu          | current on the index; an article outside the three is current       | « All » marked; nothing marked     |
+| checkFooterArticles    | link to the index of the language                                   | none                               |
+| checkBreadcrumb        | Sowel / Articles link / title; no link to the index                 | none; reported                     |
+| checkSitemap           | the index pair listed                                               | none                               |
+| Built site, Playwright | index pages 390/768/1280/1440, light and dark                       | no horizontal scroll               |
 | Built site, Playwright | menu open/closed, 390/768/1280/1440, four pages                     | no horizontal scroll, panel inside |
 | Built site, Playwright | Enter, Space, Escape, Tab out, click outside, no JS                 | opens, closes, focus back          |
 | Built site, Playwright | 1280 and 390 px, light and dark, EN and FR                          | no horizontal scroll, figures load |

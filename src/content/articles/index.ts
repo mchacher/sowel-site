@@ -1,45 +1,18 @@
-// The registry of articles (spec 002): one entry per article, both languages. The article pages, the sitemap,
-// the Docs menu of the header and the checks all read it, so an article is added here once.
-import type { Article } from "./types";
+// The registry of articles (spec 002): one entry per article, both languages. The article pages, the index pages,
+// the sitemap, the Docs menu of the header and the checks all read it, so an article is added here once.
 import { en as energyBrainEn } from "./energy-brain.en.ts";
 import { fr as energyBrainFr } from "./energy-brain.fr.ts";
-import { readingMinutes } from "../../lib/article.ts";
-import { withBase } from "../../lib/url.ts";
+import { articleList, byYear, menuArticles, type ArticleEntry } from "../../lib/articles.ts";
 
-export interface ArticleEntry {
-  en: Article;
-  fr: Article;
-}
-
-/** What the Docs menu shows for one article. */
-export interface ArticleLink {
-  /** Root-absolute path, as in the article (without the base). */
-  path: string;
-  href: string;
-  title: string;
-  datePublished: string;
-  minutes: number;
-}
+export { slugOf, indexPath, MENU_ARTICLES, type ArticleEntry, type ArticleLink } from "../../lib/articles.ts";
 
 export const articles: ArticleEntry[] = [{ en: energyBrainEn, fr: energyBrainFr }];
 
-/** The last segment of an article's path: its address under /{lang}/articles/. */
-export function slugOf(article: Article): string {
-  return article.path.split("/").filter(Boolean).pop() ?? "";
-}
+/** Every article of one language, the most recent first: the index page. */
+export const articleLinks = (lang: "en" | "fr") => articleList(articles, lang);
 
-/** The articles of one language, the most recent first. */
-export function articleLinks(lang: "en" | "fr"): ArticleLink[] {
-  return articles
-    .map((entry) => {
-      const a = entry[lang];
-      return {
-        path: a.path,
-        href: withBase(a.path),
-        title: a.title,
-        datePublished: a.datePublished,
-        minutes: readingMinutes(a),
-      };
-    })
-    .sort((x, y) => y.datePublished.localeCompare(x.datePublished));
-}
+/** The same, cut by year. */
+export const articlesByYear = (lang: "en" | "fr") => byYear(articleList(articles, lang));
+
+/** The few most recent: the Docs menu. */
+export const menuLinks = (lang: "en" | "fr") => menuArticles(articles, lang);

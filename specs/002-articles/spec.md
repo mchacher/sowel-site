@@ -22,7 +22,7 @@ shares the solar surplus. This spec adds a reading page for such texts, in Engli
 
 ## Non-goals
 
-- No article index page, no tags, no feed, no comments. The header's Docs menu is the list.
+- No tags, no feed, no comments, no pagination yet (see « Articles index » for when it becomes one).
 - No JavaScript framework, no new dependency, no third-party request. One small inline script highlights the current
   section in the contents.
 
@@ -85,7 +85,35 @@ removed; a « Docs » menu in the header gives access to the articles and the ma
   tall), the article row tinted with the accent; on a phone the panel hangs from the header across the screen width.
   A short fade and slide, none under reduced motion.
 - The footer's « Articles » leads to the article of the language (one article today; an index page once there are
-  several). The line under the Energy section's lead stays.
+  several). The line under the Energy section's lead stays. Superseded by « Articles index » below.
+
+## Articles index (maintainer's review, 2026-11-22)
+
+« Je ne vois pas comment ça va marcher quand il y aura plein d'articles. » A menu that lists every article and a
+footer link to the only article do not hold past a handful. The list moves to an index page per language; the menu
+shows the latest few.
+
+- An index page per language, `/en/articles/` and `/fr/articles/`: the night header and the footer, the compact
+  section tag of the article page (newspaper icon, the number of articles), an H1 « Articles », a one-line lead
+  (« Les idées derrière Sowel, une à la fois. » / "The ideas behind Sowel, one at a time."), then every article of
+  the registry, newest first, under a heading per year (h2).
+- An entry is one link named by the article's title: date and reading time as on the article page, the title, the
+  first paragraph clamped to three lines, a thumbnail of the article's first figure in a fixed frame (lazy, sized, no
+  layout shift) and « Lire l'article » / "Read the article" with an arrow. One column on a phone, the thumbnail beside
+  the text from about 680px. A slight lift on hover, none under reduced motion.
+- Its own title and description, canonical, hreflang alternates (the language switch leads to the other language's
+  index), Open Graph and Twitter tags through the `page` prop of `Base`, JSON-LD of type CollectionPage. Both index
+  pages are in the sitemap with their pair.
+- The Docs menu's Articles group shows the three most recent articles (`MENU_ARTICLES`), then a last row « Tous les
+  articles » / "All articles" with an arrow, always present, leading to the index. `aria-current="page"` marks the
+  article being read when it is among the three, and the « All articles » row on the index. The panel keeps a bounded
+  height whatever the number of articles.
+- The footer's « Articles » leads to the index of the language. The line under the Energy section's lead still leads
+  to its article.
+- The article's breadcrumb becomes Sowel / Articles (a link to the index) / the article's title, cut with an ellipsis
+  when it is long.
+- Interface strings in `SiteCopy.articlesPage` and `SiteCopy.nav.docs.all`, the same keys in both languages.
+- Rule for later: when the list passes about 20 entries, the index gets pagination or a filter, in a spec of its own.
 
 ## Approval
 
