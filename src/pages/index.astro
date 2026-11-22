@@ -6,6 +6,8 @@ const languages = [
   { href: withBase("/fr/"), label: "Français", lang: "fr" },
 ];
 const go = { en: withBase("/en/"), fr: withBase("/fr/") };
+// Search engines want absolute addresses: the canonical and the alternates point at the real pages.
+const abs = (path: string) => new URL(path, Astro.site).href;
 ---
 
 <!doctype html>
@@ -14,10 +16,12 @@ const go = { en: withBase("/en/"), fr: withBase("/fr/") };
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'" />
-    <title>Sowel</title>
-    <link rel="alternate" hreflang="en" href={go.en} />
-    <link rel="alternate" hreflang="fr" href={go.fr} />
-    <link rel="alternate" hreflang="x-default" href={go.en} />
+    <title>Sowel: home automation that looks after your home</title>
+    <meta name="description" content="Sowel looks after your home. Open source home automation on your own hardware. English and French." />
+    <link rel="canonical" href={abs(go.en)} />
+    <link rel="alternate" hreflang="en" href={abs(go.en)} />
+    <link rel="alternate" hreflang="fr" href={abs(go.fr)} />
+    <link rel="alternate" hreflang="x-default" href={abs(go.en)} />
     <script is:inline define:vars={{ go }}>
       location.replace(/^fr\b/i.test(navigator.language || "") ? go.fr : go.en);
     </script>
