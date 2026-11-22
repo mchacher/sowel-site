@@ -4,14 +4,14 @@ import { withBase } from "../../lib/url.ts";
 
 export const fr: Article = {
   lang: "fr",
-  path: "/fr/articles/qui-decide-d-utiliser-votre-soleil/",
-  otherPath: "/en/articles/who-decides-how-your-sun-gets-used/",
+  path: "/fr/articles/le-cerveau-energetique-de-la-maison/",
+  otherPath: "/en/articles/the-energy-brain-of-your-home/",
   meta: {
-    title: "Qui décide d'utiliser votre soleil ? | Sowel",
+    title: "Le cerveau énergétique de la maison | Sowel",
     description: "Pourquoi partager le surplus solaire entre un chauffe-eau, une voiture et une pompe à chaleur est difficile, et comment l'arbitre énergétique et les recettes de Sowel y répondent.",
   },
   datePublished: "2026-11-22",
-  title: "Qui décide d'utiliser votre soleil\u00a0?",
+  title: "Le cerveau énergétique de la maison",
   byline: "Marc Chachereau, créateur de Sowel.",
   blocks: [
     { kind: "p", runs: [{ text: "Chaque kilowattheure de soleil que votre maison utilise, c'est un kilowattheure que vous n'achetez pas. Chaque kilowattheure qu'elle laisse filer part sur le réseau." }] },

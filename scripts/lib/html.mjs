@@ -128,3 +128,43 @@ export function checkSitemap(xml, pairs) {
   }
   return p;
 }
+
+/**
+ * The Articles section of a home page (spec 002): section#articles holds exactly one card link per article, each
+ * named by a heading of the section and carrying a lazy thumbnail with its size.
+ */
+export function checkArticlesSection(html, paths) {
+  const p = [];
+  const sec = /<section\b[^>]*\bid="articles"[^>]*>([\s\S]*?)<\/section>/i.exec(html);
+  if (!sec) return ["no #articles section"];
+  const body = sec[1];
+  const links = [...body.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)];
+  for (const path of paths) {
+    const hits = links.filter((m) => (attr(m[1], "href") ?? "").endsWith(path));
+    if (hits.length !== 1) p.push(`the Articles section links ${hits.length} times to ${path}`);
+  }
+  if (links.length !== paths.length)
+    p.push(`the Articles section has ${links.length} links for ${paths.length} articles`);
+  for (const [, a, inner] of links) {
+    const by = attr(a, "aria-labelledby");
+    if (!by || !new RegExp(`<h3\\b[^>]*\\bid="${by}"`, "i").test(inner))
+      p.push(`an article card is not named by its title: ${attr(a, "href")}`);
+    const img = /<img\b([^>]*)>/i.exec(inner);
+    if (!img) p.push(`an article card has no thumbnail: ${attr(a, "href")}`);
+    else if (
+      attr(img[1], "loading") !== "lazy" ||
+      !attr(img[1], "width") ||
+      !attr(img[1], "height")
+    )
+      p.push(`an article thumbnail is not lazy with a size: ${attr(a, "href")}`);
+  }
+  return p;
+}
+
+/** The footer of every page links to the Articles section of the home page of its language. */
+export function checkFooterArticles(html, lang) {
+  const foot = /<footer\b[\s\S]*?<\/footer>/i.exec(html)?.[0] ?? "";
+  return new RegExp(`href="[^"]*/${lang}/#articles"`).test(foot)
+    ? []
+    : [`the footer has no link to /${lang}/#articles`];
+}

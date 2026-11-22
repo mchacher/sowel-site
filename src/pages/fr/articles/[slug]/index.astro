@@ -1,0 +1,17 @@
+---
+import ArticlePage from "../../../../components/ArticlePage.astro";
+import { fr } from "../../../../content/fr";
+import { articles, slugOf } from "../../../../content/articles/index.ts";
+import type { Article } from "../../../../content/articles/types";
+
+// One page per article of the registry (spec 002), at /fr/articles/<slug>/.
+export function getStaticPaths() {
+  return articles.map((entry) => ({ params: { slug: slugOf(entry.fr) }, props: { article: entry.fr } }));
+}
+interface Props {
+  article: Article;
+}
+const { article } = Astro.props;
+---
+
+<ArticlePage copy={fr} article={article} />

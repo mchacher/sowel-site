@@ -140,3 +140,51 @@ test("a contents that misses a section and an unnamed nav are reported", () => {
   assert.ok(p.some((m) => m.includes("the contents list 1 sections for 2 headings")));
   assert.ok(p.some((m) => m.includes("nav landmark has no accessible name")));
 });
+
+import { checkArticlesSection, checkFooterArticles } from "./lib/html.mjs";
+
+const card = (path, slug) =>
+  `<li><a class="acard" href="${path}" aria-labelledby="art-${slug}"><span><img src="/t.webp" alt="" width="10" height="8" loading="lazy"></span><h3 id="art-${slug}">T</h3></a></li>`;
+const home = (cards) =>
+  `<main><section id="privacy"></section><section class="section" id="articles"><h2>A</h2><ul>${cards}</ul></section></main>`;
+
+test("an Articles section with one named card per article: no problem", () => {
+  assert.deepEqual(
+    checkArticlesSection(home(card("/en/articles/a/", "a")), ["/en/articles/a/"]),
+    [],
+  );
+});
+
+test("a missing section, a missing card and a doubled card are reported", () => {
+  assert.deepEqual(checkArticlesSection("<main></main>", ["/en/articles/a/"]), [
+    "no #articles section",
+  ]);
+  const none = checkArticlesSection(home(""), ["/en/articles/a/"]);
+  assert.ok(none.some((m) => m.includes("links 0 times")));
+  const twice = checkArticlesSection(
+    home(card("/en/articles/a/", "a") + card("/en/articles/a/", "b")),
+    ["/en/articles/a/"],
+  );
+  assert.ok(twice.some((m) => m.includes("links 2 times")));
+});
+
+test("a card not named by its title or with an eager thumbnail is reported", () => {
+  const c = card("/en/articles/a/", "a");
+  const p1 = checkArticlesSection(home(c.replace('aria-labelledby="art-a"', "")), [
+    "/en/articles/a/",
+  ]);
+  assert.ok(p1.some((m) => m.includes("not named by its title")));
+  const p2 = checkArticlesSection(home(c.replace(' loading="lazy"', "")), ["/en/articles/a/"]);
+  assert.ok(p2.some((m) => m.includes("not lazy")));
+});
+
+test("the footer must link to the Articles section of its language", () => {
+  assert.deepEqual(
+    checkFooterArticles('<footer><a href="/fr/#articles">Articles</a></footer>', "fr"),
+    [],
+  );
+  assert.equal(
+    checkFooterArticles('<footer><a href="/en/#articles">Articles</a></footer>', "fr").length,
+    1,
+  );
+});

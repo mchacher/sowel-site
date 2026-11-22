@@ -11,8 +11,8 @@ shares the solar surplus. This spec adds a reading page for such texts, in Engli
 
 ## Goals
 
-- One article, "Who decides how your sun gets used?" / "Qui décide d'utiliser votre soleil ?", at
-  `/en/articles/who-decides-how-your-sun-gets-used/` and `/fr/articles/qui-decide-d-utiliser-votre-soleil/`.
+- One article, "The energy brain of your home" / « Le cerveau énergétique de la maison », at
+  `/en/articles/the-energy-brain-of-your-home/` and `/fr/articles/le-cerveau-energetique-de-la-maison/`.
 - A reading layout in the site's design: the night header and the footer of the home page, a column of about 68
   characters, two figures with captions, and the key sentence set in exergue as a large display quote.
 - The text is the maintainer's, used as written. The two languages carry the same blocks in the same order.
@@ -22,7 +22,7 @@ shares the solar surplus. This spec adds a reading page for such texts, in Engli
 
 ## Non-goals
 
-- No article index, no tags, no feed, no comments.
+- No article index page, no tags, no feed, no comments. The Articles section of the home page is the list.
 - No JavaScript framework, no new dependency, no third-party request. One small inline script highlights the current
   section in the contents.
 
@@ -48,6 +48,22 @@ shares the solar surplus. This spec adds a reading page for such texts, in Engli
 - A reading-progress line under the header (CSS scroll-driven animation; none where unsupported or under reduced motion).
 - The figures on the home page's soft well; the closing links as a card with one button and two quiet links.
 - Interface strings live in `SiteCopy.articlePage`; the article's words are unchanged.
+
+## Articles zone and rename (maintainer's review, 2026-11-22)
+
+- The article is renamed « Le cerveau énergétique de la maison » / "The energy brain of your home" (title, `<title>`,
+  Open Graph, JSON-LD headline, the Energy section's link). Nothing was online, so the addresses change with it. The
+  text, the pull quote and the meta descriptions stay.
+- A section « Articles » on both home pages, `id="articles"`, between Privacy and Install: the section tag (newspaper
+  icon), the title « Les idées derrière Sowel » / "The ideas behind Sowel", a one-line lead, then one card per
+  article. It is a light band: the dark Privacy block sits above it and the plain Install section below, so no two
+  sections that look alike touch.
+- A card is one link named by the article's title: the flow view on the soft well in a fixed frame (lazy, sized), the
+  date and reading time as on the article page, the title, the first paragraph clamped to three lines, and « Lire
+  l'article » with an arrow. One column on a phone, the picture beside the text once the card is about 680px wide
+  (from about 760px of window), a grid that takes more cards later. A slight lift on hover, none under reduced motion.
+- The footer gains « Articles », to `/{lang}/#articles`, on every page. The section rail and the header menu are
+  unchanged.
 
 ## Approval
 

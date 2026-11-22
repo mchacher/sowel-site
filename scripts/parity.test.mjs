@@ -128,3 +128,42 @@ test("a reading time without its {n} placeholder is reported", () => {
   );
   assert.ok(p.some((m) => m.startsWith("readingTime has no {n}") && m.includes("second")));
 });
+
+import { compareRegistry } from "./lib/parity.mjs";
+
+const pair = () => {
+  const open = { kind: "p", runs: [{ text: "First paragraph." }] };
+  const en = art({ path: "/en/articles/a/", otherPath: "/fr/articles/b/" });
+  const fr = other({ path: "/fr/articles/b/", otherPath: "/en/articles/a/" });
+  en.blocks = [open, ...en.blocks];
+  fr.blocks = [open, ...fr.blocks];
+  const img = { src: "/t.webp", alt: "", width: 10, height: 8 };
+  return { en, fr, thumbnail: { en: img, fr: img } };
+};
+
+test("a registry entry with both languages, paths and thumbnails: no problem", () => {
+  assert.deepEqual(compareRegistry([pair()]), []);
+});
+
+test("a registry entry without its French article is reported", () => {
+  const p = compareRegistry([{ ...pair(), fr: undefined }]);
+  assert.ok(p.some((m) => m.includes("both an English and a French")));
+});
+
+test("a path outside /{lang}/articles/, a reused path and a missing thumbnail are reported", () => {
+  const bad = pair();
+  bad.en.path = "/en/a/";
+  bad.fr.otherPath = "/en/a/";
+  bad.thumbnail.fr = { src: "", width: 0, height: 0 };
+  const p = compareRegistry([bad, pair(), pair()]);
+  assert.ok(p.some((m) => m.includes("en path is not")));
+  assert.ok(p.some((m) => m.includes("no sized fr thumbnail")));
+  assert.ok(p.some((m) => m.includes("used twice")));
+});
+
+test("an article that does not open on a paragraph has no standfirst for its card", () => {
+  const e = pair();
+  e.en.blocks = e.en.blocks.slice(1);
+  e.fr.blocks = e.fr.blocks.slice(1);
+  assert.ok(compareRegistry([e]).some((m) => m.includes("does not open on a paragraph")));
+});

@@ -2,13 +2,12 @@
 // Node 24 runs the .ts files directly (type stripping).
 import { en } from "../src/content/en.ts";
 import { fr } from "../src/content/fr.ts";
-import { en as articleEn } from "../src/content/articles/sun-arbiter.en.ts";
-import { fr as articleFr } from "../src/content/articles/sun-arbiter.fr.ts";
-import { compareArticles, compareCopy } from "./lib/parity.mjs";
+import { articles } from "../src/content/articles/index.ts";
+import { compareCopy, compareRegistry } from "./lib/parity.mjs";
 
 const problems = [
   ...compareCopy(en, fr),
-  ...compareArticles(articleEn, articleFr).map((p) => `article: ${p}`),
+  ...compareRegistry(articles).map((p) => `articles: ${p}`),
 ];
 if (problems.length) {
   console.error("i18n parity failed:");

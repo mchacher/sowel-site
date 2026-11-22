@@ -169,6 +169,16 @@ export interface SiteCopy {
     lead: string;
     links: { icon: IconName; title: string; body: string; href: string }[];
   };
+  /** The Articles section of the home page (spec 002): the cards come from src/content/articles/index.ts. */
+  articles: {
+    id: string;
+    eyebrow: string;
+    title: string;
+    titleAccent: string;
+    lead: string;
+    /** The link label at the foot of each card. */
+    read: string;
+  };
   footer: { tagline: string; licence: string; privacy: string; links: Link[] };
   /** The interface around an article (spec 002): its words stay in src/content/articles/. */
   articlePage: {

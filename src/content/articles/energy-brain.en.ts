@@ -4,14 +4,14 @@ import { withBase } from "../../lib/url.ts";
 
 export const en: Article = {
   lang: "en",
-  path: "/en/articles/who-decides-how-your-sun-gets-used/",
-  otherPath: "/fr/articles/qui-decide-d-utiliser-votre-soleil/",
+  path: "/en/articles/the-energy-brain-of-your-home/",
+  otherPath: "/fr/articles/le-cerveau-energetique-de-la-maison/",
   meta: {
-    title: "Who decides how your sun gets used? | Sowel",
+    title: "The energy brain of your home | Sowel",
     description: "Why sharing solar surplus between a water heater, a car and a heat pump is hard, and how Sowel's energy arbiter and recipes solve it.",
   },
   datePublished: "2026-11-22",
-  title: "Who decides how your sun gets used?",
+  title: "The energy brain of your home",
   byline: "Marc Chachereau, creator of Sowel.",
   blocks: [
     { kind: "p", runs: [{ text: "Every kilowatt-hour of sun your home uses is a kilowatt-hour you do not buy. Every kilowatt-hour it lets slip goes to the grid." }] },

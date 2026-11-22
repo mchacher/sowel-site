@@ -141,3 +141,36 @@ export function compareArticles(a, b) {
     problems.push("otherPath does not point at the other language's path");
   return problems;
 }
+
+/**
+ * The registry of articles (spec 002, src/content/articles/index.ts): each entry pairs an English and a French
+ * article with the same blocks, both under /{lang}/articles/<slug>/, with a sized thumbnail per language, and no
+ * two entries share a path.
+ */
+export function compareRegistry(entries) {
+  const problems = [];
+  const seen = new Set();
+  entries.forEach((entry, n) => {
+    const at = `article ${n + 1}`;
+    if (!entry?.en || !entry?.fr) {
+      problems.push(`${at}: needs both an English and a French article`);
+      return;
+    }
+    problems.push(...compareArticles(entry.en, entry.fr).map((p) => `${at}: ${p}`));
+    for (const lang of ["en", "fr"]) {
+      const a = entry[lang];
+      if (a.lang !== lang) problems.push(`${at}: the ${lang} article says lang ${a.lang}`);
+      if (!new RegExp(`^/${lang}/articles/[a-z0-9]+(-[a-z0-9]+)*/$`).test(a.path ?? ""))
+        problems.push(`${at}: ${lang} path is not /${lang}/articles/<slug>/: ${a.path}`);
+      if (seen.has(a.path)) problems.push(`${at}: the path ${a.path} is used twice`);
+      seen.add(a.path);
+      const t = entry.thumbnail?.[lang];
+      if (!text(t?.src) || !(t?.width > 0 && t?.height > 0))
+        problems.push(`${at}: no sized ${lang} thumbnail`);
+      const first = a.blocks?.[0];
+      if (first?.kind !== "p")
+        problems.push(`${at}: the ${lang} article does not open on a paragraph`);
+    }
+  });
+  return problems;
+}

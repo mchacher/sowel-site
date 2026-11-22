@@ -1,0 +1,249 @@
+---
+// The Articles section of the home page (spec 002): one card per article of the registry, the most recent first.
+import type { SiteCopy } from "../content/types";
+import { articleCards } from "../content/articles/index.ts";
+import { formatDate } from "../lib/article";
+import Accent from "./Accent.astro";
+import Icon from "./Icon.astro";
+import SectionTag from "./SectionTag.astro";
+
+interface Props {
+  copy: SiteCopy;
+}
+const { copy } = Astro.props;
+const { articles } = copy;
+const cards = articleCards(copy.lang);
+---
+
+<section class="section section--band articles" id={articles.id}>
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <SectionTag text={articles.eyebrow} icon="newspaper" />
+      <h2 class="h2"><Accent text={articles.title} accent={articles.titleAccent} /></h2>
+      <p class="lead">{articles.lead}</p>
+    </div>
+
+    <ul class="cards">
+      {
+        cards.map((c, i) => (
+          <li class="cards__item" data-reveal style={`--delay:${i * 80}ms`}>
+            <a
+              class="acard"
+              href={c.href}
+              aria-labelledby={`art-${c.slug}`}
+              aria-describedby={`art-${c.slug}-sf`}
+              data-article={c.path}
+            >
+              <span class="acard__well" aria-hidden="true">
+                <img
+                  src={c.thumbnail.src}
+                  alt=""
+                  width={c.thumbnail.width}
+                  height={c.thumbnail.height}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </span>
+              <span class="acard__body">
+                <span class="acard__meta">
+                  <span>
+                    <Icon name="calendar" class="icon acard__icon" />
+                    <time datetime={c.datePublished}>{formatDate(c.datePublished, copy.lang)}</time>
+                  </span>
+                  <span>
+                    <Icon name="clock" class="icon acard__icon" />
+                    {copy.articlePage.readingTime.replace("{n}", String(c.minutes))}
+                  </span>
+                </span>
+                <h3 class="acard__title" id={`art-${c.slug}`}>{c.title}</h3>
+                <span class="acard__sf" id={`art-${c.slug}-sf`}>{c.standfirst}</span>
+                <span class="acard__read">
+                  {articles.read}
+                  <Icon name="arrow-right" class="icon acard__arrow" />
+                </span>
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  /* A grid that takes more cards later: one column on a phone, as many as fit beside each other after. */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+    gap: 24px;
+    margin-top: clamp(36px, 4.5vw, 56px);
+  }
+  .cards__item {
+    display: flex;
+    min-width: 0;
+    container-type: inline-size;
+  }
+
+  /* The whole card is one link, named by its title. */
+  .acard {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 10px;
+    border-radius: var(--r-xl);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-card);
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  .acard:hover {
+    color: inherit;
+    border-color: var(--border-strong);
+    box-shadow: 0 1px 2px rgba(15, 42, 60, 0.05), 0 18px 36px -18px rgba(15, 42, 60, 0.28);
+  }
+  .acard:focus-visible {
+    outline: 2px solid var(--accent-mark);
+    outline-offset: 4px;
+    border-radius: var(--r-xl);
+  }
+
+  /* The thumbnail: the captured view, whole, on the soft well of the other product views, in a fixed frame set
+     inside the card like the visuals of the model's pillars. */
+  .acard__well {
+    position: relative;
+    display: block;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: calc(var(--r-xl) - 8px);
+    background:
+      radial-gradient(70% 55% at 50% 100%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 72%),
+      var(--n-50);
+    box-shadow: inset 0 0 0 1px var(--border);
+  }
+  .acard__well img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: auto;
+    height: auto;
+    max-width: calc(100% - 2 * var(--pad));
+    max-height: calc(100% - 2 * var(--pad));
+    transform: translate(-50%, -50%);
+    border-radius: var(--r-md);
+    box-shadow: 0 0 0 1px var(--border), 0 18px 36px -20px rgba(17, 23, 27, 0.35);
+    filter: var(--img-dim);
+  }
+  .acard__well {
+    --pad: clamp(16px, 5cqi, 24px);
+  }
+
+  .acard__body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 18px 14px 16px;
+  }
+  .acard__meta {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 18px;
+    row-gap: 2px;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--text-3);
+  }
+  .acard__meta > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+  .acard :global(.acard__icon) {
+    width: 15px;
+    height: 15px;
+  }
+  .acard__title {
+    font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-strong);
+    text-wrap: balance;
+  }
+  .acard__sf {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-2);
+  }
+  .acard__read {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--accent-ink);
+  }
+  .acard :global(.acard__arrow) {
+    width: 17px;
+    height: 17px;
+    transition: transform 0.2s ease;
+  }
+  .acard:hover :global(.acard__arrow),
+  .acard:focus-visible :global(.acard__arrow) {
+    transform: translateX(4px);
+  }
+
+  /* A wide card lies down: the picture on the left, the text on the right. */
+  @container (min-width: 680px) {
+    .acard {
+      display: grid;
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+      align-items: stretch;
+      padding: 12px;
+    }
+    /* The frame takes the height of the row, at least a fixed share of the card's width. */
+    .acard__well {
+      aspect-ratio: auto;
+      width: 100%;
+      height: 100%;
+      min-height: clamp(16rem, 31cqi, 23rem);
+      --pad: clamp(20px, 3cqi, 32px);
+    }
+    .acard__body {
+      align-self: center;
+      gap: 12px;
+      padding: clamp(20px, 3cqi, 36px) clamp(24px, 4.5cqi, 56px);
+    }
+    .acard__title {
+      font-size: clamp(1.5rem, 1.1rem + 1.1vw, 2rem);
+      line-height: 1.15;
+    }
+    .acard__sf {
+      font-size: 1.0625rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .acard:hover {
+      transform: translateY(-3px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .acard,
+    .acard :global(.acard__arrow) {
+      transition: none;
+    }
+    .acard:hover :global(.acard__arrow),
+    .acard:focus-visible :global(.acard__arrow) {
+      transform: none;
+    }
+  }
+</style>

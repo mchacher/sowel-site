@@ -256,7 +256,7 @@ export const en: SiteCopy = {
     title: "Your energy, tracked and optimised",
     titleAccent: "optimised",
     lead: "Sowel follows your production and your consumption as they happen, and tracks what they cost you. To lower that cost, recipes rely on the energy arbiter, which shares the solar surplus by priority: the water heater first, then the car. You have no rule to write.",
-    article: { label: "Read the article: Who decides how your sun gets used?", href: withBase("/en/articles/who-decides-how-your-sun-gets-used/") },
+    article: { label: "Read the article: The energy brain of your home", href: withBase("/en/articles/the-energy-brain-of-your-home/") },
     flow: {
       title: "Live flow",
       body: "Production, consumption and the grid, as they happen.",
@@ -325,11 +325,20 @@ export const en: SiteCopy = {
       { icon: "scroll-text", title: "Release notes", body: "What changed in each version", href: `${DOCS}release-notes/` },
     ],
   },
+  articles: {
+    id: "articles",
+    eyebrow: "Articles",
+    title: "The ideas behind Sowel",
+    titleAccent: "behind Sowel",
+    lead: "In-depth articles, signed by its creator.",
+    read: "Read the article",
+  },
   footer: {
     tagline: "Sowel looks after your home.",
     licence: "Free software under the AGPL-3.0 licence.",
     privacy: "This site sets no cookie and loads nothing from another site.",
     links: [
+      { label: "Articles", href: withBase("/en/#articles") },
       { label: "GitHub", href: REPO },
       { label: "Manual", href: DOCS },
       { label: "Licence", href: `${REPO}/blob/main/LICENSE` },

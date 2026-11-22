@@ -1,8 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { slugify, headingIds, wordCount, readingMinutes, formatDate } from "../src/lib/article.ts";
-import { en } from "../src/content/articles/sun-arbiter.en.ts";
-import { fr } from "../src/content/articles/sun-arbiter.fr.ts";
+import { en } from "../src/content/articles/energy-brain.en.ts";
+import { fr } from "../src/content/articles/energy-brain.fr.ts";
 
 test("a heading slugs to a stable id, accents folded", () => {
   assert.equal(slugify("Ce qu'il ne fait pas encore"), "ce-qu-il-ne-fait-pas-encore");

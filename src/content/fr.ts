@@ -256,7 +256,7 @@ export const fr: SiteCopy = {
     title: "Votre énergie, suivie et optimisée",
     titleAccent: "optimisée",
     lead: "Sowel suit votre production et votre consommation en direct, et chiffre ce qu'elles vous coûtent. Pour faire baisser cette facture, les recettes s'appuient sur l'arbitre énergétique, qui répartit le surplus solaire par priorité : d'abord le ballon d'eau chaude, puis la voiture. Vous n'avez aucune règle à écrire.",
-    article: { label: "Lire l'article\u00a0: Qui décide d'utiliser votre soleil\u00a0?", href: withBase("/fr/articles/qui-decide-d-utiliser-votre-soleil/") },
+    article: { label: "Lire l'article\u00a0: Le cerveau énergétique de la maison", href: withBase("/fr/articles/le-cerveau-energetique-de-la-maison/") },
     flow: {
       title: "Flux en direct",
       body: "Ce que vous produisez, consommez et échangez avec le réseau, à l'instant.",
@@ -325,11 +325,20 @@ export const fr: SiteCopy = {
       { icon: "scroll-text", title: "Notes de version", body: "Ce qui change à chaque version", href: `${DOCS}release-notes/` },
     ],
   },
+  articles: {
+    id: "articles",
+    eyebrow: "Articles",
+    title: "Les idées derrière Sowel",
+    titleAccent: "derrière Sowel",
+    lead: "Des articles de fond, signés de son créateur.",
+    read: "Lire l'article",
+  },
   footer: {
     tagline: "Sowel prend soin de votre maison.",
     licence: "Logiciel libre sous licence AGPL-3.0.",
     privacy: "Ce site ne dépose aucun cookie et ne charge rien depuis un autre site.",
     links: [
+      { label: "Articles", href: withBase("/fr/#articles") },
       { label: "GitHub", href: REPO },
       { label: "Manuel", href: DOCS },
       { label: "Licence", href: `${REPO}/blob/main/LICENSE` },
