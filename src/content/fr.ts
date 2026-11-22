@@ -20,7 +20,7 @@ export const fr: SiteCopy = {
   },
   nav: {
     links: [
-      { label: "Votre maison", href: "#home" },
+      { label: "Le modèle", href: "#home" },
       { label: "Pièces", href: "#rooms" },
       { label: "Tableau de bord", href: "#dashboard" },
       { label: "Recettes", href: "#recipes" },
