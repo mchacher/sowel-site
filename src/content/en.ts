@@ -21,7 +21,7 @@ export const en: SiteCopy = {
   nav: {
     links: [
       { label: "The model", href: "#home" },
-      { label: "Rooms", href: "#rooms" },
+      { label: "Zones", href: "#rooms" },
       { label: "Dashboard", href: "#dashboard" },
       { label: "Recipes", href: "#recipes" },
       { label: "Modes", href: "#modes" },
@@ -125,16 +125,16 @@ export const en: SiteCopy = {
   },
   rooms: {
     id: "rooms",
-    eyebrow: "Rooms that know",
-    title: "Every room works out its own state",
-    titleAccent: "Every room",
-    lead: "Put equipment in a room and the room works out the rest by itself, with nothing to configure.",
+    eyebrow: "Zones",
+    title: "Every zone works out its own state",
+    titleAccent: "Every zone",
+    lead: "Put equipment in a zone and the zone works out the rest by itself, with nothing to configure.",
     items: [
-      { icon: "thermometer", title: "Temperature", body: "The average of the sensors in the room." },
-      { icon: "person-standing", title: "Presence", body: "Motion anywhere in the room, and how long ago." },
+      { icon: "thermometer", title: "Temperature", body: "The average of the sensors in the zone." },
+      { icon: "person-standing", title: "Presence", body: "Motion anywhere in the zone, and how long ago." },
       { icon: "app-window", title: "Openings", body: "Which windows and shutters are open." },
       { icon: "lightbulb", title: "Lights", body: "How many are on, at a glance." },
-      { icon: "zap", title: "Power", body: "What the room draws right now." },
+      { icon: "zap", title: "Power", body: "What the zone draws right now." },
     ],
     stripSmall: {
       src: withBase("/img/en/living-room-strip.webp"),
