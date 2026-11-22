@@ -204,10 +204,10 @@ const byline = article.byline.replace(/\.\s*$/, "");
 
 <style>
   .article {
-    --col: 40rem; /* about 68 characters of Inter at 18px */
-    --wide: 56rem;
+    --col: 45rem; /* about 77 characters of Inter at 17px */
+    --wide: 58rem;
     padding-block: clamp(28px, 4.5vw, 56px) clamp(64px, 8vw, 104px);
-    font-size: 1.125rem;
+    font-size: 1.0625rem;
     line-height: 1.7;
   }
   .article__grid {
@@ -277,7 +277,7 @@ const byline = article.byline.replace(/\.\s*$/, "");
   }
   .article__title {
     margin-top: 18px;
-    font-size: clamp(2rem, 1.5rem + 2vw, 2.75rem);
+    font-size: clamp(1.875rem, 1.45rem + 1.8vw, 2.5rem);
     line-height: 1.12;
     font-weight: 720;
     letter-spacing: -0.028em;
@@ -286,7 +286,7 @@ const byline = article.byline.replace(/\.\s*$/, "");
   }
   .standfirst {
     margin-top: 18px;
-    font-size: 1.25rem;
+    font-size: 1.1875rem;
     line-height: 1.55;
     color: var(--text-strong);
     text-wrap: pretty;
@@ -425,7 +425,7 @@ const byline = article.byline.replace(/\.\s*$/, "");
     margin-top: 2.9rem;
   }
   .sec h2 {
-    font-size: clamp(1.45rem, 1.3rem + 0.5vw, 1.625rem);
+    font-size: clamp(1.35rem, 1.25rem + 0.4vw, 1.5rem);
     line-height: 1.25;
     font-weight: 700;
     letter-spacing: -0.02em;
@@ -479,7 +479,7 @@ const byline = article.byline.replace(/\.\s*$/, "");
 
   /* The exergue: the key sentence, a little wider than the text, with a rule and a quotation mark. */
   .prose > .pull {
-    max-width: min(46rem, 100%);
+    max-width: min(50rem, 100%);
     margin-block: 2.6rem;
     padding: 4px 0 4px clamp(18px, 3vw, 28px);
     border-left: 3px solid var(--accent-mark);
@@ -491,7 +491,7 @@ const byline = article.byline.replace(/\.\s*$/, "");
     color: color-mix(in srgb, var(--accent-mark) 45%, transparent);
   }
   .pull p {
-    font-size: clamp(1.5rem, 1.1rem + 1.5vw, 2.25rem);
+    font-size: clamp(1.4rem, 1.05rem + 1.3vw, 2rem);
     line-height: 1.18;
     font-weight: 730;
     letter-spacing: -0.025em;
@@ -589,8 +589,8 @@ const byline = article.byline.replace(/\.\s*$/, "");
   @media (min-width: 1100px) {
     .article__grid {
       display: grid;
-      grid-template-columns: minmax(11rem, 13rem) minmax(0, var(--col)) minmax(0, 14rem);
-      column-gap: clamp(2.5rem, 3.5vw, 3.5rem);
+      grid-template-columns: minmax(10.5rem, 12rem) minmax(0, var(--col)) minmax(0, 12rem);
+      column-gap: clamp(2rem, 3vw, 3rem);
       justify-content: center;
     }
     .article__head {
@@ -624,7 +624,7 @@ const byline = article.byline.replace(/\.\s*$/, "");
 
   @media (max-width: 639px) {
     .standfirst {
-      font-size: 1.1875rem;
+      font-size: 1.125rem;
     }
     .byline__avatar {
       width: 42px;
