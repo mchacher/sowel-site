@@ -4,12 +4,14 @@ import Icon from "./Icon.astro";
 
 interface Props {
   text: string;
-  icon: IconName;
+  icon: IconName | "newspaper";
+  /** The compact tag, for an article's header. */
+  small?: boolean;
 }
-const { text, icon } = Astro.props;
+const { text, icon, small = false } = Astro.props;
 ---
 
-<p class="section-tag">
+<p class:list={["section-tag", { "section-tag--sm": small }]}>
   <span class="section-tag__chip"><Icon name={icon} class="section-tag__icon" /></span>
   {text}
 </p>
@@ -57,18 +59,38 @@ const { text, icon } = Astro.props;
     width: 22px;
     height: 22px;
   }
+  /* The compact tag of an article: the same card and medallion, at the size of a label. */
+  .section-tag--sm,
+  .section-tag.section-tag--sm {
+    gap: 10px;
+    margin-bottom: 0;
+    padding: 4px 14px 4px 4px;
+    border-radius: 12px;
+    font-size: 14px;
+  }
+  .section-tag--sm .section-tag__chip,
+  .section-tag.section-tag--sm .section-tag__chip {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+  }
+  .section-tag--sm :global(.section-tag__icon),
+  .section-tag.section-tag--sm :global(.section-tag__icon) {
+    width: 16px;
+    height: 16px;
+  }
   @media (max-width: 639px) {
-    .section-tag {
+    .section-tag:not(.section-tag--sm) {
       gap: 12px;
       padding-right: 20px;
       font-size: 17px;
     }
-    .section-tag__chip {
+    .section-tag:not(.section-tag--sm) .section-tag__chip {
       width: 40px;
       height: 40px;
       border-radius: 11px;
     }
-    .section-tag :global(.section-tag__icon) {
+    .section-tag:not(.section-tag--sm) :global(.section-tag__icon) {
       width: 21px;
       height: 21px;
     }

@@ -16,6 +16,7 @@ export const en: SiteCopy = {
     home: "Sowel, home",
     nav: "Main",
     sections: "Sections of the page",
+    footer: "Site links",
     copyDone: "Command copied to the clipboard",
   },
   nav: {
@@ -29,7 +30,20 @@ export const en: SiteCopy = {
       { label: "Privacy", href: "#privacy" },
     ],
     github: { label: "GitHub", href: REPO },
-    docs: { label: "Docs", href: DOCS },
+    docs: {
+      label: "Docs",
+      menu: "Articles and manual",
+      articles: "Articles",
+      all: "All articles",
+      manual: "Manual",
+      links: [
+        { icon: "rocket", title: "Getting started", body: "Install Sowel and add your first devices", href: `${DOCS}user/getting-started/` },
+        { icon: "book-open", title: "User guide", body: "Devices, zones, modes, recipes, plugins", href: `${DOCS}user/` },
+        { icon: "zap", title: "Energy", body: "Where the energy goes, the surplus arbiter", href: `${DOCS}deep-dives/energy-tour/` },
+        { icon: "code-xml", title: "Technical guide", body: "Architecture, API, writing a plugin", href: `${DOCS}technical/` },
+        { icon: "scroll-text", title: "Release notes", body: "What changed in each version", href: `${DOCS}release-notes/` },
+      ],
+    },
     switch: { label: "FR", aria: "FR, lire ce site en français", href: withBase("/fr/"), lang: "fr" },
   },
   hero: {
@@ -255,6 +269,7 @@ export const en: SiteCopy = {
     title: "Your energy, tracked and optimised",
     titleAccent: "optimised",
     lead: "Sowel follows your production and your consumption as they happen, and tracks what they cost you. To lower that cost, recipes rely on the energy arbiter, which shares the solar surplus by priority: the water heater first, then the car. You have no rule to write.",
+    article: { label: "Read the article: The energy brain of your home", href: withBase("/en/articles/the-energy-brain-of-your-home/") },
     flow: {
       title: "Live flow",
       body: "Production, consumption and the grid, as they happen.",
@@ -328,9 +343,27 @@ export const en: SiteCopy = {
     licence: "Free software under the AGPL-3.0 licence.",
     privacy: "This site sets no cookie and loads nothing from another site.",
     links: [
+      { label: "Articles", href: withBase("/en/articles/") },
       { label: "GitHub", href: REPO },
       { label: "Manual", href: DOCS },
       { label: "Licence", href: `${REPO}/blob/main/LICENSE` },
     ],
+  },
+  articlePage: {
+    eyebrow: "Article",
+    breadcrumb: { label: "Breadcrumb", home: "Sowel", articles: "Articles" },
+    toc: "In this article",
+    readingTime: "{n} min read",
+    anchor: "Link to the section: {h}",
+  },
+  articlesPage: {
+    meta: {
+      title: "Articles | Sowel",
+      description: "Articles on Sowel, the open source home automation that runs on your own hardware: how it works and the ideas behind it.",
+    },
+    count: { one: "1 article", other: "{n} articles" },
+    title: "Articles",
+    lead: "The ideas behind Sowel, one at a time.",
+    read: "Read the article",
   },
 };

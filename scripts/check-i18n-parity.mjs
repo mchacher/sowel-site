@@ -2,12 +2,19 @@
 // Node 24 runs the .ts files directly (type stripping).
 import { en } from "../src/content/en.ts";
 import { fr } from "../src/content/fr.ts";
-import { compareCopy } from "./lib/parity.mjs";
+import { articles } from "../src/content/articles/index.ts";
+import { compareCopy, compareDocsMenu, compareRegistry } from "./lib/parity.mjs";
 
-const problems = compareCopy(en, fr);
+const problems = [
+  ...compareCopy(en, fr),
+  ...compareDocsMenu(en, fr),
+  ...compareRegistry(articles).map((p) => `articles: ${p}`),
+];
 if (problems.length) {
   console.error("i18n parity failed:");
   for (const p of problems) console.error(`  - ${p}`);
   process.exit(1);
 }
-console.log("i18n parity: en and fr carry the same keys.");
+console.log(
+  "i18n parity: en and fr carry the same keys and the articles the same blocks, the Docs menu the same pages.",
+);

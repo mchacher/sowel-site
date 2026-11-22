@@ -31,7 +31,9 @@ export type IconName =
   | "terminal"
   | "radio"
   | "box"
-  | "warehouse";
+  | "warehouse"
+  | "rocket"
+  | "code-xml";
 
 export interface Link {
   label: string;
@@ -53,11 +55,25 @@ export interface TreeNode {
 export interface SiteCopy {
   lang: "en" | "fr";
   meta: { title: string; description: string };
-  a11y: { skip: string; home: string; nav: string; sections: string; copyDone: string };
+  a11y: { skip: string; home: string; nav: string; sections: string; footer: string; copyDone: string };
   nav: {
     links: Link[];
     github: Link;
-    docs: Link;
+    /** The Docs menu of the header (spec 002): the articles of the registry, then the reading entries of the manual. */
+    docs: {
+      /** The visible label of the button, also its accessible name. */
+      label: string;
+      /** The accessible name of the panel's nav landmark. */
+      menu: string;
+      /** The heading of the articles group; the entries come from src/content/articles/index.ts. */
+      articles: string;
+      /** The last row of the articles group, always present: the link to the index page. */
+      all: string;
+      /** The heading of the manual group. */
+      manual: string;
+      /** The manual's entries, on docs.sowel.org in the language of the page. */
+      links: { icon: IconName; title: string; body: string; href: string }[];
+    };
     switch: { label: string; aria: string; href: string; lang: "en" | "fr" };
   };
   hero: {
@@ -146,6 +162,8 @@ export interface SiteCopy {
     title: string;
     titleAccent: string;
     lead: string;
+    /** One line under the lead: the article on the arbiter (spec 002). */
+    article: Link;
     flow: { title: string; body: string; image: Img };
     bilan: { title: string; body: string; image: Img; savings: Img };
     arbiter: { title: string; body: string; image: Img };
@@ -168,4 +186,27 @@ export interface SiteCopy {
     links: { icon: IconName; title: string; body: string; href: string }[];
   };
   footer: { tagline: string; licence: string; privacy: string; links: Link[] };
+  /** The interface around an article (spec 002): its words stay in src/content/articles/. */
+  articlePage: {
+    /** The small tag above the title. */
+    eyebrow: string;
+    /** The breadcrumb: its landmark name, the home link, the link to the index; the article's title ends it. */
+    breadcrumb: { label: string; home: string; articles: string };
+    /** The table of contents: its title and landmark name. */
+    toc: string;
+    /** The reading time; {n} is replaced by the minutes, computed at build time. */
+    readingTime: string;
+    /** The accessible name of a heading's anchor link; {h} is replaced by the heading. */
+    anchor: string;
+  };
+  /** The index page of the articles (spec 002): /{lang}/articles/. */
+  articlesPage: {
+    meta: { title: string; description: string };
+    /** The compact tag above the title: the number of articles; {n} is replaced by it. */
+    count: { one: string; other: string };
+    title: string;
+    lead: string;
+    /** The call at the foot of each entry. */
+    read: string;
+  };
 }

@@ -16,6 +16,7 @@ export const fr: SiteCopy = {
     home: "Sowel, accueil",
     nav: "Principale",
     sections: "Sections de la page",
+    footer: "Liens du site",
     copyDone: "Commande copiée dans le presse-papiers",
   },
   nav: {
@@ -29,7 +30,20 @@ export const fr: SiteCopy = {
       { label: "Confidentialité", href: "#privacy" },
     ],
     github: { label: "GitHub", href: REPO },
-    docs: { label: "Manuel", href: DOCS },
+    docs: {
+      label: "Docs",
+      menu: "Articles et manuel",
+      articles: "Articles",
+      all: "Tous les articles",
+      manual: "Manuel",
+      links: [
+        { icon: "rocket", title: "Premiers pas", body: "Installer Sowel et ajouter vos premiers appareils", href: `${DOCS}user/getting-started/` },
+        { icon: "book-open", title: "Guide utilisateur", body: "Appareils, zones, modes, recettes, plugins", href: `${DOCS}user/` },
+        { icon: "zap", title: "Énergie", body: "Où va l'énergie, l'arbitre de surplus", href: `${DOCS}deep-dives/energy-tour/` },
+        { icon: "code-xml", title: "Guide technique", body: "Architecture, API, écrire un plugin", href: `${DOCS}technical/` },
+        { icon: "scroll-text", title: "Notes de version", body: "Ce qui change à chaque version", href: `${DOCS}release-notes/` },
+      ],
+    },
     switch: { label: "EN", aria: "EN, read this site in English", href: withBase("/en/"), lang: "en" },
   },
   hero: {
@@ -255,6 +269,7 @@ export const fr: SiteCopy = {
     title: "Votre énergie, suivie et optimisée",
     titleAccent: "optimisée",
     lead: "Sowel suit votre production et votre consommation en direct, et chiffre ce qu'elles vous coûtent. Pour faire baisser cette facture, les recettes s'appuient sur l'arbitre énergétique, qui répartit le surplus solaire par priorité : d'abord le ballon d'eau chaude, puis la voiture. Vous n'avez aucune règle à écrire.",
+    article: { label: "Lire l'article\u00a0: Le cerveau énergétique de la maison", href: withBase("/fr/articles/le-cerveau-energetique-de-la-maison/") },
     flow: {
       title: "Flux en direct",
       body: "Ce que vous produisez, consommez et échangez avec le réseau, à l'instant.",
@@ -328,9 +343,27 @@ export const fr: SiteCopy = {
     licence: "Logiciel libre sous licence AGPL-3.0.",
     privacy: "Ce site ne dépose aucun cookie et ne charge rien depuis un autre site.",
     links: [
+      { label: "Articles", href: withBase("/fr/articles/") },
       { label: "GitHub", href: REPO },
       { label: "Manuel", href: DOCS },
       { label: "Licence", href: `${REPO}/blob/main/LICENSE` },
     ],
+  },
+  articlePage: {
+    eyebrow: "Article",
+    breadcrumb: { label: "Fil d'Ariane", home: "Sowel", articles: "Articles" },
+    toc: "Dans cet article",
+    readingTime: "{n}\u00a0min de lecture",
+    anchor: "Lien vers la section\u00a0: {h}",
+  },
+  articlesPage: {
+    meta: {
+      title: "Articles | Sowel",
+      description: "Les articles sur Sowel, la domotique open source qui tourne sur votre propre matériel\u00a0: son fonctionnement et les idées qui la portent.",
+    },
+    count: { one: "1 article", other: "{n} articles" },
+    title: "Articles",
+    lead: "Les idées derrière Sowel, une à la fois.",
+    read: "Lire l'article",
   },
 };

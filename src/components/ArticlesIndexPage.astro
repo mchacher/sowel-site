@@ -1,0 +1,342 @@
+---
+// The index page of the articles (spec 002): every article of the language, the most recent first, under a heading
+// per year. One link per entry, named by its title.
+import Base from "../layouts/Base.astro";
+import Header from "./Header.astro";
+import Footer from "./Footer.astro";
+import Icon from "./Icon.astro";
+import SectionTag from "./SectionTag.astro";
+import type { SiteCopy } from "../content/types";
+import { articleLinks, articlesByYear, indexPath } from "../content/articles/index.ts";
+import { formatDate } from "../lib/article";
+import { withBase } from "../lib/url";
+
+interface Props {
+  copy: SiteCopy;
+}
+const { copy } = Astro.props;
+const lang = copy.lang;
+const other = lang === "en" ? "fr" : "en";
+const ui = copy.articlesPage;
+const path = indexPath(lang);
+const groups = articlesByYear(lang);
+const all = articleLinks(lang);
+const count = (all.length === 1 ? ui.count.one : ui.count.other).replace("{n}", String(all.length));
+const readingTime = (n: number) => copy.articlePage.readingTime.replace("{n}", String(n));
+const abs = (p: string) => new URL(withBase(p), Astro.site).href;
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: ui.meta.title,
+  description: ui.meta.description,
+  url: abs(path),
+  inLanguage: lang,
+  isPartOf: { "@type": "WebSite", name: "Sowel", url: abs(`/${lang}/`) },
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: all.map((a, i) => ({ "@type": "ListItem", position: i + 1, url: abs(a.path), name: a.title })),
+  },
+};
+let n = 0;
+---
+
+<Base copy={copy} path={path} page={{ meta: ui.meta, alternates: { en: indexPath("en"), fr: indexPath("fr") }, jsonLd, ogType: "website" }}>
+  <Header copy={copy} inner={{ home: `/${lang}/`, switchHref: withBase(indexPath(other)), current: path }} />
+  <main id="main" class="aindex">
+    <div class="container aindex__col">
+      <header class="aindex__head">
+        <nav class="crumbs" aria-label={copy.articlePage.breadcrumb.label}>
+          <ol>
+            <li><a href={withBase(`/${lang}/`)}>{copy.articlePage.breadcrumb.home}</a></li>
+            <li aria-current="page">{copy.articlePage.breadcrumb.articles}</li>
+          </ol>
+        </nav>
+        <SectionTag text={count} icon="newspaper" small />
+        <h1 class="aindex__title">{ui.title}</h1>
+        <p class="aindex__lead">{ui.lead}</p>
+      </header>
+
+      {
+        groups.map((g) => (
+          <section class="year" aria-labelledby={`year-${g.year}`} data-year={g.year}>
+            <h2 class="year__title" id={`year-${g.year}`}>{g.year}</h2>
+            <ul class="alist">
+              {g.items.map((a) => {
+                const i = n++;
+                return (
+                  <li class="alist__item">
+                    <a
+                      class="entry"
+                      href={a.href}
+                      aria-labelledby={`a-${a.slug}`}
+                      aria-describedby={`a-${a.slug}-sf`}
+                      data-index-article={a.path}
+                    >
+                      <span class="entry__frame" aria-hidden="true">
+                        {a.thumbnail && (
+                          <img
+                            src={a.thumbnail.src}
+                            alt=""
+                            width={a.thumbnail.width}
+                            height={a.thumbnail.height}
+                            loading={i === 0 ? "eager" : "lazy"}
+                            decoding="async"
+                          />
+                        )}
+                      </span>
+                      <span class="entry__body">
+                        <span class="entry__meta">
+                          <span>
+                            <Icon name="calendar" class="icon entry__icon" />
+                            <time datetime={a.datePublished}>{formatDate(a.datePublished, lang)}</time>
+                          </span>
+                          <span>
+                            <Icon name="clock" class="icon entry__icon" />
+                            {readingTime(a.minutes)}
+                          </span>
+                        </span>
+                        <h3 class="entry__title" id={`a-${a.slug}`}>{a.title}</h3>
+                        <span class="entry__sf" id={`a-${a.slug}-sf`}>{a.standfirst}</span>
+                        <span class="entry__read">
+                          {ui.read}
+                          <Icon name="arrow-right" class="icon entry__arrow" />
+                        </span>
+                      </span>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        ))
+      }
+    </div>
+  </main>
+  <Footer copy={copy} />
+</Base>
+
+<style>
+  .aindex {
+    padding-block: clamp(28px, 4.5vw, 56px) clamp(64px, 8vw, 104px);
+  }
+  .aindex__col {
+    max-width: calc(58rem + 2 * var(--gutter));
+  }
+
+  /* The head: the same breadcrumb and compact tag as an article, a title, a one-line lead. */
+  .crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: var(--text-3);
+  }
+  .crumbs li + li::before {
+    content: "/" / "";
+    margin-right: 6px;
+    color: var(--border-strong);
+  }
+  .crumbs a {
+    color: var(--text-2);
+    border-radius: 3px;
+  }
+  .crumbs a:hover {
+    color: var(--accent-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .aindex__head :global(.section-tag) {
+    margin-top: 22px;
+  }
+  .aindex__title {
+    margin-top: 18px;
+    font-size: clamp(2rem, 1.5rem + 2vw, 2.75rem);
+    line-height: 1.1;
+    font-weight: 720;
+    letter-spacing: -0.03em;
+    color: var(--text-strong);
+  }
+  .aindex__lead {
+    margin-top: 14px;
+    font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+    line-height: 1.55;
+    color: var(--text-2);
+    text-wrap: pretty;
+  }
+
+  /* A year: a small heading on a rule, then its articles. */
+  .year {
+    margin-top: clamp(36px, 5vw, 56px);
+  }
+  .year__title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 0.9375rem;
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-3);
+  }
+  .year__title::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .alist {
+    display: grid;
+    gap: 20px;
+    margin-top: 18px;
+  }
+  .alist__item {
+    min-width: 0;
+    container-type: inline-size;
+  }
+
+  /* An entry is one link, named by its title. */
+  .entry {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border-radius: var(--r-lg);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-card);
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  .entry:hover {
+    color: inherit;
+    border-color: var(--border-strong);
+    box-shadow: 0 1px 2px rgba(15, 42, 60, 0.05), 0 18px 36px -18px rgba(15, 42, 60, 0.28);
+  }
+  .entry:focus-visible {
+    outline: 2px solid var(--accent-mark);
+    outline-offset: 4px;
+  }
+
+  /* The thumbnail: the article's first figure, whole, on the soft well, in a frame of fixed proportions. */
+  .entry__frame {
+    --pad: 14px;
+    position: relative;
+    display: block;
+    aspect-ratio: 2 / 1;
+    overflow: hidden;
+    border-radius: calc(var(--r-lg) - 6px);
+    background:
+      radial-gradient(70% 55% at 50% 100%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 72%),
+      var(--n-50);
+    box-shadow: inset 0 0 0 1px var(--border);
+  }
+  .entry__frame img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: auto;
+    height: auto;
+    max-width: calc(100% - 2 * var(--pad));
+    max-height: calc(100% - 2 * var(--pad));
+    transform: translate(-50%, -50%);
+    border-radius: 6px;
+    box-shadow: 0 0 0 1px var(--border), 0 12px 24px -16px rgba(17, 23, 27, 0.35);
+    filter: var(--img-dim);
+  }
+
+  .entry__body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+    padding: 16px 12px 12px;
+  }
+  .entry__meta {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 18px;
+    row-gap: 2px;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--text-3);
+  }
+  .entry__meta > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+  .entry :global(.entry__icon) {
+    width: 15px;
+    height: 15px;
+  }
+  .entry__title {
+    font-size: clamp(1.25rem, 1.15rem + 0.4vw, 1.4375rem);
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-strong);
+    text-wrap: balance;
+  }
+  .entry__sf {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-2);
+  }
+  .entry__read {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--accent-ink);
+  }
+  .entry :global(.entry__arrow) {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.2s ease;
+  }
+  .entry:hover :global(.entry__arrow),
+  .entry:focus-visible :global(.entry__arrow) {
+    transform: translateX(4px);
+  }
+
+  /* A wide entry lies down: the thumbnail on the left, the text beside it. */
+  @container (min-width: 680px) {
+    .entry {
+      display: grid;
+      grid-template-columns: 15rem minmax(0, 1fr);
+      align-items: center;
+      gap: 8px;
+    }
+    .entry__frame {
+      aspect-ratio: 4 / 3;
+      --pad: 16px;
+    }
+    .entry__body {
+      padding: 12px 20px 12px 18px;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .entry:hover {
+      transform: translateY(-2px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .entry,
+    .entry :global(.entry__arrow) {
+      transition: none;
+    }
+    .entry:hover :global(.entry__arrow),
+    .entry:focus-visible :global(.entry__arrow) {
+      transform: none;
+    }
+  }
+</style>

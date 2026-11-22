@@ -15,6 +15,7 @@ const { energy } = Astro.props.copy;
       <SectionTag text={energy.eyebrow} icon="zap" />
       <h2 class="h2"><Accent text={energy.title} accent={energy.titleAccent} /></h2>
       <p class="lead">{energy.lead}</p>
+      <p class="more"><a href={energy.article.href}>{energy.article.label}</a></p>
     </div>
 
     <div class="energy">
@@ -81,6 +82,19 @@ const { energy } = Astro.props.copy;
 </section>
 
 <style>
+  .more {
+    margin-top: 14px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .more a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: color-mix(in srgb, var(--accent-mark) 50%, transparent);
+  }
+  .more a::after {
+    content: " \2192";
+  }
   .energy {
     display: grid;
     gap: 20px;
