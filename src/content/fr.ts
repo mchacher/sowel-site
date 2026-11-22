@@ -175,7 +175,7 @@ export const fr: SiteCopy = {
     eyebrow: "Recettes",
     title: "Des automatismes prêts à l'emploi, posés sur une pièce",
     titleAccent: "prêts à l'emploi",
-    lead: "Une recette est un vrai programme, écrit et testé une fois. Vous la posez sur une pièce, vous répondez à quelques questions, et elle tourne.",
+    lead: "Une recette est un vrai programme, livré validé. Vous la posez sur une pièce, vous répondez à quelques questions, et elle tourne.",
     placedOn: "Posée sur",
     asks: "Demande",
     running: "En cours",
