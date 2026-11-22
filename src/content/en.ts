@@ -77,7 +77,7 @@ export const en: SiteCopy = {
     equipment: {
       title: "Equipment, not devices",
       quote: "A device is what is on the network. An equipment is what is in the room.",
-      body: "The garage door is one equipment built on two devices: a dry contact that triggers it and a door-closed contact that says whether it is shut. You see one door, which you open and whose state you read. Replace a contact, the door stays.",
+      body: "The garage door is one equipment built on two devices: a dry contact that triggers it and a door-closed contact that says whether it is shut. You see one door, which you open and whose state you read.",
       devicesLabel: "Devices",
       devices: ["Dry contact", "Door-closed contact"],
       equipmentLabel: "Equipment",

@@ -77,7 +77,7 @@ export const fr: SiteCopy = {
     equipment: {
       title: "Des équipements, pas des appareils",
       quote: "Un appareil, c'est ce qui est sur le réseau. Un équipement, c'est ce qui est dans la pièce.",
-      body: "La porte de garage est un seul équipement, construit sur deux appareils : un contact sec qui la déclenche et un contact de fermeture qui dit si elle est fermée. Vous voyez une porte, que vous ouvrez et dont vous lisez l'état. Changez un contact, la porte reste.",
+      body: "La porte de garage est un seul équipement, construit sur deux appareils : un contact sec qui la déclenche et un contact de fermeture qui dit si elle est fermée. Vous voyez une porte, que vous ouvrez et dont vous lisez l'état.",
       devicesLabel: "Appareils",
       devices: ["Contact sec", "Contact de fermeture"],
       equipmentLabel: "Équipement",
