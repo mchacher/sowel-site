@@ -207,7 +207,7 @@ const items = copy.nav.links.filter((l) => ICONS[l.href]).map((l) => ({ ...l, ic
     .snav__rail::before {
       content: "";
       position: absolute;
-      right: 14px;
+      right: 11.75px; /* centre of the dots (8px padding + 4.5px) minus half the line */
       top: 8px;
       bottom: 8px;
       width: 1.5px;
@@ -246,7 +246,6 @@ const items = copy.nav.links.filter((l) => ICONS[l.href]).map((l) => ({ ...l, ic
       position: relative;
       width: 9px;
       height: 9px;
-      margin-right: 1px;
       border-radius: 50%;
       background: color-mix(in srgb, var(--text-2) 45%, var(--surface));
       transition:
