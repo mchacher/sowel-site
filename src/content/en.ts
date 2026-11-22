@@ -9,7 +9,7 @@ export const en: SiteCopy = {
   meta: {
     title: "Sowel: home automation that looks after your home",
     description:
-      "Sowel knows your home: it runs itself, is set up in a few clicks, and your data stays at home. Open source, on your own hardware.",
+      "Sowel knows your home: it runs itself, is set up in the browser, and your data stays at home. Open source, on your own hardware.",
   },
   a11y: {
     skip: "Skip to content",
@@ -87,7 +87,7 @@ export const en: SiteCopy = {
     },
     types: {
       title: "About thirty equipment types",
-      body: "Each type knows what it measures and which orders it takes, so every screen and every recipe speaks the same language.",
+      body: "Each type knows what it measures and which orders it takes, so screens and recipes use the same names and the same orders.",
       count: "~30",
       list: [
         "Light",
@@ -127,7 +127,7 @@ export const en: SiteCopy = {
     eyebrow: "Rooms that know",
     title: "Every room works out its own state",
     titleAccent: "Every room",
-    lead: "Put equipment in a room and the room computes the rest by itself. Natively, with nothing to configure.",
+    lead: "Put equipment in a room and the room works out the rest by itself, with nothing to configure.",
     items: [
       { icon: "thermometer", title: "Temperature", body: "The average of the sensors in the room." },
       { icon: "person-standing", title: "Presence", body: "Motion anywhere in the room, and how long ago." },
@@ -299,7 +299,7 @@ export const en: SiteCopy = {
     items: [
       { icon: "timer", title: "A schedule or a button", body: "Switch to Day, Evening, Night or Away from the calendar, or with one tap." },
       { icon: "layers", title: "Many rooms at once", body: "A mode runs its actions across rooms and floors." },
-      { icon: "house", title: "Recipes that adapt", body: "Every recipe knows the active mode: it can behave differently at night or when you are away." },
+      { icon: "house", title: "Recipes that adapt", body: "A recipe can behave differently at night or when you are away." },
     ],
     image: {
       src: withBase("/img/en/living-room-behaviors.webp"),
@@ -311,8 +311,8 @@ export const en: SiteCopy = {
   community: {
     id: "community",
     eyebrow: "Community",
-    title: "Made with the people who use it",
-    titleAccent: "the people who use it",
+    title: "Questions, ideas, bugs: GitHub",
+    titleAccent: "GitHub",
     lead: "Sowel is open source. Ask a question, suggest an idea, report a bug or show us your home: it all happens on GitHub.",
     links: [
       { icon: "git-fork", title: "GitHub", body: "Code, issues and releases", href: REPO },
