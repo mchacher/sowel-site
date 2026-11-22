@@ -49,6 +49,14 @@ export function compareCopy(a, b) {
         problems.push(`titleAccent not found in its title, ${side} language: ${k}`);
     }
   }
+  for (const [side, f] of [
+    ["first", fa],
+    ["second", fb],
+  ]) {
+    for (const [k, v] of Object.entries(f))
+      if (k.endsWith("readingTime") && !String(v).includes("{n}"))
+        problems.push(`readingTime has no {n} placeholder, ${side} language: ${k}`);
+  }
   return problems;
 }
 

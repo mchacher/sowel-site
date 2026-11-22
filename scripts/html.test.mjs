@@ -68,7 +68,11 @@ const article = `<html lang="en"><head><title>T</title>
 <link rel="alternate" hreflang="en" href="https://x/en/articles/a/"><link rel="alternate" hreflang="fr" href="https://x/fr/articles/b/"><link rel="alternate" hreflang="x-default" href="https://x/en/articles/a/">
 <meta property="og:image" content="https://x/og.png"><meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">{"@type":"Article","headline":"H","datePublished":"2026-11-22","image":"https://x/o.png","author":{},"publisher":{},"inLanguage":"en"}</script></head>
-<body><h1>Hi</h1><blockquote class="pull"><p>Q</p></blockquote>
+<body><h1>Hi</h1>
+<nav aria-label="Breadcrumb"></nav><nav aria-labelledby="t" data-toc><p id="t">In</p><a href="#one">One</a><a href="#two">Two</a></nav>
+<span data-reading-time="6">6 min read</span><time datetime="2026-11-22">22 November 2026</time>
+<h2 id="one">One</h2><a href="#one" aria-label="Link to the section: One"></a><h2 id="two">Two</h2>
+<blockquote class="pull"><p>Q</p></blockquote>
 <figure><img src="/a.webp" alt="One"><figcaption>c</figcaption></figure>
 <figure><img src="/b.webp" alt="Two"><figcaption>c</figcaption></figure></body></html>`;
 
@@ -106,4 +110,33 @@ test("the sitemap must list both pages of a pair with their alternates", () => {
   const pair = [{ en: "/en/a/", fr: "/fr/b/" }];
   assert.deepEqual(checkSitemap(sm(["/en/a/", "/fr/b/"]), pair), []);
   assert.ok(checkSitemap(sm(["/en/a/"]), pair).some((m) => m.includes("/fr/b/")));
+});
+
+test("a heading without id, a broken anchor, no reading time and no date are reported", () => {
+  const p = checkPage(
+    article
+      .replace('<h2 id="two">', "<h2>")
+      .replace('data-reading-time="6"', "")
+      .replace('<time datetime="2026-11-22">', "<time>"),
+    { lang: "en", type: "Article" },
+  );
+  for (const need of [
+    "heading has no id",
+    "does not resolve: #two",
+    "no reading time",
+    "no publication date",
+  ])
+    assert.ok(
+      p.some((m) => m.includes(need)),
+      need,
+    );
+});
+
+test("a contents that misses a section and an unnamed nav are reported", () => {
+  const p = checkPage(
+    article.replace('<a href="#two">Two</a>', "").replace(' aria-label="Breadcrumb"', ""),
+    { lang: "en", type: "Article" },
+  );
+  assert.ok(p.some((m) => m.includes("the contents list 1 sections for 2 headings")));
+  assert.ok(p.some((m) => m.includes("nav landmark has no accessible name")));
 });

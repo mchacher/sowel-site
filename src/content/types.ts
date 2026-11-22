@@ -53,7 +53,7 @@ export interface TreeNode {
 export interface SiteCopy {
   lang: "en" | "fr";
   meta: { title: string; description: string };
-  a11y: { skip: string; home: string; nav: string; sections: string; copyDone: string };
+  a11y: { skip: string; home: string; nav: string; sections: string; footer: string; copyDone: string };
   nav: {
     links: Link[];
     github: Link;
@@ -170,4 +170,17 @@ export interface SiteCopy {
     links: { icon: IconName; title: string; body: string; href: string }[];
   };
   footer: { tagline: string; licence: string; privacy: string; links: Link[] };
+  /** The interface around an article (spec 002): its words stay in src/content/articles/. */
+  articlePage: {
+    /** The small tag above the title. */
+    eyebrow: string;
+    /** The breadcrumb: its landmark name, the home link, the current page. */
+    breadcrumb: { label: string; home: string; current: string };
+    /** The table of contents: its title and landmark name. */
+    toc: string;
+    /** The reading time; {n} is replaced by the minutes, computed at build time. */
+    readingTime: string;
+    /** The accessible name of a heading's anchor link; {h} is replaced by the heading. */
+    anchor: string;
+  };
 }

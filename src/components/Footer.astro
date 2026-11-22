@@ -5,7 +5,7 @@ import Logo from "./Logo.astro";
 interface Props {
   copy: SiteCopy;
 }
-const { footer } = Astro.props.copy;
+const { footer, a11y } = Astro.props.copy;
 ---
 
 <footer class="footer">
@@ -17,7 +17,7 @@ const { footer } = Astro.props.copy;
         <p class="footer__small">{footer.licence}</p>
       </div>
     </div>
-    <nav class="footer__links">
+    <nav class="footer__links" aria-label={a11y.footer}>
       {footer.links.map((l) => <a href={l.href}>{l.label}</a>)}
     </nav>
   </div>

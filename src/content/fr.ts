@@ -16,6 +16,7 @@ export const fr: SiteCopy = {
     home: "Sowel, accueil",
     nav: "Principale",
     sections: "Sections de la page",
+    footer: "Liens du site",
     copyDone: "Commande copiée dans le presse-papiers",
   },
   nav: {
@@ -333,5 +334,12 @@ export const fr: SiteCopy = {
       { label: "Manuel", href: DOCS },
       { label: "Licence", href: `${REPO}/blob/main/LICENSE` },
     ],
+  },
+  articlePage: {
+    eyebrow: "Article",
+    breadcrumb: { label: "Fil d'Ariane", home: "Sowel", current: "Article" },
+    toc: "Dans cet article",
+    readingTime: "{n}\u00a0min de lecture",
+    anchor: "Lien vers la section\u00a0: {h}",
   },
 };

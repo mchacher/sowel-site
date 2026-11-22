@@ -113,3 +113,18 @@ test("an empty pull quote and a wrong twin path are reported", () => {
   assert.ok(p.some((m) => m.includes("empty text")));
   assert.ok(p.some((m) => m.includes("otherPath")));
 });
+
+test("an article's interface strings are compared like the rest of the copy", () => {
+  const ui = (toc) => ({ articlePage: { toc, readingTime: "{n} min read" } });
+  assert.deepEqual(compareCopy(ui("In this article"), ui("Dans cet article")), []);
+  const p = compareCopy(ui("In this article"), { articlePage: { readingTime: "{n} min" } });
+  assert.ok(p.some((m) => m.includes("articlePage.toc")));
+});
+
+test("a reading time without its {n} placeholder is reported", () => {
+  const p = compareCopy(
+    { articlePage: { readingTime: "{n} min read" } },
+    { articlePage: { readingTime: "6 min de lecture" } },
+  );
+  assert.ok(p.some((m) => m.startsWith("readingTime has no {n}") && m.includes("second")));
+});

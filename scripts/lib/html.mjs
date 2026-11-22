@@ -56,7 +56,32 @@ export function checkPage(html, { lang, type = "SoftwareApplication" }) {
     for (const [, l, href] of alt)
       if (!/^https?:\/\/.+\/articles\//.test(href))
         p.push(`hreflang ${l} does not point at an article`);
+    // The reading interface (spec 002, layout pass): ids on headings, a contents, a reading time.
+    const h2 = [...html.matchAll(/<h2\b([^>]*)>/gi)];
+    if (!h2.length) p.push("no h2 in the article");
+    for (const m of h2) if (!attr(m[1], "id")) p.push("an article heading has no id");
+    const toc = /<nav\b[^>]*\bdata-toc\b[^>]*>([\s\S]*?)<\/nav>/i.exec(html);
+    if (!toc) p.push("no table of contents");
+    else {
+      const targets = [...toc[1].matchAll(/href="#([^"]+)"/gi)].map((m) => m[1]);
+      if (targets.length !== h2.length)
+        p.push(`the contents list ${targets.length} sections for ${h2.length} headings`);
+    }
+    if (!/\bdata-reading-time="[1-9]\d*"[^>]*>[\s\S]*?\d/i.test(html)) p.push("no reading time");
+    if (!/<time\b[^>]*datetime="\d{4}-\d{2}-\d{2}"/i.test(html)) p.push("no publication date");
   }
+  // Every in-page anchor resolves to an element of the page.
+  {
+    const ids = new Set([...html.matchAll(/\bid="([^"]+)"/gi)].map((m) => m[1]));
+    for (const m of html.matchAll(/<a\b[^>]*href="#([^"]+)"/gi))
+      if (!ids.has(m[1])) p.push(`an anchor does not resolve: #${m[1]}`);
+  }
+  // Landmarks: several nav elements must each carry a name.
+  const navs = [...html.matchAll(/<nav\b([^>]*)>/gi)];
+  if (navs.length > 1)
+    for (const m of navs)
+      if (!attr(m[1], "aria-label") && !attr(m[1], "aria-labelledby"))
+        p.push("a nav landmark has no accessible name");
   for (const m of html.matchAll(/<button\b([^>]*)>([\s\S]*?)<\/button>/gi)) {
     const label = attr(m[1], "aria-label");
     const text = strip(m[2]);

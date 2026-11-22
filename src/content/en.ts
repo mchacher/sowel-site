@@ -16,6 +16,7 @@ export const en: SiteCopy = {
     home: "Sowel, home",
     nav: "Main",
     sections: "Sections of the page",
+    footer: "Site links",
     copyDone: "Command copied to the clipboard",
   },
   nav: {
@@ -333,5 +334,12 @@ export const en: SiteCopy = {
       { label: "Manual", href: DOCS },
       { label: "Licence", href: `${REPO}/blob/main/LICENSE` },
     ],
+  },
+  articlePage: {
+    eyebrow: "Article",
+    breadcrumb: { label: "Breadcrumb", home: "Sowel", current: "Article" },
+    toc: "In this article",
+    readingTime: "{n} min read",
+    anchor: "Link to the section: {h}",
   },
 };
