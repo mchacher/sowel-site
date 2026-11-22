@@ -4,16 +4,17 @@ import { withBase } from "../../lib/url.ts";
 
 export const en: Article = {
   lang: "en",
-  path: "/en/articles/the-energy-brain-of-your-home/",
-  otherPath: "/fr/articles/le-cerveau-energetique-de-la-maison/",
+  path: "/en/articles/optimise-your-solar-power-production/",
+  otherPath: "/fr/articles/optimiser-votre-production-photovoltaique/",
   meta: {
-    title: "The energy brain of your home | Sowel",
+    title: "Optimise your solar power production | Sowel",
     description: "Why sharing solar surplus between a water heater, a car and a heat pump is hard, and how Sowel's energy arbiter and recipes solve it.",
   },
   datePublished: "2026-11-22",
-  title: "The energy brain of your home",
+  title: "Optimise your solar power production",
   byline: "Marc Chachereau, creator of Sowel.",
   blocks: [
+    { kind: "p", runs: [{ text: "Sowel is the energy brain of your home: it shares the surplus from your solar panels between your appliances in real time." }] },
     { kind: "p", runs: [{ text: "Every kWh of sun your home uses is a kWh you do not buy. The unused surplus goes to the grid." }] },
     { kind: "p", runs: [{ text: "Your water heater, your car, your heat pump and your pool all want that sun. The obvious fix: each of these loads watches the meter and starts as soon as there is a surplus. It fails for a simple reason: they all read the same meter, start together and fight over the same watts." }] },
     { kind: "p", runs: [{ text: "Adding priorities is not enough: sharing a surplus that never stops moving takes algorithms that are hard to get right. Sowel solves this in a very original way: it centralises the intelligence of energy and decentralises the intelligence of control. One arbiter distributes the sun, and each of your automations asks it for its share while keeping control of its own appliance." }] },

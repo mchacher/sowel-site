@@ -4,16 +4,17 @@ import { withBase } from "../../lib/url.ts";
 
 export const fr: Article = {
   lang: "fr",
-  path: "/fr/articles/le-cerveau-energetique-de-la-maison/",
-  otherPath: "/en/articles/the-energy-brain-of-your-home/",
+  path: "/fr/articles/optimiser-votre-production-photovoltaique/",
+  otherPath: "/en/articles/optimise-your-solar-power-production/",
   meta: {
-    title: "Le cerveau énergétique de la maison | Sowel",
+    title: "Optimiser votre production photovoltaïque | Sowel",
     description: "Pourquoi partager le surplus solaire entre un chauffe-eau, une voiture et une pompe à chaleur est difficile, et comment l'arbitre énergétique et les recettes de Sowel y répondent.",
   },
   datePublished: "2026-11-22",
-  title: "Le cerveau énergétique de la maison",
+  title: "Optimiser votre production photovoltaïque",
   byline: "Marc Chachereau, créateur de Sowel.",
   blocks: [
+    { kind: "p", runs: [{ text: "Sowel est le cerveau énergétique de votre maison\u00a0: il répartit en temps réel le surplus de vos panneaux photovoltaïques entre vos appareils." }] },
     { kind: "p", runs: [{ text: "Chaque kWh de soleil que votre maison utilise est un kWh que vous n'achetez pas. Le surplus non consommé part sur le réseau." }] },
     { kind: "p", runs: [{ text: "Votre chauffe-eau, votre voiture, votre pompe à chaleur et votre piscine réclament tous ce soleil. La solution évidente\u00a0: chacune de ces charges surveille le compteur et démarre dès qu'il y a du surplus. Elle échoue pour une raison simple\u00a0: toutes lisent le même compteur, démarrent ensemble et se disputent les mêmes watts." }] },
     { kind: "p", runs: [{ text: "Ajouter des priorités ne suffit pas\u00a0: partager un surplus qui bouge sans cesse demande des algorithmes difficiles à mettre au point. Sowel résout cela d'une manière très originale\u00a0: il centralise l'intelligence de l'énergie et décentralise l'intelligence de la commande. Un seul arbitre distribue le soleil, et chacun de vos automatismes le lui demande en gardant la main sur son appareil." }] },
