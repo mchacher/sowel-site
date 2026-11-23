@@ -73,6 +73,7 @@ const article = `<html lang="en"><head><title>T</title>
 <span data-reading-time="6">6 min read</span><time datetime="2026-11-22">22 November 2026</time>
 <h2 id="one">One</h2><a href="#one" aria-label="Link to the section: One"></a><h2 id="two">Two</h2>
 <blockquote class="pull"><p>Q</p></blockquote>
+<div class="hl"><p>H</p><svg viewBox="0 0 10 10" role="img" aria-labelledby="d-t" aria-describedby="d-d"><title id="d-t">The arbiter</title><desc id="d-d">A hub and three appliances.</desc><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M0 0"/></svg></svg></div>
 <figure><img src="/a.webp" alt="One"><figcaption>c</figcaption></figure>
 <figure><img src="/b.webp" alt="Two"><figcaption>c</figcaption></figure></body></html>`;
 
@@ -101,6 +102,17 @@ test("an article JSON-LD without a date is reported", () => {
     type: "Article",
   });
   assert.ok(p.some((m) => m.includes("no datePublished")));
+});
+
+test("a diagram without its title or its description is reported", () => {
+  const p = checkPage(
+    article
+      .replace(' aria-describedby="d-d"', "")
+      .replace('<title id="d-t">The arbiter</title>', ""),
+    { lang: "en", type: "Article" },
+  );
+  assert.ok(p.some((m) => m.includes("a diagram has no title naming it")));
+  assert.ok(p.some((m) => m.includes("a diagram has no description")));
 });
 
 const sm = (paths) =>

@@ -13,7 +13,56 @@ export type Block =
   | { kind: "figure"; id: "flow" | "arbiter"; image: Img; caption: string }
   /** The key sentence, set in exergue. */
   | { kind: "pull"; text: string }
+  /** A sentence set in a card; `accent` is words of `text`, set in the accent ink. */
+  | { kind: "highlight"; text: string; accent: string }
+  /** The diagram of the arbiter at work, in its own card. */
+  | { kind: "diagram"; illustration: Illustration }
   | { kind: "links"; items: Link[] };
+
+/** Lucide icons the diagrams of an article may use. */
+export type DiagramIcon =
+  | "scale"
+  | "chef-hat"
+  | "droplets"
+  | "car-front"
+  | "fan"
+  | "gauge"
+  | "list-ordered"
+  | "arrow-up"
+  | "arrow-down"
+  | "circle-check"
+  | "hourglass"
+  | "moon";
+
+/** What the arbiter answers a recipe: granted, waiting, or nothing to give (at rest). */
+export type LoadState = "granted" | "waiting" | "rest";
+
+/**
+ * The diagram of an article (spec 002): the arbiter reads the meter and the priorities, each appliance's recipe asks
+ * it for surplus and it answers. Every label lives here, in the language of the article; the component draws the
+ * shapes and holds no text.
+ */
+export interface Illustration {
+  /** The accessible name of the diagram, and its longer description. */
+  title: string;
+  desc: string;
+  hub: { name: string; tag: string; icon: DiagramIcon };
+  /** What the arbiter reads: the main meter, and the priority order the user set. */
+  meter: { name: string; tag: string };
+  order: { name: string; tag: string };
+  /** The label of the recipe chip on every appliance, and the tag under it. */
+  recipe: string;
+  loadTag: string;
+  /** Per appliance: what its recipe asks, what the arbiter answers, and an optional detail of the answer. */
+  loads: {
+    name: string;
+    icon: DiagramIcon;
+    ask: string;
+    answer: string;
+    state: LoadState;
+    detail?: string;
+  }[];
+}
 
 export interface Article {
   lang: "en" | "fr";

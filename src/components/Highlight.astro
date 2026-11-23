@@ -1,0 +1,40 @@
+---
+// A highlight of an article (spec 002): a sentence in a card, its key words in the accent ink.
+import type { Block } from "../content/articles/types";
+
+interface Props {
+  block: Extract<Block, { kind: "highlight" }>;
+}
+const { block } = Astro.props;
+const at = block.text.indexOf(block.accent);
+const before = at < 0 ? block.text : block.text.slice(0, at);
+const after = at < 0 ? "" : block.text.slice(at + block.accent.length);
+---
+
+<div class="hl">
+  <p class="hl__text">{before}<strong class="hl__accent">{block.accent}</strong>{after}</p>
+</div>
+
+<style>
+  /* The card: the soft well of the figures, an accent rule along the sentence (its width is set by the article). */
+  .hl {
+    padding: clamp(16px, 3vw, 30px);
+    border-radius: var(--r-lg);
+    border: 1px solid var(--border);
+    background:
+      radial-gradient(75% 60% at 50% 100%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 72%),
+      var(--n-50);
+  }
+  .hl__text {
+    padding-left: clamp(14px, 2.4vw, 20px);
+    border-left: 3px solid var(--accent-mark);
+    font-size: 1.1875rem;
+    line-height: 1.55;
+    color: var(--text-strong);
+    text-wrap: pretty;
+  }
+  .hl .hl__accent {
+    font-weight: 650;
+    color: var(--accent-ink);
+  }
+</style>

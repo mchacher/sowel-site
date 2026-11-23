@@ -40,6 +40,33 @@ test("a titleAccent must be words of its title", () => {
 
 import { compareArticles } from "./lib/parity.mjs";
 
+const highlight = () => ({
+  kind: "highlight",
+  text: "It centralises energy and decentralises control.",
+  accent: "centralises energy",
+});
+const diagram = () => ({
+  kind: "diagram",
+  illustration: {
+    title: "T",
+    desc: "D",
+    hub: { name: "The arbiter", tag: "Energy", icon: "scale" },
+    meter: { name: "Meter", tag: "Surplus" },
+    order: { name: "Priorities", tag: "Yours" },
+    recipe: "recipe",
+    loadTag: "Control",
+    loads: [
+      {
+        name: "Water heater",
+        icon: "shower-head",
+        ask: "Asks",
+        answer: "Granted",
+        state: "granted",
+      },
+      { name: "Car", icon: "car-front", ask: "Asks", answer: "Waiting", state: "waiting" },
+    ],
+  },
+});
 const art = (over = {}) => ({
   lang: "en",
   path: "/en/a/",
@@ -60,6 +87,8 @@ const art = (over = {}) => ({
     },
     { kind: "pull", text: "Q" },
     { kind: "links", items: [{ label: "l", href: "/h" }] },
+    highlight(),
+    diagram(),
   ],
   ...over,
 });
@@ -127,6 +156,55 @@ test("a reading time without its {n} placeholder is reported", () => {
     { articlePage: { readingTime: "6 min de lecture" } },
   );
   assert.ok(p.some((m) => m.startsWith("readingTime has no {n}") && m.includes("second")));
+});
+
+test("a highlight whose accent is not words of its text is reported", () => {
+  const b = other();
+  b.blocks[6] = { ...highlight(), accent: "something else" };
+  const p = compareArticles(art(), b);
+  assert.ok(p.some((m) => m.includes("the accent is not words of its text")));
+});
+
+test("a highlight with an appliance missing, an empty label or another icon is reported", () => {
+  const b = other();
+  const h = diagram();
+  h.illustration.loads.pop();
+  h.illustration.hub = { ...h.illustration.hub, tag: "", icon: "fan" };
+  h.illustration.desc = " ";
+  b.blocks[7] = h;
+  const p = compareArticles(art(), b);
+  assert.ok(p.some((m) => m.includes("2 appliances vs 1")));
+  assert.ok(p.some((m) => m.includes("empty hub tag")));
+  assert.ok(p.some((m) => m.includes("empty diagram description")));
+  assert.ok(p.some((m) => m.includes("the hub has another icon")));
+  const c = other();
+  const k = diagram();
+  k.illustration.loads[1] = {
+    ...k.illustration.loads[1],
+    name: "Voiture",
+    icon: "fan",
+    state: "rest",
+  };
+  c.blocks[7] = k;
+  assert.ok(compareArticles(art(), c).some((m) => m.includes("appliance 2 has another icon")));
+  assert.ok(
+    compareArticles(art(), c).some((m) => m.includes("appliance 2 has another answer state")),
+  );
+  const d = other();
+  const e = diagram();
+  e.illustration.loads[0] = { ...e.illustration.loads[0], ask: "", state: "later" };
+  d.blocks[7] = e;
+  const q = compareArticles(art(), d);
+  assert.ok(q.some((m) => m.includes("empty appliance request")));
+  assert.ok(q.some((m) => m.includes("unknown answer state")));
+});
+
+test("a highlight without appliances is reported", () => {
+  const a = art();
+  const b = other();
+  for (const x of [a, b])
+    x.blocks[7] = { ...diagram(), illustration: { ...diagram().illustration, loads: [] } };
+  assert.ok(compareArticles(a, b).some((m) => m.includes("a diagram without appliances")));
 });
 
 import { compareRegistry } from "./lib/parity.mjs";
