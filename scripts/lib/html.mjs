@@ -50,6 +50,16 @@ export function checkPage(html, { lang, type = "SoftwareApplication" }) {
       if (!/<figcaption\b/i.test(m[0])) p.push("a figure has no caption");
     }
     if (!/<blockquote\b[^>]*class="[^"]*\bpull\b/i.test(html)) p.push("no pull quote");
+    // A diagram (the highlight's, spec 002) is an image named by its title and described by its desc.
+    const pageIds = new Set([...html.matchAll(/\bid="([^"]+)"/gi)].map((m) => m[1]));
+    for (const m of html.matchAll(/<svg\b([^>]*\brole="img"[^>]*)>([\s\S]*?)<\/svg>/gi)) {
+      const named = attr(m[1], "aria-labelledby");
+      const described = attr(m[1], "aria-describedby");
+      if (!/<title\b[^>]*>[^<]+<\/title>/i.test(m[2]) || !named || !pageIds.has(named))
+        p.push("a diagram has no title naming it");
+      if (!/<desc\b[^>]*>[^<]+<\/desc>/i.test(m[2]) || !described || !pageIds.has(described))
+        p.push("a diagram has no description");
+    }
     const alt = [
       ...html.matchAll(/<link[^>]*rel="alternate"[^>]*hreflang="(en|fr)"[^>]*href="([^"]*)"/gi),
     ];

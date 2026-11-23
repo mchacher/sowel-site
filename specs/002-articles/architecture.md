@@ -4,7 +4,7 @@
 
 ```
 src/content/articles/
-├── types.ts               # Article and Block (p, h2, list, figure, pull, links)
+├── types.ts               # Article and Block (p, h2, list, figure, pull, highlight, links)
 ├── index.ts              # the registry: each article in both languages; articleLinks, articlesByYear, menuLinks
 ├── energy-brain.en.ts    # the English article
 └── energy-brain.fr.ts    # the French article, same blocks
@@ -27,6 +27,20 @@ Each article states its own path and the path of its twin (`otherPath`).
 
 A `blockquote` a little wider than the text (up to 46rem), with a 3px accent rule on its left, a Lucide quote mark in a
 lighter accent, and Inter at weight 730 in the accent ink (readable in both themes).
+
+## The highlight
+
+- Block `{ kind: "highlight"; text; accent; illustration }` in `types.ts`: `accent` is words of `text`, set in the accent
+  ink; `illustration` holds the diagram's title and description, the hub (name, tag, icon), the recipe label, the
+  appliances' tag and the appliances (name, icon). Icons are the `DiagramIcon` Lucide names.
+- `src/components/Highlight.astro` draws the card and two SVG layouts of the diagram, inlining the Lucide icons as
+  nested SVG through `Icon.astro`. The card is a size container: from 600px of content the row layout shows, below it
+  the column one (at most 26rem wide). The hidden layout is `display: none`, so only one image is in the
+  accessibility tree. Colours are CSS variables (`--tile` for the hub, `--surface` and `--p-50` for the appliances).
+- `ArticlePage.astro` places it like the exergue (up to 50rem). `wordCount` counts its sentence.
+- Checks: `compareArticles` (text and accent filled, the accent inside the text, every label filled, same number of
+  appliances and same icons in both languages, at least one appliance) and `checkPage` (an SVG with `role="img"` has a
+  `title` and a `desc`, referenced by `aria-labelledby` and `aria-describedby`).
 
 ## Reading interface
 

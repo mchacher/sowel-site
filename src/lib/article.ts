@@ -25,7 +25,7 @@ export function headingIds(article: Article): string[] {
     });
 }
 
-/** Every word a reader reads: title, paragraphs, headings, lists, the exergue, captions and links. */
+/** Every word a reader reads: title, paragraphs, headings, lists, the exergue, the highlight, captions and links. */
 export function wordCount(article: Article): number {
   const parts: string[] = [article.title];
   for (const b of article.blocks) {
@@ -33,6 +33,7 @@ export function wordCount(article: Article): number {
     else if (b.kind === "h2" || b.kind === "pull") parts.push(b.text);
     else if (b.kind === "list") parts.push(...b.items);
     else if (b.kind === "links") parts.push(...b.items.map((l) => l.label));
+    else if (b.kind === "highlight") parts.push(b.text);
     else parts.push(b.caption);
   }
   return parts.join(" ").split(/\s+/).filter((w) => /[\p{L}\p{N}]/u.test(w)).length;

@@ -13,7 +13,27 @@ export type Block =
   | { kind: "figure"; id: "flow" | "arbiter"; image: Img; caption: string }
   /** The key sentence, set in exergue. */
   | { kind: "pull"; text: string }
+  /** A sentence set in a card with a diagram under it; `accent` is words of `text`, set in the accent ink. */
+  | { kind: "highlight"; text: string; accent: string; illustration: Illustration }
   | { kind: "links"; items: Link[] };
+
+/** Lucide icons the diagrams of an article may use. */
+export type DiagramIcon = "scale" | "chef-hat" | "droplets" | "car-front" | "fan";
+
+/**
+ * The diagram of a highlight (spec 002): one hub joined to a few appliances, each driven by a recipe. Every label
+ * lives here, in the language of the article; the component draws the shapes and holds no text.
+ */
+export interface Illustration {
+  /** The accessible name of the diagram, and its longer description. */
+  title: string;
+  desc: string;
+  hub: { name: string; tag: string; icon: DiagramIcon };
+  /** The label of the recipe chip on every appliance, and the tag under it. */
+  recipe: string;
+  loadTag: string;
+  loads: { name: string; icon: DiagramIcon }[];
+}
 
 export interface Article {
   lang: "en" | "fr";

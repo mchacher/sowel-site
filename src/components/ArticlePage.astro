@@ -5,6 +5,7 @@ import Footer from "./Footer.astro";
 import Logo from "./Logo.astro";
 import Icon from "./Icon.astro";
 import SectionTag from "./SectionTag.astro";
+import Highlight from "./Highlight.astro";
 import type { SiteCopy } from "../content/types";
 import type { Article, Block } from "../content/articles/types";
 import { withBase } from "../lib/url";
@@ -150,6 +151,7 @@ const byline = article.byline.replace(/\.\s*$/, "");
                 </ul>
               );
             }
+            if (b.kind === "highlight") return <Highlight block={b} uid={`hl-${i}`} />;
             if (b.kind === "pull")
               return (
                 <blockquote class="pull">
@@ -511,6 +513,13 @@ const byline = article.byline.replace(/\.\s*$/, "");
     text-wrap: balance;
   }
 
+  /* The highlight: as wide as the exergue (its own look lives in Highlight.astro). */
+  .prose > :global(.hl) {
+    width: 100%;
+    max-width: min(50rem, 100%);
+    margin: 2.4rem auto;
+  }
+
   /* Figures: the captures on the home page's soft well, a small muted caption under. */
   .prose > .fig {
     margin-block: 2.2rem;
@@ -610,7 +619,8 @@ const byline = article.byline.replace(/\.\s*$/, "");
       grid-row: 1;
     }
     .article__head,
-    .prose > * {
+    .prose > *,
+    .prose > :global(.hl) {
       margin-inline: 0;
     }
     .toc-m {

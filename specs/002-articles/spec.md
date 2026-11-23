@@ -121,6 +121,31 @@ shows the latest few.
 photovoltaïque » / "Optimise your solar power production", short and naming the subject (title, `<title>`, Open Graph,
 JSON-LD, the Energy section's link, the addresses). The text and the pull quote stay.
 
+## Highlight (maintainer's review, 2026-11-23)
+
+Four edits to the text, the same in both languages, and the key sentence given room of its own.
+
+- Second paragraph: « réclament tous ce soleil » becomes « veulent tous consommer cette électricité solaire » ("all
+  want to use that solar electricity"), and « La solution évidente » becomes « L'approche habituelle des domotiques
+  classiques consiste à laisser chaque charge surveiller le compteur et démarrer dès qu'il y a du surplus » ("The
+  usual approach of conventional home automation is to let each load watch the meter and start as soon as there is a
+  surplus"). The next sentence stays.
+- The first bold lead of « Pourquoi c'est difficile » becomes « Le surplus solaire varie sans cesse. » ("The solar
+  surplus never stops changing.").
+- The sentence « Sowel résout cela d'une manière très originale... » leaves the paragraph before it and becomes a
+  highlight: a card in the article's design (the soft well of the figures, an accent rule along the sentence, the
+  width of the exergue, both themes), the words « centralise l'intelligence de l'énergie et décentralise
+  l'intelligence de la commande » in semibold accent ink, and under it « une jolie illustration graphique ».
+- The illustration is an inline SVG drawn from the design tokens, with no request and no script. At the top, one hub,
+  « L'arbitre » / "The arbiter", tagged « Intelligence de l'énergie » / "Intelligence of energy", joined by lines to three
+  appliances (water heater, car, heat pump), each with its « recette » / "recipe" chip where the line arrives and
+  tagged « Intelligence de la commande » / "Intelligence of control". Lucide line icons (scale, as in the product's
+  arbiter settings; chef hat, as in the product's recipes). A row under the hub on a wide card, a column hanging from
+  a trunk on a phone; text never below 12px on screen. It is an image (`role="img"`) named by its title and described
+  by its desc, in the language. The wires draw in once, not under reduced motion.
+- Its labels live in the article module of each language; the component holds none. The exergue « Un cerveau pour
+  l'énergie, un savoir-faire par appareil » stays as it is.
+
 ## Approval
 
 The maintainer reviews the rendered page before the merge. That review stands for the approval gate of this spec.

@@ -114,6 +114,34 @@ export function compareArticles(a, b) {
           filled(l.href, "href");
         }
         break;
+      case "highlight": {
+        for (const h of [x, y]) {
+          filled(h.text, "text");
+          filled(h.accent, "accent");
+          if (text(h.accent) && !h.text?.includes(h.accent))
+            problems.push(`${at} (highlight): the accent is not words of its text`);
+          const il = h.illustration ?? {};
+          filled(il.title, "diagram title");
+          filled(il.desc, "diagram description");
+          filled(il.hub?.name, "hub name");
+          filled(il.hub?.tag, "hub tag");
+          filled(il.recipe, "recipe label");
+          filled(il.loadTag, "appliance tag");
+          for (const l of il.loads ?? []) filled(l.name, "appliance name");
+        }
+        const la = x.illustration?.loads ?? [];
+        const lb = y.illustration?.loads ?? [];
+        if (!la.length) problems.push(`${at} (highlight): a diagram without appliances`);
+        if (la.length !== lb.length)
+          problems.push(`${at}: ${la.length} appliances vs ${lb.length}`);
+        if (x.illustration?.hub?.icon !== y.illustration?.hub?.icon)
+          problems.push(`${at}: the hub has another icon in each language`);
+        la.forEach((l, j) => {
+          if (lb[j] && l.icon !== lb[j].icon)
+            problems.push(`${at}: appliance ${j + 1} has another icon in each language`);
+        });
+        break;
+      }
       case "figure":
         if (x.id !== y.id) problems.push(`${at}: figure ${x.id} vs ${y.id}`);
         for (const f of [x, y]) {
