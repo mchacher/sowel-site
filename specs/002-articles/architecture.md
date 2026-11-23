@@ -30,11 +30,11 @@ lighter accent, and Inter at weight 730 in the accent ink (readable in both them
 
 ## The highlight
 
-- Block `{ kind: "highlight"; text; accent; illustration }` in `types.ts`: `accent` is words of `text`, set in the accent
-  ink; `illustration` holds the diagram's title and description, the hub (name, tag, icon), the two inputs it reads (`meter`, `order`: name, tag), the recipe label, the
+- Block `{ kind: "highlight"; text; accent }` in `types.ts`: `accent` is words of `text`, set in the accent ink. The
+  diagram is a block of its own, `{ kind: "diagram"; illustration }` (`Diagram.astro`); `illustration` holds the diagram's title and description, the hub (name, tag, icon), the two inputs it reads (`meter`, `order`: name, tag), the recipe label, the
   appliances' tag and the appliances (name, icon, `ask`, `answer`, `state`: `granted` | `waiting` | `rest`, optional
   `detail`). Icons are the `DiagramIcon` Lucide names.
-- `src/components/Highlight.astro` draws the card and two SVG layouts of the diagram, inlining the Lucide icons as
+- `src/components/Diagram.astro` draws the card and two SVG layouts of the diagram, inlining the Lucide icons as
   nested SVG through `Icon.astro`. The card is a size container: from 600px of content the row layout shows, below it
   the column one (at most 26rem wide). The hidden layout is `display: none`, so only one image is in the
   accessibility tree. Colours are CSS variables (`--tile` for the hub, `--surface` and `--p-50` for the appliances).

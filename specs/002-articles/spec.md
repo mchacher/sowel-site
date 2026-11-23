@@ -158,6 +158,11 @@ Four edits to the text, the same in both languages, and the key sentence given r
   compteur et démarre dès qu'il y a du surplus, elles échouent… ». The grid-import bullet starts « Suivant la
   configuration, ».
 
+- Third review (2026-11-23): the diagram leaves the highlight and goes lower, in « Comment fonctionne Sowel », right
+  after the paragraph that introduces the arbiter (it reads the meter, shares the surplus, answers granted, waiting or
+  revoked), before the exergue. The highlight keeps the sentence alone. In the article module it is a block of its own,
+  `{ kind: "diagram"; illustration }`, in its own card. « répartit le surplus disponible » replaces « le soleil ».
+
 ## Approval
 
 The maintainer reviews the rendered page before the merge. That review stands for the approval gate of this spec.

@@ -114,12 +114,16 @@ export function compareArticles(a, b) {
           filled(l.href, "href");
         }
         break;
-      case "highlight": {
+      case "highlight":
         for (const h of [x, y]) {
           filled(h.text, "text");
           filled(h.accent, "accent");
           if (text(h.accent) && !h.text?.includes(h.accent))
             problems.push(`${at} (highlight): the accent is not words of its text`);
+        }
+        break;
+      case "diagram": {
+        for (const h of [x, y]) {
           const il = h.illustration ?? {};
           filled(il.title, "diagram title");
           filled(il.desc, "diagram description");
@@ -139,7 +143,7 @@ export function compareArticles(a, b) {
         }
         const la = x.illustration?.loads ?? [];
         const lb = y.illustration?.loads ?? [];
-        if (!la.length) problems.push(`${at} (highlight): a diagram without appliances`);
+        if (!la.length) problems.push(`${at} (diagram): a diagram without appliances`);
         if (la.length !== lb.length)
           problems.push(`${at}: ${la.length} appliances vs ${lb.length}`);
         if (x.illustration?.hub?.icon !== y.illustration?.hub?.icon)

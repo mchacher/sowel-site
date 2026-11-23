@@ -6,6 +6,7 @@ import Logo from "./Logo.astro";
 import Icon from "./Icon.astro";
 import SectionTag from "./SectionTag.astro";
 import Highlight from "./Highlight.astro";
+import Diagram from "./Diagram.astro";
 import type { SiteCopy } from "../content/types";
 import type { Article, Block } from "../content/articles/types";
 import { withBase } from "../lib/url";
@@ -151,7 +152,8 @@ const byline = article.byline.replace(/\.\s*$/, "");
                 </ul>
               );
             }
-            if (b.kind === "highlight") return <Highlight block={b} uid={`hl-${i}`} />;
+            if (b.kind === "highlight") return <Highlight block={b} />;
+            if (b.kind === "diagram") return <Diagram block={b} uid={`dg-${i}`} />;
             if (b.kind === "pull")
               return (
                 <blockquote class="pull">

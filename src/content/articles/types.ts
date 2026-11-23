@@ -13,8 +13,10 @@ export type Block =
   | { kind: "figure"; id: "flow" | "arbiter"; image: Img; caption: string }
   /** The key sentence, set in exergue. */
   | { kind: "pull"; text: string }
-  /** A sentence set in a card with a diagram under it; `accent` is words of `text`, set in the accent ink. */
-  | { kind: "highlight"; text: string; accent: string; illustration: Illustration }
+  /** A sentence set in a card; `accent` is words of `text`, set in the accent ink. */
+  | { kind: "highlight"; text: string; accent: string }
+  /** The diagram of the arbiter at work, in its own card. */
+  | { kind: "diagram"; illustration: Illustration }
   | { kind: "links"; items: Link[] };
 
 /** Lucide icons the diagrams of an article may use. */
@@ -36,7 +38,7 @@ export type DiagramIcon =
 export type LoadState = "granted" | "waiting" | "rest";
 
 /**
- * The diagram of a highlight (spec 002): the arbiter reads the meter and the priorities, each appliance's recipe asks
+ * The diagram of an article (spec 002): the arbiter reads the meter and the priorities, each appliance's recipe asks
  * it for surplus and it answers. Every label lives here, in the language of the article; the component draws the
  * shapes and holds no text.
  */

@@ -34,7 +34,7 @@ export function wordCount(article: Article): number {
     else if (b.kind === "list") parts.push(...b.items);
     else if (b.kind === "links") parts.push(...b.items.map((l) => l.label));
     else if (b.kind === "highlight") parts.push(b.text);
-    else parts.push(b.caption);
+    else if (b.kind === "figure") parts.push(b.caption);
   }
   return parts.join(" ").split(/\s+/).filter((w) => /[\p{L}\p{N}]/u.test(w)).length;
 }

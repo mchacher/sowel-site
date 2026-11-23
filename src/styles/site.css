@@ -156,7 +156,11 @@ a:hover {
   font-size: 15px;
   font-weight: 600;
   white-space: nowrap;
-  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease;
 }
 
 .btn--fill {
@@ -204,7 +208,9 @@ a:hover {
   .js [data-reveal] {
     opacity: 0;
     transform: translateY(16px);
-    transition: opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+    transition:
+      opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+      transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
     transition-delay: var(--delay, 0ms);
   }
 
