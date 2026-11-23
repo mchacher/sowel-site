@@ -2,7 +2,7 @@
 // Pure functions over a list of entries, so scripts/articles.test.mjs can run them on a registry of its own.
 import type { Article } from "../content/articles/types.ts";
 import type { Img } from "../content/types.ts";
-import { readingMinutes } from "./article.ts";
+import { readingMinutes, runText } from "./article.ts";
 import { withBase } from "./url.ts";
 
 /** How many articles the Docs menu of the header shows; the « All articles » row leads to the rest. */
@@ -41,11 +41,12 @@ export function slugOf(article: Article): string {
 /** The first paragraph, as plain text. */
 export function standfirstOf(article: Article): string {
   const first = article.blocks[0];
-  return first?.kind === "p" ? first.runs.map((r) => ("bold" in r ? r.bold : r.text)).join("") : "";
+  return first?.kind === "p" ? first.runs.map(runText).join("") : "";
 }
 
-/** The image of the first figure. */
+/** The article's own thumbnail, or else the image of its first figure. */
 export function thumbnailOf(article: Article): Img | undefined {
+  if (article.thumbnail) return article.thumbnail;
   for (const b of article.blocks) if (b.kind === "figure") return b.image;
   return undefined;
 }

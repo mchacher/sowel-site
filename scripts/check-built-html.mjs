@@ -20,6 +20,8 @@ import {
 } from "./lib/html.mjs";
 
 const dist = process.argv[2] ?? "dist";
+// The blocks an article renders as a <figure>: captures and the schemes drawn in HTML (spec 003).
+const FIGURE_KINDS = ["figure", "topology", "pipeline", "form", "layers"];
 const copy = { en, fr };
 let bad = 0;
 const report = (file, problems) => {
@@ -63,7 +65,8 @@ for (const entry of articles) {
   for (const lang of ["en", "fr"]) {
     const file = join(dist, entry[lang].path, "index.html");
     const html = readFileSync(file, "utf8");
-    report(file, checkPage(html, { lang, type: "Article" }));
+    const figures = entry[lang].blocks.filter((b) => FIGURE_KINDS.includes(b.kind)).length;
+    report(file, checkPage(html, { lang, type: "Article", figures }));
     report(file, checkBreadcrumb(html, { index: indexPath(lang), title: entry[lang].title }));
     common(file, html, lang, entry[lang].path);
   }

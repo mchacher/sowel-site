@@ -16,6 +16,7 @@ const { recipes } = Astro.props.copy;
       <SectionTag text={recipes.eyebrow} icon="chef-hat" />
       <h2 class="h2"><Accent text={recipes.title} accent={recipes.titleAccent} /></h2>
       <p class="lead">{recipes.lead}</p>
+      <p class="more"><a href={recipes.article.href}>{recipes.article.label}</a></p>
     </div>
 
     <ul class="grid">
@@ -77,6 +78,20 @@ const { recipes } = Astro.props.copy;
 </section>
 
 <style>
+  /* The line under the lead that leads to the article (spec 003), as in the Energy section. */
+  .more {
+    margin-top: 14px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .more a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: color-mix(in srgb, var(--accent-mark) 50%, transparent);
+  }
+  .more a::after {
+    content: " \2192";
+  }
   .grid {
     margin-top: clamp(48px, 6vw, 72px);
     display: grid;

@@ -283,3 +283,126 @@ test("a Docs menu entry missing, under the wrong prefix or on another page is re
   moved.nav.docs.links[0].href = "https://docs.sowel.org/fr/user/";
   assert.ok(compareDocsMenu(en, moved).some((m) => m.includes("another page in each language")));
 });
+
+// Spec 003: list items with a bold lead, links inside a paragraph, and the schemes drawn in HTML.
+const scheme = (lang = "en") => ({
+  ...art({
+    lang,
+    path: lang === "en" ? "/en/a/" : "/fr/b/",
+    otherPath: lang === "en" ? "/fr/b/" : "/en/a/",
+  }),
+  blocks: [
+    {
+      kind: "p",
+      runs: [{ text: "See " }, { link: "the other article", href: "/en/x/" }, { text: "." }],
+    },
+    { kind: "list", items: [{ lead: "Lead.", text: "Text." }, "plain"] },
+    {
+      kind: "topology",
+      label: "L",
+      caption: "C",
+      zones: [
+        {
+          name: "Home",
+          level: 0,
+          icon: "house",
+          values: [{ text: "Occupied", on: true }, { text: "20 °C" }],
+        },
+      ],
+    },
+    {
+      kind: "pipeline",
+      label: "L",
+      caption: "C",
+      stages: [
+        {
+          name: "Room",
+          tag: "T",
+          icon: "house",
+          accent: true,
+          rows: [{ key: "Presence", value: "Yes", pill: "room" }],
+        },
+      ],
+    },
+    {
+      kind: "form",
+      label: "L",
+      caption: "C",
+      title: "T",
+      subtitle: "S",
+      rows: [{ label: "Delay", value: "10" }, { group: "Slot 1" }],
+    },
+    {
+      kind: "layers",
+      label: "L",
+      caption: "C",
+      items: [{ name: "N", body: "B", note: "No", icon: "layers" }],
+    },
+  ],
+});
+
+test("spec 003 blocks with the same shape in both languages: no problem", () => {
+  assert.deepEqual(compareArticles(scheme("en"), scheme("fr")), []);
+});
+
+test("a bold lead in one language only and an unnamed scheme are reported", () => {
+  const b = scheme("fr");
+  b.blocks[1] = { kind: "list", items: ["Lead. Text.", "plain"] };
+  b.blocks[2] = { ...b.blocks[2], label: " " };
+  const p = compareArticles(scheme("en"), b);
+  assert.ok(p.some((m) => m.includes("bold lead in one language only")));
+  assert.ok(p.some((m) => m.includes("empty scheme label")));
+});
+
+test("a scheme part with another level, state or pill is reported", () => {
+  const b = scheme("fr");
+  b.blocks[2] = { ...b.blocks[2], zones: [{ ...b.blocks[2].zones[0], level: 1 }] };
+  b.blocks[3] = {
+    ...b.blocks[3],
+    stages: [{ ...b.blocks[3].stages[0], rows: [{ key: "P", value: "Y", pill: "on" }] }],
+  };
+  const p = compareArticles(scheme("en"), b);
+  assert.ok(p.some((m) => m.includes("zones 1 differ")));
+  assert.ok(p.some((m) => m.includes("stages 1 differ")));
+});
+
+test("a link without its target is reported", () => {
+  const b = scheme("fr");
+  b.blocks[0] = {
+    kind: "p",
+    runs: [{ text: "Voir " }, { link: "l'autre article", href: "" }, { text: "." }],
+  };
+  assert.ok(compareArticles(scheme("en"), b).some((m) => m.includes("empty link href")));
+});
+
+test("a link internal in one language only, an empty scheme and a missing part are reported", () => {
+  const b = scheme("fr");
+  b.blocks[0] = {
+    kind: "p",
+    runs: [{ text: "Voir " }, { link: "l'autre", href: "https://x.org/" }, { text: "." }],
+  };
+  b.blocks[4] = { ...b.blocks[4], title: "", rows: [{ label: "Délai", value: "10" }] };
+  b.blocks[5] = { ...b.blocks[5], items: [] };
+  const p = compareArticles(scheme("en"), b);
+  assert.ok(p.some((m) => m.includes("internal in one language only")));
+  assert.ok(p.some((m) => m.includes("empty form title")));
+  assert.ok(p.some((m) => m.includes("2 rows vs 1")));
+  assert.ok(p.some((m) => m.includes("1 items vs 0")));
+});
+
+test("a scheme part with its keys in another order, or false for an absent flag, is the same shape", () => {
+  const b = scheme("fr");
+  const z = b.blocks[2].zones[0];
+  b.blocks[2] = {
+    ...b.blocks[2],
+    zones: [{ values: z.values, icon: z.icon, level: z.level, name: z.name }],
+  };
+  b.blocks[5] = { ...b.blocks[5], items: [{ ...b.blocks[5].items[0], accent: false }] };
+  assert.deepEqual(compareArticles(scheme("en"), b), []);
+});
+
+test("an empty value in a scheme is reported", () => {
+  const b = scheme("fr");
+  b.blocks[4] = { ...b.blocks[4], rows: [{ label: "Délai", value: "" }, { group: "Plage 1" }] };
+  assert.ok(compareArticles(scheme("en"), b).some((m) => m.includes("empty form text")));
+});

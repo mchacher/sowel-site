@@ -138,6 +138,8 @@ export interface SiteCopy {
     running: string;
     cards: { icon: IconName; title: string; body: string; room: string; settings: string[]; running?: boolean }[];
     ai: { tag: string; title: string; body: string; steps: string[] };
+    /** One line under the lead: the article on comfort and recipes (spec 003). */
+    article: Link;
   };
   privacy: {
     id: string;
