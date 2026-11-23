@@ -9,7 +9,8 @@ const strip = (s) =>
     .trim();
 const attr = (tag, name) => new RegExp(`\\b${name}\\s*=\\s*"([^"]*)"`, "i").exec(tag)?.[1];
 
-export function checkPage(html, { lang, type = "SoftwareApplication" }) {
+/** `figures`: how many figures an article page must carry (its figure and scheme blocks). */
+export function checkPage(html, { lang, type = "SoftwareApplication", figures = 2 }) {
   const p = [];
   if (!new RegExp(`<html[^>]*\\blang="${lang}"`, "i").test(html))
     p.push(`html lang is not ${lang}`);
@@ -43,10 +44,15 @@ export function checkPage(html, { lang, type = "SoftwareApplication" }) {
   }
   if (type === "Article") {
     const figs = html.match(/<figure\b/gi)?.length ?? 0;
-    if (figs !== 2) p.push(`expected two figures, found ${figs}`);
+    if (figs !== figures) p.push(`expected ${figures} figures, found ${figs}`);
     for (const m of html.matchAll(/<figure\b[\s\S]*?<\/figure>/gi)) {
+      // A capture is an image with its alt text; a scheme drawn in HTML (spec 003) is an element role="img" with a name.
       const img = /<img\b([^>]*)>/i.exec(m[0]);
-      if (!img || !(attr(img[1], "alt") ?? "").trim()) p.push("a figure image has no alt text");
+      const scheme = /<[a-z]+\b([^>]*\brole="img"[^>]*)>/i.exec(m[0]);
+      if (img) {
+        if (!(attr(img[1], "alt") ?? "").trim()) p.push("a figure image has no alt text");
+      } else if (!scheme || !(attr(scheme[1], "aria-label") ?? "").trim())
+        p.push("a figure scheme has no name");
       if (!/<figcaption\b/i.test(m[0])) p.push("a figure has no caption");
     }
     if (!/<blockquote\b[^>]*class="[^"]*\bpull\b/i.test(html)) p.push("no pull quote");

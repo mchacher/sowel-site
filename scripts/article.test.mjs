@@ -45,3 +45,15 @@ test("the date reads in the page's language", () => {
   assert.equal(formatDate("2026-11-22", "fr"), "22 novembre 2026");
   assert.equal(formatDate("2026-11-22", "en"), "22 November 2026");
 });
+
+test("the word count reads list leads, link runs and scheme captions (spec 003)", () => {
+  const a = {
+    title: "T",
+    blocks: [
+      { kind: "p", runs: [{ text: "one" }, { link: "two three", href: "/x" }] },
+      { kind: "list", items: [{ lead: "four", text: "five" }, "six"] },
+      { kind: "topology", label: "not counted", caption: "seven eight", zones: [] },
+    ],
+  };
+  assert.equal(wordCount(a), 9);
+});

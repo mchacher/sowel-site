@@ -115,6 +115,25 @@ test("a diagram without its title or its description is reported", () => {
   assert.ok(p.some((m) => m.includes("a diagram has no description")));
 });
 
+test("an article with a scheme drawn in HTML: named and captioned, counted as a figure (spec 003)", () => {
+  const withScheme = article.replace(
+    "</body>",
+    '<figure><div role="img" aria-label="A scheme"><span>x</span></div><figcaption>c</figcaption></figure></body>',
+  );
+  assert.deepEqual(checkPage(withScheme, { lang: "en", type: "Article", figures: 3 }), []);
+  assert.ok(
+    checkPage(withScheme, { lang: "en", type: "Article" }).some((m) =>
+      m.includes("expected 2 figures, found 3"),
+    ),
+  );
+  const unnamed = withScheme.replace(' aria-label="A scheme"', "");
+  assert.ok(
+    checkPage(unnamed, { lang: "en", type: "Article", figures: 3 }).some((m) =>
+      m.includes("scheme has no name"),
+    ),
+  );
+});
+
 const sm = (paths) =>
   `<urlset>${paths.map((x) => `<url><loc>https://x${x}</loc><xhtml:link hreflang="en" href="https://x/en/a/" /><xhtml:link hreflang="fr" href="https://x/fr/b/" /><xhtml:link hreflang="x-default" href="https://x/en/a/" /></url>`).join("")}</urlset>`;
 

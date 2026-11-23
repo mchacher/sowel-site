@@ -226,6 +226,7 @@ export const en: SiteCopy = {
         settings: ["Pump", "Safe duration"],
       },
     ],
+    article: { label: "Read the article: Simply optimise the comfort of your home", href: withBase("/en/articles/simply-optimise-the-comfort-of-your-home/") },
     ai: {
       tag: "Coming soon",
       title: "Your own recipe, in plain words",

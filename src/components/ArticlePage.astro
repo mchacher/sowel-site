@@ -7,8 +7,9 @@ import Icon from "./Icon.astro";
 import SectionTag from "./SectionTag.astro";
 import Highlight from "./Highlight.astro";
 import Diagram from "./Diagram.astro";
+import Scheme from "./Scheme.astro";
 import type { SiteCopy } from "../content/types";
-import type { Article, Block } from "../content/articles/types";
+import type { Article, Block, Run } from "../content/articles/types";
 import { withBase } from "../lib/url";
 import { formatDate, headingIds, readingMinutes } from "../lib/article";
 
@@ -51,6 +52,8 @@ const nextId = () => ids[h++];
 const minutes = readingMinutes(article);
 const date = formatDate(article.datePublished, article.lang);
 // The byline reads as a label in the byline row: its closing full stop is left out.
+// A paragraph's runs: text, bold, or a link (spec 003). A list item: text, or a bold lead and its text.
+const isLink = (r: Run): r is { link: string; href: string } => "link" in r;
 const byline = article.byline.replace(/\.\s*$/, "");
 ---
 
@@ -76,7 +79,7 @@ const byline = article.byline.replace(/\.\s*$/, "");
         {
           lead && (
             <p class="standfirst">
-              {lead.runs.map((r) => ("bold" in r ? <strong>{r.bold}</strong> : r.text))}
+              {lead.runs.map((r) => (isLink(r) ? <a href={r.href}>{r.link}</a> : "bold" in r ? <strong>{r.bold}</strong> : r.text))}
             </p>
           )
         }
@@ -113,7 +116,7 @@ const byline = article.byline.replace(/\.\s*$/, "");
         {
           body.map(({ b, i }) => {
             if (b.kind === "p")
-              return <p>{b.runs.map((r) => ("bold" in r ? <strong>{r.bold}</strong> : r.text))}</p>;
+              return <p>{b.runs.map((r) => (isLink(r) ? <a class="inline" href={r.href}>{r.link}</a> : "bold" in r ? <strong>{r.bold}</strong> : r.text))}</p>;
             if (b.kind === "h2") {
               const id = nextId();
               return (
@@ -125,8 +128,8 @@ const byline = article.byline.replace(/\.\s*$/, "");
             }
             if (b.kind === "list")
               return (
-                <ul class="list">
-                  {b.items.map((t) => <li>{t}</li>)}
+                <ul class={b.items.some((t) => typeof t !== "string") ? "list list--lead" : "list"}>
+                  {b.items.map((t) => (typeof t === "string" ? <li>{t}</li> : <li><strong>{t.lead}</strong> {t.text}</li>))}
                 </ul>
               );
             if (b.kind === "links") {
@@ -154,6 +157,8 @@ const byline = article.byline.replace(/\.\s*$/, "");
             }
             if (b.kind === "highlight") return <Highlight block={b} />;
             if (b.kind === "diagram") return <Diagram block={b} uid={`dg-${i}`} />;
+            if (b.kind === "topology" || b.kind === "pipeline" || b.kind === "form" || b.kind === "layers")
+              return <Scheme block={b} uid={`sc-${i}`} />;
             if (b.kind === "pull")
               return (
                 <blockquote class="pull">
@@ -523,10 +528,10 @@ const byline = article.byline.replace(/\.\s*$/, "");
   }
 
   /* Figures: the captures on the home page's soft well, a small muted caption under. */
-  .prose > .fig {
+  .prose > :global(.fig) {
     margin-block: 2.2rem;
   }
-  .fig__well {
+  .prose :global(.fig__well) {
     padding: clamp(14px, 2.4vw, 24px);
     border-radius: var(--r-lg);
     border: 1px solid var(--border);
@@ -541,15 +546,44 @@ const byline = article.byline.replace(/\.\s*$/, "");
     box-shadow: 0 0 0 1px var(--border), 0 18px 36px -20px rgba(17, 23, 27, 0.32);
     filter: var(--img-dim);
   }
-  .fig figcaption {
+  .prose :global(.fig figcaption) {
     margin-top: 10px;
     font-size: 0.85rem;
     line-height: 1.5;
     color: var(--text-3);
     text-wrap: pretty;
   }
-  .prose > .fig--arbiter {
+  /* A scheme is rendered by Scheme.astro, so the column rule above does not reach it: it takes the column here. */
+  .prose > :global(.scheme) {
+    width: 100%;
+    max-width: var(--col);
+    margin-inline: auto;
+  }
+  .prose > .fig--arbiter,
+  .prose > :global(.scheme--pipeline),
+  .prose > :global(.scheme--layers) {
     max-width: min(var(--wide), 100%);
+  }
+  /* A tall phone-width capture (spec 003): kept narrow and centred on its well. */
+  .fig--activity img {
+    display: block;
+    max-width: 26rem;
+    margin-inline: auto;
+  }
+  /* A link inside a paragraph (spec 003). */
+  .prose .inline {
+    color: var(--accent-ink);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--accent-mark) 45%, transparent);
+    text-underline-offset: 3px;
+  }
+  .prose .inline:hover {
+    text-decoration-color: currentColor;
+  }
+  /* Bullets that open on a bold lead get a little more air (spec 003). */
+  .list--lead {
+    gap: 0.8em;
   }
   @media (max-width: 959px) {
     .fig--arbiter .fig__well {
@@ -622,7 +656,8 @@ const byline = article.byline.replace(/\.\s*$/, "");
     }
     .article__head,
     .prose > *,
-    .prose > :global(.hl) {
+    .prose > :global(.hl),
+    .prose > :global(.scheme) {
       margin-inline: 0;
     }
     .toc-m {

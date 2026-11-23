@@ -1,6 +1,9 @@
 // Build-time helpers of the article page (spec 002): heading ids, reading time, publication date.
 // Pure functions, so scripts/article.test.mjs can run them under Node's type stripping.
-import type { Article } from "../content/articles/types.ts";
+import type { Article, Run } from "../content/articles/types.ts";
+
+/** The words of a run: its text, its bold text or its link text. */
+export const runText = (r: Run): string => ("bold" in r ? r.bold : "link" in r ? r.link : r.text);
 
 /** A stable, readable id from a heading: lower case, accents folded, words joined by hyphens. */
 export function slugify(text: string): string {
@@ -25,16 +28,18 @@ export function headingIds(article: Article): string[] {
     });
 }
 
-/** Every word a reader reads: title, paragraphs, headings, lists, the exergue, the highlight, captions and links. */
+/** Every word a reader reads: title, paragraphs, headings, lists, the exergue, the highlight, captions (figures and schemes) and links. */
 export function wordCount(article: Article): number {
   const parts: string[] = [article.title];
   for (const b of article.blocks) {
-    if (b.kind === "p") parts.push(...b.runs.map((r) => ("bold" in r ? r.bold : r.text)));
+    if (b.kind === "p") parts.push(...b.runs.map(runText));
     else if (b.kind === "h2" || b.kind === "pull") parts.push(b.text);
-    else if (b.kind === "list") parts.push(...b.items);
+    else if (b.kind === "list") parts.push(...b.items.map((t) => (typeof t === "string" ? t : `${t.lead} ${t.text}`)));
     else if (b.kind === "links") parts.push(...b.items.map((l) => l.label));
     else if (b.kind === "highlight") parts.push(b.text);
     else if (b.kind === "figure") parts.push(b.caption);
+    else if (b.kind === "topology" || b.kind === "pipeline" || b.kind === "form" || b.kind === "layers")
+      parts.push(b.caption);
   }
   return parts.join(" ").split(/\s+/).filter((w) => /[\p{L}\p{N}]/u.test(w)).length;
 }

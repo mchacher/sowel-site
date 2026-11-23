@@ -93,7 +93,15 @@ export function compareArticles(a, b) {
           if (s && Object.keys(r)[0] !== Object.keys(s)[0])
             problems.push(`${at}: run ${j} is not the same kind`);
         });
-        for (const r of [...x.runs, ...y.runs]) filled(Object.values(r)[0], "run");
+        for (const r of [...x.runs, ...y.runs]) {
+          filled(Object.values(r)[0], "run");
+          if ("link" in r) filled(r.href, "link href");
+        }
+        x.runs.forEach((r, j) => {
+          const s = y.runs[j];
+          if (s && "href" in r && r.href.startsWith("/") !== String(s.href ?? "").startsWith("/"))
+            problems.push(`${at}: link ${j} is internal in one language only`);
+        });
         break;
       }
       case "h2":
@@ -104,8 +112,57 @@ export function compareArticles(a, b) {
       case "list":
         if (x.items.length !== y.items.length)
           problems.push(`${at}: ${x.items.length} items vs ${y.items.length}`);
-        for (const t of [...x.items, ...y.items]) filled(t, "item");
+        x.items.forEach((t, j) => {
+          const u = y.items[j];
+          if (u !== undefined && typeof t !== typeof u)
+            problems.push(`${at}: item ${j + 1} has a bold lead in one language only`);
+        });
+        for (const t of [...x.items, ...y.items]) {
+          if (typeof t === "string") filled(t, "item");
+          else {
+            filled(t?.lead, "item lead");
+            filled(t?.text, "item text");
+          }
+        }
         break;
+      // The schemes drawn in HTML (spec 003): named and captioned, the same shape in both languages.
+      case "topology":
+      case "pipeline":
+      case "form":
+      case "layers": {
+        for (const h of [x, y]) {
+          filled(h.label, "scheme label");
+          filled(h.caption, "scheme caption");
+        }
+        const parts = { topology: "zones", pipeline: "stages", form: "rows", layers: "items" }[
+          x.kind
+        ];
+        const pa = x[parts] ?? [];
+        const pb = y[parts] ?? [];
+        if (!pa.length) problems.push(`${at} (${x.kind}): an empty scheme`);
+        if (pa.length !== pb.length) problems.push(`${at}: ${pa.length} ${parts} vs ${pb.length}`);
+        const shape = (v) =>
+          JSON.stringify(v, (k, val) =>
+            typeof val === "string" && !["icon", "pill"].includes(k) ? "" : val,
+          );
+        pa.forEach((part, j) => {
+          if (pb[j] && shape(part) !== shape(pb[j]))
+            problems.push(
+              `${at}: ${parts} ${j + 1} differ in shape, icon, level or state between the languages`,
+            );
+        });
+        for (const part of [...pa, ...pb])
+          JSON.stringify(part, (k, val) => {
+            if (typeof val === "string" && k !== "value") filled(val, `${x.kind} text`);
+            return val;
+          });
+        if (x.kind === "form")
+          for (const h of [x, y]) {
+            filled(h.title, "form title");
+            filled(h.subtitle, "form subtitle");
+          }
+        break;
+      }
       case "links":
         if (x.items.length !== y.items.length)
           problems.push(`${at}: ${x.items.length} links vs ${y.items.length}`);
