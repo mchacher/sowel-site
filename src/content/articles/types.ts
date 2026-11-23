@@ -18,21 +18,48 @@ export type Block =
   | { kind: "links"; items: Link[] };
 
 /** Lucide icons the diagrams of an article may use. */
-export type DiagramIcon = "scale" | "chef-hat" | "droplets" | "car-front" | "fan";
+export type DiagramIcon =
+  | "scale"
+  | "chef-hat"
+  | "droplets"
+  | "car-front"
+  | "fan"
+  | "gauge"
+  | "list-ordered"
+  | "arrow-up"
+  | "arrow-down"
+  | "circle-check"
+  | "hourglass"
+  | "moon";
+
+/** What the arbiter answers a recipe: granted, waiting, or nothing to give (at rest). */
+export type LoadState = "granted" | "waiting" | "rest";
 
 /**
- * The diagram of a highlight (spec 002): one hub joined to a few appliances, each driven by a recipe. Every label
- * lives here, in the language of the article; the component draws the shapes and holds no text.
+ * The diagram of a highlight (spec 002): the arbiter reads the meter and the priorities, each appliance's recipe asks
+ * it for surplus and it answers. Every label lives here, in the language of the article; the component draws the
+ * shapes and holds no text.
  */
 export interface Illustration {
   /** The accessible name of the diagram, and its longer description. */
   title: string;
   desc: string;
   hub: { name: string; tag: string; icon: DiagramIcon };
+  /** What the arbiter reads: the main meter, and the priority order the user set. */
+  meter: { name: string; tag: string };
+  order: { name: string; tag: string };
   /** The label of the recipe chip on every appliance, and the tag under it. */
   recipe: string;
   loadTag: string;
-  loads: { name: string; icon: DiagramIcon }[];
+  /** Per appliance: what its recipe asks, what the arbiter answers, and an optional detail of the answer. */
+  loads: {
+    name: string;
+    icon: DiagramIcon;
+    ask: string;
+    answer: string;
+    state: LoadState;
+    detail?: string;
+  }[];
 }
 
 export interface Article {

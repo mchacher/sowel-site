@@ -125,9 +125,17 @@ export function compareArticles(a, b) {
           filled(il.desc, "diagram description");
           filled(il.hub?.name, "hub name");
           filled(il.hub?.tag, "hub tag");
+          filled(il.meter?.name, "meter name");
+          filled(il.meter?.tag, "meter tag");
+          filled(il.order?.name, "priority name");
+          filled(il.order?.tag, "priority tag");
           filled(il.recipe, "recipe label");
           filled(il.loadTag, "appliance tag");
-          for (const l of il.loads ?? []) filled(l.name, "appliance name");
+          for (const l of il.loads ?? []) {
+            filled(l.name, "appliance name");
+            filled(l.ask, "appliance request");
+            filled(l.answer, "arbiter answer");
+          }
         }
         const la = x.illustration?.loads ?? [];
         const lb = y.illustration?.loads ?? [];
@@ -136,9 +144,16 @@ export function compareArticles(a, b) {
           problems.push(`${at}: ${la.length} appliances vs ${lb.length}`);
         if (x.illustration?.hub?.icon !== y.illustration?.hub?.icon)
           problems.push(`${at}: the hub has another icon in each language`);
+        for (const loads of [la, lb])
+          loads.forEach((l, j) => {
+            if (!["granted", "waiting", "rest"].includes(l.state))
+              problems.push(`${at}: appliance ${j + 1} has an unknown answer state`);
+          });
         la.forEach((l, j) => {
           if (lb[j] && l.icon !== lb[j].icon)
             problems.push(`${at}: appliance ${j + 1} has another icon in each language`);
+          if (lb[j] && l.state !== lb[j].state)
+            problems.push(`${at}: appliance ${j + 1} has another answer state in each language`);
         });
         break;
       }

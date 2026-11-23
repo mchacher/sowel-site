@@ -17,34 +17,34 @@
 
 ## Test Plan
 
-| Module                 | Scenario                                                             | Expected                            |
-| ---------------------- | -------------------------------------------------------------------- | ----------------------------------- |
-| compareArticles        | same blocks in both languages                                        | no problem                          |
-| compareArticles        | a block, a list item or a bold run is missing                        | the difference is named             |
-| compareArticles        | blocks in another order, a figure without alt text                   | reported                            |
-| checkPage (Article)    | complete page; no alt, no pull quote, no date                        | none; each one reported             |
-| checkSitemap           | both pages of a pair listed; one missing                             | none; the missing path is named     |
-| compareRegistry        | complete entry; no French; bad path, reused path                     | none; each one reported             |
-| compareRegistry        | no opening paragraph                                                 | reported                            |
-| compareDocsMenu        | same pages, right prefixes; entry missing, wrong prefix, other page  | none; each one reported             |
-| checkDocsMenu          | complete menu EN, FR, current article                                | no problem                          |
-| checkDocsMenu          | no menu, wrong name, unnamed or uncontrolled panel                   | reported                            |
-| checkDocsMenu          | missing article, wrong current, wrong manual links                   | reported                            |
-| checkFooterArticles    | link to the article; to the old #articles anchor                     | none; reported                      |
-| checkNoArticlesZone    | a link to #articles, an id="articles"                                | reported                            |
-| articleList, byYear    | registry of six fake articles over two years                         | six entries, newest first, by year  |
-| menuArticles           | registry of six fake articles; of two                                | the three newest; both              |
-| checkArticlesIndex     | complete index; an article missing, no year heading, unnamed entry   | none; each one reported             |
-| checkDocsMenu          | capped menu with « All articles »; one too many; no « All » row      | none; each one reported             |
-| checkDocsMenu          | current on the index; an article outside the three is current        | « All » marked; nothing marked      |
-| checkFooterArticles    | link to the index of the language                                    | none                                |
-| checkBreadcrumb        | Sowel / Articles link / title; no link to the index                  | none; reported                      |
-| checkSitemap           | the index pair listed                                                | none                                |
-| Built site, Playwright | index pages 390/768/1280/1440, light and dark                        | no horizontal scroll                |
-| Built site, Playwright | menu open/closed, 390/768/1280/1440, four pages                      | no horizontal scroll, panel inside  |
-| Built site, Playwright | Enter, Space, Escape, Tab out, click outside, no JS                  | opens, closes, focus back           |
-| Built site, Playwright | 1280 and 390 px, light and dark, EN and FR                           | no horizontal scroll, figures load  |
-| compareArticles        | highlight whose accent is not words of its text                      | reported                            |
-| compareArticles        | highlight: appliance missing, empty label, another icon, none at all | each one reported                   |
-| checkPage (Article)    | a diagram without its title or its description                       | each one reported                   |
-| Built site, Playwright | highlight 1280 and 390, light and dark, EN and FR                    | one layout shown, text 12px or more |
+| Module                 | Scenario                                                                                                       | Expected                            |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| compareArticles        | same blocks in both languages                                                                                  | no problem                          |
+| compareArticles        | a block, a list item or a bold run is missing                                                                  | the difference is named             |
+| compareArticles        | blocks in another order, a figure without alt text                                                             | reported                            |
+| checkPage (Article)    | complete page; no alt, no pull quote, no date                                                                  | none; each one reported             |
+| checkSitemap           | both pages of a pair listed; one missing                                                                       | none; the missing path is named     |
+| compareRegistry        | complete entry; no French; bad path, reused path                                                               | none; each one reported             |
+| compareRegistry        | no opening paragraph                                                                                           | reported                            |
+| compareDocsMenu        | same pages, right prefixes; entry missing, wrong prefix, other page                                            | none; each one reported             |
+| checkDocsMenu          | complete menu EN, FR, current article                                                                          | no problem                          |
+| checkDocsMenu          | no menu, wrong name, unnamed or uncontrolled panel                                                             | reported                            |
+| checkDocsMenu          | missing article, wrong current, wrong manual links                                                             | reported                            |
+| checkFooterArticles    | link to the article; to the old #articles anchor                                                               | none; reported                      |
+| checkNoArticlesZone    | a link to #articles, an id="articles"                                                                          | reported                            |
+| articleList, byYear    | registry of six fake articles over two years                                                                   | six entries, newest first, by year  |
+| menuArticles           | registry of six fake articles; of two                                                                          | the three newest; both              |
+| checkArticlesIndex     | complete index; an article missing, no year heading, unnamed entry                                             | none; each one reported             |
+| checkDocsMenu          | capped menu with « All articles »; one too many; no « All » row                                                | none; each one reported             |
+| checkDocsMenu          | current on the index; an article outside the three is current                                                  | « All » marked; nothing marked      |
+| checkFooterArticles    | link to the index of the language                                                                              | none                                |
+| checkBreadcrumb        | Sowel / Articles link / title; no link to the index                                                            | none; reported                      |
+| checkSitemap           | the index pair listed                                                                                          | none                                |
+| Built site, Playwright | index pages 390/768/1280/1440, light and dark                                                                  | no horizontal scroll                |
+| Built site, Playwright | menu open/closed, 390/768/1280/1440, four pages                                                                | no horizontal scroll, panel inside  |
+| Built site, Playwright | Enter, Space, Escape, Tab out, click outside, no JS                                                            | opens, closes, focus back           |
+| Built site, Playwright | 1280 and 390 px, light and dark, EN and FR                                                                     | no horizontal scroll, figures load  |
+| compareArticles        | highlight whose accent is not words of its text                                                                | reported                            |
+| compareArticles        | highlight: appliance missing, empty label or request, another icon or answer state, unknown state, none at all | each one reported                   |
+| checkPage (Article)    | a diagram without its title or its description                                                                 | each one reported                   |
+| Built site, Playwright | highlight 1280 and 390, light and dark, EN and FR                                                              | one layout shown, text 12px or more |

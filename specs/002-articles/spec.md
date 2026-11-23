@@ -146,6 +146,18 @@ Four edits to the text, the same in both languages, and the key sentence given r
 - Its labels live in the article module of each language; the component holds none. The exergue « Un cerveau pour
   l'énergie, un savoir-faire par appareil » stays as it is.
 
+- Second review (2026-11-23): the diagram must show the orchestration, not only the structure. The arbiter reads two
+  inputs, the main meter (« Compteur général » / "Main meter", « Surplus mesuré » / "Measured surplus") and the priorities
+  (« Priorités » / "Priorities", « Fixées par vous » / "Set by you"). Between the arbiter and each appliance the
+  dialogue is drawn: the request of its recipe (arrow up; « Demande 550 W » / "Asks for 550 W", « Pas de demande » /
+  "No request") and the arbiter's answer (arrow down): « Accordé » / "Granted" (solid, check), « En attente » /
+  "Waiting" (outlined, hourglass, with « il manque 310 W » / "310 W short"), « Au repos » / "At rest" (dashed, moon). The
+  answer is told by a word and an icon, never by colour alone. Same states as the arbiter figure of the article.
+- Same review: the sentence says the arbiter distributes « le surplus » (not « le soleil »), and the introduction no
+  longer states the usual approach (it is the subject of « Les solutions habituelles »): « Si chacune surveille le
+  compteur et démarre dès qu'il y a du surplus, elles échouent… ». The grid-import bullet starts « Suivant la
+  configuration, ».
+
 ## Approval
 
 The maintainer reviews the rendered page before the merge. That review stands for the approval gate of this spec.

@@ -48,11 +48,19 @@ const highlight = () => ({
     title: "T",
     desc: "D",
     hub: { name: "The arbiter", tag: "Energy", icon: "scale" },
+    meter: { name: "Meter", tag: "Surplus" },
+    order: { name: "Priorities", tag: "Yours" },
     recipe: "recipe",
     loadTag: "Control",
     loads: [
-      { name: "Water heater", icon: "shower-head" },
-      { name: "Car", icon: "car-front" },
+      {
+        name: "Water heater",
+        icon: "shower-head",
+        ask: "Asks",
+        answer: "Granted",
+        state: "granted",
+      },
+      { name: "Car", icon: "car-front", ask: "Asks", answer: "Waiting", state: "waiting" },
     ],
   },
 });
@@ -167,9 +175,24 @@ test("a highlight with an appliance missing, an empty label or another icon is r
   assert.ok(p.some((m) => m.includes("the hub has another icon")));
   const c = other();
   const k = highlight();
-  k.illustration.loads[1] = { name: "Voiture", icon: "fan" };
+  k.illustration.loads[1] = {
+    ...k.illustration.loads[1],
+    name: "Voiture",
+    icon: "fan",
+    state: "rest",
+  };
   c.blocks[6] = k;
   assert.ok(compareArticles(art(), c).some((m) => m.includes("appliance 2 has another icon")));
+  assert.ok(
+    compareArticles(art(), c).some((m) => m.includes("appliance 2 has another answer state")),
+  );
+  const d = other();
+  const e = highlight();
+  e.illustration.loads[0] = { ...e.illustration.loads[0], ask: "", state: "later" };
+  d.blocks[6] = e;
+  const q = compareArticles(art(), d);
+  assert.ok(q.some((m) => m.includes("empty appliance request")));
+  assert.ok(q.some((m) => m.includes("unknown answer state")));
 });
 
 test("a highlight without appliances is reported", () => {
