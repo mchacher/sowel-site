@@ -13,6 +13,17 @@ interface Props {
 }
 const { block: b, uid } = Astro.props;
 const capId = `cap-${uid}`;
+// The form's rows cut into sections at each group heading, so every <dl> holds only questions and answers.
+type FormRow = Extract<SchemeBlock, { kind: "form" }>["rows"][number];
+const sections: { group?: string; rows: { label: string; value: string }[] }[] = [];
+if (b.kind === "form")
+  for (const r of b.rows as FormRow[]) {
+    if ("group" in r) sections.push({ group: r.group, rows: [] });
+    else {
+      if (!sections.length) sections.push({ rows: [] });
+      sections[sections.length - 1].rows.push(r);
+    }
+  }
 ---
 
 <figure class={`fig scheme scheme--${b.kind}`}>
@@ -80,18 +91,21 @@ const capId = `cap-${uid}`;
               <span class="form__sub">{b.subtitle}</span>
             </span>
           </div>
-          <dl class="form__rows">
-            {b.rows.map((r) =>
-              "group" in r ? (
-                <div class="form__group">{r.group}</div>
-              ) : (
-                <div class="form__row">
-                  <dt>{r.label}</dt>
-                  <dd>{r.value}</dd>
-                </div>
-              ),
-            )}
-          </dl>
+          <div class="form__rows">
+            {sections.map((sec) => (
+              <Fragment>
+                {sec.group && <p class="form__group">{sec.group}</p>}
+                <dl>
+                  {sec.rows.map((r) => (
+                    <div class="form__row">
+                      <dt>{r.label}</dt>
+                      <dd>{r.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </Fragment>
+            ))}
+          </div>
         </div>
       )
     }
@@ -347,8 +361,10 @@ const capId = `cap-${uid}`;
     color: var(--text-3);
   }
   .form__rows {
-    margin: 0;
     padding: 6px 16px 10px;
+  }
+  .form__rows dl {
+    margin: 0;
   }
   .form__row {
     display: flex;
@@ -359,7 +375,7 @@ const capId = `cap-${uid}`;
     font-size: 0.85rem;
     line-height: 1.4;
   }
-  .form__row:last-child {
+  .form__rows dl:last-child .form__row:last-child {
     border-bottom: 0;
   }
   .form__row dt {
@@ -373,6 +389,7 @@ const capId = `cap-${uid}`;
     font-variant-numeric: tabular-nums;
   }
   .form__group {
+    margin: 0;
     padding: 12px 0 2px;
     font-size: 0.75rem;
     font-weight: 650;

@@ -44,8 +44,9 @@ export function standfirstOf(article: Article): string {
   return first?.kind === "p" ? first.runs.map(runText).join("") : "";
 }
 
-/** The image of the first figure. */
+/** The article's own thumbnail, or else the image of its first figure. */
 export function thumbnailOf(article: Article): Img | undefined {
+  if (article.thumbnail) return article.thumbnail;
   for (const b of article.blocks) if (b.kind === "figure") return b.image;
   return undefined;
 }

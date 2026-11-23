@@ -13,6 +13,7 @@ export const fr: Article = {
   },
   datePublished: "2026-11-23",
   title: "Optimiser simplement le confort de votre maison",
+  thumbnail: { src: withBase("/img/fr/living-room.webp"), alt: "La page du séjour dans Sowel, avec ses équipements, ses modes et la recette Lumière dimmable sur mouvement.", width: 2200, height: 1238 },
   byline: "Marc Chachereau, créateur de Sowel.",
   blocks: [
     { kind: "p", runs: [{ text: "Permettre à chacun d'optimiser son confort et sa consommation d'énergie selon ses besoins, et de le faire simplement, c'est le défi de la domotique. Sowel y apporte une réponse originale, avec une approche différente." }] },

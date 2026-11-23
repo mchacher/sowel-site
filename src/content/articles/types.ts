@@ -124,5 +124,7 @@ export interface Article {
   datePublished: string;
   title: string;
   byline: string;
+  /** The picture of the article's card on the index page; without it, the first figure (spec 003). */
+  thumbnail?: Img;
   blocks: Block[];
 }

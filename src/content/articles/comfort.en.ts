@@ -13,6 +13,7 @@ export const en: Article = {
   },
   datePublished: "2026-11-23",
   title: "Simply optimise the comfort of your home",
+  thumbnail: { src: withBase("/img/en/living-room.webp"), alt: "The living room page in Sowel, with its equipment, its modes and the Motion Light (Dimmable) recipe.", width: 2200, height: 1238 },
   byline: "Marc Chachereau, creator of Sowel.",
   blocks: [
     { kind: "p", runs: [{ text: "Letting everyone optimise their comfort and energy use to suit their needs, and do it simply, is the challenge of home automation. Sowel brings an original answer to it, with a different approach." }] },

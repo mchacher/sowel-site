@@ -374,3 +374,35 @@ test("a link without its target is reported", () => {
   };
   assert.ok(compareArticles(scheme("en"), b).some((m) => m.includes("empty link href")));
 });
+
+test("a link internal in one language only, an empty scheme and a missing part are reported", () => {
+  const b = scheme("fr");
+  b.blocks[0] = {
+    kind: "p",
+    runs: [{ text: "Voir " }, { link: "l'autre", href: "https://x.org/" }, { text: "." }],
+  };
+  b.blocks[4] = { ...b.blocks[4], title: "", rows: [{ label: "Délai", value: "10" }] };
+  b.blocks[5] = { ...b.blocks[5], items: [] };
+  const p = compareArticles(scheme("en"), b);
+  assert.ok(p.some((m) => m.includes("internal in one language only")));
+  assert.ok(p.some((m) => m.includes("empty form title")));
+  assert.ok(p.some((m) => m.includes("2 rows vs 1")));
+  assert.ok(p.some((m) => m.includes("1 items vs 0")));
+});
+
+test("a scheme part with its keys in another order, or false for an absent flag, is the same shape", () => {
+  const b = scheme("fr");
+  const z = b.blocks[2].zones[0];
+  b.blocks[2] = {
+    ...b.blocks[2],
+    zones: [{ values: z.values, icon: z.icon, level: z.level, name: z.name }],
+  };
+  b.blocks[5] = { ...b.blocks[5], items: [{ ...b.blocks[5].items[0], accent: false }] };
+  assert.deepEqual(compareArticles(scheme("en"), b), []);
+});
+
+test("an empty value in a scheme is reported", () => {
+  const b = scheme("fr");
+  b.blocks[4] = { ...b.blocks[4], rows: [{ label: "Délai", value: "" }, { group: "Plage 1" }] };
+  assert.ok(compareArticles(scheme("en"), b).some((m) => m.includes("empty form text")));
+});

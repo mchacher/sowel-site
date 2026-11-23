@@ -76,3 +76,11 @@ test("an entry carries its standfirst, reading time and the first figure as thum
   assert.equal(a.href, "/en/articles/a7/");
   assert.equal(thumbnailOf({ ...fake(8, "2026-01-01").en, blocks: [] }), undefined);
 });
+
+test("an article's own thumbnail wins over its first figure (spec 003)", () => {
+  const a = {
+    ...fake(9, "2026-01-01").en,
+    thumbnail: { src: "/img/own.webp", alt: "Own", width: 20, height: 10 },
+  };
+  assert.equal(thumbnailOf(a)?.src, "/img/own.webp");
+});

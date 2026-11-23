@@ -141,10 +141,19 @@ export function compareArticles(a, b) {
         const pb = y[parts] ?? [];
         if (!pa.length) problems.push(`${at} (${x.kind}): an empty scheme`);
         if (pa.length !== pb.length) problems.push(`${at}: ${pa.length} ${parts} vs ${pb.length}`);
+        // The shape of a part: its keys in sorted order, texts blanked (icons and pills kept), `false` read as absent.
         const shape = (v) =>
-          JSON.stringify(v, (k, val) =>
-            typeof val === "string" && !["icon", "pill"].includes(k) ? "" : val,
-          );
+          JSON.stringify(v, (k, val) => {
+            if (typeof val === "string") return ["icon", "pill"].includes(k) ? val : "";
+            if (val === false) return undefined;
+            if (val && typeof val === "object" && !Array.isArray(val))
+              return Object.fromEntries(
+                Object.keys(val)
+                  .sort()
+                  .map((key) => [key, val[key]]),
+              );
+            return val;
+          });
         pa.forEach((part, j) => {
           if (pb[j] && shape(part) !== shape(pb[j]))
             problems.push(
@@ -152,8 +161,8 @@ export function compareArticles(a, b) {
             );
         });
         for (const part of [...pa, ...pb])
-          JSON.stringify(part, (k, val) => {
-            if (typeof val === "string" && k !== "value") filled(val, `${x.kind} text`);
+          JSON.stringify(part, (_key, val) => {
+            if (typeof val === "string") filled(val, `${x.kind} text`);
             return val;
           });
         if (x.kind === "form")
