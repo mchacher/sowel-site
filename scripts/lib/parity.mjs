@@ -172,6 +172,41 @@ export function compareArticles(a, b) {
           }
         break;
       }
+      // The schemes of spec 004: compared whole, since each holds more than one list (heads, rows, zones; or the
+      // uses and the layers of the stack). Texts blanked; icons, pills, tiers and accents kept; every text filled.
+      case "knowledge":
+      case "chain":
+      case "stack": {
+        for (const h of [x, y]) {
+          filled(h.label, "scheme label");
+          filled(h.caption, "scheme caption");
+        }
+        const parts = { knowledge: "rows", chain: "steps", stack: "items" }[x.kind];
+        if (!(x[parts] ?? []).length) problems.push(`${at} (${x.kind}): an empty scheme`);
+        const whole = (v) =>
+          JSON.stringify({ ...v, label: "", caption: "" }, (k, val) => {
+            if (typeof val === "string")
+              return ["icon", "pill", "tier", "kind"].includes(k) ? val : "";
+            if (val === false) return undefined;
+            if (val && typeof val === "object" && !Array.isArray(val))
+              return Object.fromEntries(
+                Object.keys(val)
+                  .sort()
+                  .map((key) => [key, val[key]]),
+              );
+            return val;
+          });
+        if (whole(x) !== whole(y))
+          problems.push(
+            `${at} (${x.kind}): the scheme differs in shape, icon or state between the languages`,
+          );
+        for (const h of [x, y])
+          JSON.stringify({ ...h, label: "-", caption: "-" }, (_key, val) => {
+            if (typeof val === "string") filled(val, `${x.kind} text`);
+            return val;
+          });
+        break;
+      }
       case "links":
         if (x.items.length !== y.items.length)
           problems.push(`${at}: ${x.items.length} links vs ${y.items.length}`);

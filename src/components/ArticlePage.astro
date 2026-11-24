@@ -79,7 +79,7 @@ const byline = article.byline.replace(/\.\s*$/, "");
         {
           lead && (
             <p class="standfirst">
-              {lead.runs.map((r) => (isLink(r) ? <a class="inline" href={r.href}>{r.link}</a> : "bold" in r ? <strong>{r.bold}</strong> : r.text))}
+              {lead.runs.map((r) => (isLink(r) ? <a class="inline" href={r.href}>{r.link}</a> : "bold" in r ? <strong>{r.bold}</strong> : "code" in r ? <code>{r.code}</code> : r.text))}
             </p>
           )
         }
@@ -116,7 +116,7 @@ const byline = article.byline.replace(/\.\s*$/, "");
         {
           body.map(({ b, i }) => {
             if (b.kind === "p")
-              return <p>{b.runs.map((r) => (isLink(r) ? <a class="inline" href={r.href}>{r.link}</a> : "bold" in r ? <strong>{r.bold}</strong> : r.text))}</p>;
+              return <p>{b.runs.map((r) => (isLink(r) ? <a class="inline" href={r.href}>{r.link}</a> : "bold" in r ? <strong>{r.bold}</strong> : "code" in r ? <code>{r.code}</code> : r.text))}</p>;
             if (b.kind === "h2") {
               const id = nextId();
               return (
@@ -157,7 +157,15 @@ const byline = article.byline.replace(/\.\s*$/, "");
             }
             if (b.kind === "highlight") return <Highlight block={b} />;
             if (b.kind === "diagram") return <Diagram block={b} uid={`dg-${i}`} />;
-            if (b.kind === "topology" || b.kind === "pipeline" || b.kind === "form" || b.kind === "layers")
+            if (
+              b.kind === "topology" ||
+              b.kind === "pipeline" ||
+              b.kind === "form" ||
+              b.kind === "layers" ||
+              b.kind === "knowledge" ||
+              b.kind === "chain" ||
+              b.kind === "stack"
+            )
               return <Scheme block={b} uid={`sc-${i}`} />;
             if (b.kind === "pull")
               return (
@@ -560,9 +568,25 @@ const byline = article.byline.replace(/\.\s*$/, "");
     margin-inline: auto;
   }
   .prose > .fig--arbiter,
+  .prose > .fig--devices,
+  .prose > .fig--room,
   .prose > :global(.scheme--pipeline),
-  .prose > :global(.scheme--layers) {
+  .prose > :global(.scheme--layers),
+  .prose > :global(.scheme--knowledge),
+  .prose > :global(.scheme--chain),
+  .prose > :global(.scheme--stack) {
     max-width: min(var(--wide), 100%);
+  }
+  /* A raw name inside a paragraph (spec 004), as the network spells it. */
+  .prose p code,
+  .standfirst code {
+    font-family: var(--mono);
+    font-size: 0.82em;
+    padding: 1px 5px;
+    border-radius: 4px;
+    background: var(--n-50);
+    color: var(--text-2);
+    overflow-wrap: anywhere;
   }
   /* A tall phone-width capture (spec 003): kept narrow and centred on its well. */
   .fig--activity img {

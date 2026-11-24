@@ -2,8 +2,8 @@
 // Pure functions, so scripts/article.test.mjs can run them under Node's type stripping.
 import type { Article, Run } from "../content/articles/types.ts";
 
-/** The words of a run: its text, its bold text or its link text. */
-export const runText = (r: Run): string => ("bold" in r ? r.bold : "link" in r ? r.link : r.text);
+/** The words of a run: its text, its bold text, its link text or its raw name. */
+export const runText = (r: Run): string => ("bold" in r ? r.bold : "link" in r ? r.link : "code" in r ? r.code : r.text);
 
 /** A stable, readable id from a heading: lower case, accents folded, words joined by hyphens. */
 export function slugify(text: string): string {
@@ -28,6 +28,9 @@ export function headingIds(article: Article): string[] {
     });
 }
 
+/** The schemes drawn in HTML (specs 003 and 004): each renders as a figure with a caption. */
+export const SCHEME_KINDS: string[] = ["topology", "pipeline", "form", "layers", "knowledge", "chain", "stack"];
+
 /** Every word a reader reads: title, paragraphs, headings, lists, the exergue, the highlight, captions (figures and schemes) and links. */
 export function wordCount(article: Article): number {
   const parts: string[] = [article.title];
@@ -38,8 +41,7 @@ export function wordCount(article: Article): number {
     else if (b.kind === "links") parts.push(...b.items.map((l) => l.label));
     else if (b.kind === "highlight") parts.push(b.text);
     else if (b.kind === "figure") parts.push(b.caption);
-    else if (b.kind === "topology" || b.kind === "pipeline" || b.kind === "form" || b.kind === "layers")
-      parts.push(b.caption);
+    else if (SCHEME_KINDS.includes(b.kind)) parts.push((b as { caption: string }).caption);
   }
   return parts.join(" ").split(/\s+/).filter((w) => /[\p{L}\p{N}]/u.test(w)).length;
 }

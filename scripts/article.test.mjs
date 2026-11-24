@@ -57,3 +57,23 @@ test("the word count reads list leads, link runs and scheme captions (spec 003)"
   };
   assert.equal(wordCount(a), 9);
 });
+
+test("the word count reads raw names and the captions of spec 004 schemes", () => {
+  const a = {
+    title: "T",
+    blocks: [
+      { kind: "p", runs: [{ text: "one" }, { code: "two" }] },
+      {
+        kind: "knowledge",
+        label: "not counted",
+        caption: "three four",
+        heads: [],
+        rows: [],
+        zones: [],
+      },
+      { kind: "chain", label: "not counted", caption: "five", steps: [] },
+      { kind: "stack", label: "not counted", caption: "six", base: "not counted", items: [] },
+    ],
+  };
+  assert.equal(wordCount(a), 7);
+});
