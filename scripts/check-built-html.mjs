@@ -20,8 +20,17 @@ import {
 } from "./lib/html.mjs";
 
 const dist = process.argv[2] ?? "dist";
-// The blocks an article renders as a <figure>: captures and the schemes drawn in HTML (spec 003).
-const FIGURE_KINDS = ["figure", "topology", "pipeline", "form", "layers"];
+// The blocks an article renders as a <figure>: captures and the schemes drawn in HTML (specs 003 and 004).
+const FIGURE_KINDS = [
+  "figure",
+  "topology",
+  "pipeline",
+  "form",
+  "layers",
+  "knowledge",
+  "chain",
+  "stack",
+];
 const copy = { en, fr };
 let bad = 0;
 const report = (file, problems) => {

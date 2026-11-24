@@ -406,3 +406,127 @@ test("an empty value in a scheme is reported", () => {
   b.blocks[4] = { ...b.blocks[4], rows: [{ label: "Délai", value: "" }, { group: "Plage 1" }] };
   assert.ok(compareArticles(scheme("en"), b).some((m) => m.includes("empty form text")));
 });
+
+// Spec 004: a raw name inside a paragraph, and three schemes compared whole.
+const knowledge = (lang = "en") => ({
+  ...art({
+    lang,
+    path: lang === "en" ? "/en/a/" : "/fr/b/",
+    otherPath: lang === "en" ? "/fr/b/" : "/en/a/",
+  }),
+  blocks: [
+    { kind: "p", runs: [{ text: "A name like " }, { code: "switch.plug_3" }, { text: "." }] },
+    {
+      kind: "knowledge",
+      label: "L",
+      caption: "C",
+      heads: [
+        { name: "Devices", tag: "On the network", icon: "radio" },
+        { name: "Data", tag: "Standardised" },
+      ],
+      rows: [
+        {
+          devices: [
+            { name: "relay", raw: "state: OFF" },
+            { name: "contact", raw: "contact: false" },
+          ],
+          data: [{ name: "Order", value: "pulse" }],
+          equipment: { name: "Garage door", tag: "Two devices" },
+        },
+      ],
+      zones: [
+        { name: "Garage", icon: "door-closed", tier: "room", values: [{ text: "Open" }] },
+        { name: "Home", icon: "house", tier: "above", values: [{ text: "Occupied", on: true }] },
+      ],
+    },
+    {
+      kind: "chain",
+      label: "L",
+      caption: "C",
+      steps: [
+        { key: "Device", value: "Motion", icon: "radio" },
+        { key: "Room", value: "Occupied", icon: "door-closed", accent: true },
+      ],
+    },
+    {
+      kind: "stack",
+      label: "L",
+      caption: "C",
+      base: "Knowledge",
+      items: [
+        { name: "Recipes", icon: "chef-hat", tier: "use" },
+        { name: "Zones", icon: "map", tier: "layer", body: "The hierarchy" },
+      ],
+    },
+  ],
+});
+
+test("spec 004 blocks with the same shape in both languages: no problem", () => {
+  assert.deepEqual(compareArticles(knowledge("en"), knowledge("fr")), []);
+});
+
+test("a raw name in one language only is reported", () => {
+  const b = knowledge("fr");
+  b.blocks[0] = {
+    kind: "p",
+    runs: [{ text: "Un nom comme " }, { text: "switch.plug_3" }, { text: "." }],
+  };
+  assert.ok(
+    compareArticles(knowledge("en"), b).some((m) => m.includes("run 1 is not the same kind")),
+  );
+});
+
+test("a knowledge scheme with a device missing or another zone tier is reported", () => {
+  const b = knowledge("fr");
+  const k = b.blocks[1];
+  b.blocks[1] = {
+    ...k,
+    rows: [{ ...k.rows[0], devices: [k.rows[0].devices[0]] }],
+    zones: [{ ...k.zones[0], tier: "above" }, k.zones[1]],
+  };
+  assert.ok(
+    compareArticles(knowledge("en"), b).some((m) => m.includes("(knowledge): the scheme differs")),
+  );
+});
+
+test("a chain step with another accent and a stack item on another tier are reported", () => {
+  const b = knowledge("fr");
+  b.blocks[2] = {
+    ...b.blocks[2],
+    steps: [b.blocks[2].steps[0], { ...b.blocks[2].steps[1], accent: false }],
+  };
+  b.blocks[3] = {
+    ...b.blocks[3],
+    items: [{ ...b.blocks[3].items[0], tier: "layer" }, b.blocks[3].items[1]],
+  };
+  const p = compareArticles(knowledge("en"), b);
+  assert.ok(p.some((m) => m.includes("(chain): the scheme differs")));
+  assert.ok(p.some((m) => m.includes("(stack): the scheme differs")));
+});
+
+test("an empty stack base, an empty knowledge value and an empty chain are reported", () => {
+  const b = knowledge("fr");
+  b.blocks[3] = { ...b.blocks[3], base: "" };
+  const k = b.blocks[1];
+  b.blocks[1] = { ...k, rows: [{ ...k.rows[0], equipment: { name: "Porte", tag: "" } }] };
+  const p = compareArticles(knowledge("en"), b);
+  assert.ok(p.some((m) => m.includes("empty stack text")));
+  assert.ok(p.some((m) => m.includes("empty knowledge text")));
+  const c = knowledge("en");
+  c.blocks[2] = { ...c.blocks[2], steps: [] };
+  assert.ok(
+    compareArticles(c, knowledge("fr")).some((m) => m.includes("(chain): an empty scheme")),
+  );
+});
+
+test("a knowledge scheme without zones and a stack layer without description are reported", () => {
+  const b = knowledge("fr");
+  b.blocks[1] = { ...b.blocks[1], zones: [] };
+  b.blocks[3] = {
+    ...b.blocks[3],
+    items: [b.blocks[3].items[0], { ...b.blocks[3].items[1], body: undefined }],
+  };
+  const p = compareArticles(knowledge("en"), b);
+  assert.ok(p.some((m) => m.includes("without heads or zones")));
+  assert.ok(p.some((m) => m.includes("a layer without its description")));
+});

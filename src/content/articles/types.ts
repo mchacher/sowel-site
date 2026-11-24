@@ -1,15 +1,15 @@
-// The shape of an article (spec 002, widened by spec 003). The two languages export one Article each, built of the
+// The shape of an article (spec 002, widened by specs 003 and 004). The two languages export one Article each, built of the
 // same blocks in the same order; scripts/lib/parity.mjs compares them block by block.
 import type { Img, Link } from "../types";
 
-/** A run of a paragraph: plain text, text in bold, or a link (spec 003). */
-export type Run = { text: string } | { bold: string } | { link: string; href: string };
+/** A run of a paragraph: plain text, text in bold, a link (spec 003), or a raw name set in the mono face (spec 004). */
+export type Run = { text: string } | { bold: string } | { link: string; href: string } | { code: string };
 
 /** A list item: plain text, or a bold lead followed by its text (spec 003). */
 export type ListItem = string | { lead: string; text: string };
 
 /** The captured views an article may show; the id sets the figure's frame. */
-export type FigureId = "flow" | "arbiter" | "strip" | "activity";
+export type FigureId = "flow" | "arbiter" | "strip" | "activity" | "devices" | "room";
 
 export type Block =
   | { kind: "p"; runs: Run[] }
@@ -28,6 +28,10 @@ export type Block =
   | { kind: "pipeline"; label: string; caption: string; stages: PipelineStage[] }
   | { kind: "form"; label: string; caption: string; title: string; subtitle: string; rows: FormRow[] }
   | { kind: "layers"; label: string; caption: string; items: LayerItem[] }
+  /** Schemes of spec 004: the layers of knowledge on examples, a propagation chain, and the closing stack. */
+  | { kind: "knowledge"; label: string; caption: string; heads: KnowledgeHead[]; rows: KnowledgeRow[]; zones: KnowledgeZone[] }
+  | { kind: "chain"; label: string; caption: string; steps: ChainStep[] }
+  | { kind: "stack"; label: string; caption: string; base: string; items: StackItem[] }
   | { kind: "links"; items: Link[] };
 
 /** A zone of the topology scheme: its depth in the tree and the values computed for it. `on` marks a presence. */
@@ -63,6 +67,44 @@ export interface LayerItem {
   accent?: boolean;
 }
 
+/** A column heading of the knowledge scheme: the devices, then the three layers. `icon` replaces the layer number. */
+export interface KnowledgeHead {
+  name: string;
+  tag: string;
+  icon?: DiagramIcon;
+}
+
+/** One example of the knowledge scheme: its devices and their raw data, the standardised data, the equipment. */
+export interface KnowledgeRow {
+  devices: { name: string; raw: string }[];
+  data: { name: string; value: string }[];
+  equipment: { name: string; tag: string };
+}
+
+/** A zone of the knowledge scheme: a room (outlined) or a level above it, with the values computed for it. */
+export interface KnowledgeZone {
+  name: string;
+  icon: DiagramIcon;
+  tier: "room" | "above";
+  values: { text: string; on?: boolean }[];
+}
+
+/** A step of the propagation chain. `accent` outlines it. */
+export interface ChainStep {
+  key: string;
+  value: string;
+  icon: DiagramIcon;
+  accent?: boolean;
+}
+
+/** An item of the closing stack: a use on top, or a layer of the knowledge at the base. */
+export interface StackItem {
+  name: string;
+  icon: DiagramIcon;
+  tier: "use" | "layer";
+  body?: string;
+}
+
 /** Lucide icons the diagrams of an article may use. */
 export type DiagramIcon =
   | "scale"
@@ -81,7 +123,11 @@ export type DiagramIcon =
   | "circle-check"
   | "hourglass"
   | "moon"
-  | "arrow-left-right";
+  | "arrow-left-right"
+  | "list"
+  | "package"
+  | "layout-grid"
+  | "map";
 
 /** What the arbiter answers a recipe: granted, waiting, or nothing to give (at rest). */
 export type LoadState = "granted" | "waiting" | "rest";
