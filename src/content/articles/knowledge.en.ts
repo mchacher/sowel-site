@@ -16,7 +16,7 @@ export const en: Article = {
   thumbnail: { src: withBase("/img/en/knowledge-map.webp"), alt: "The diagram of the knowledge of the home: from devices to standardised data, to equipment, then to zones.", width: 1600, height: 900 },
   byline: "Marc Chachereau, creator of Sowel.",
   blocks: [
-    { kind: "p", runs: [{ text: "Setting up home automation well is still hard: hundreds of data points to name, link and combine. Sowel makes this work simpler by organising the knowledge of the home itself. This article explains how." }] },
+    { kind: "p", runs: [{ text: "Setting up home automation well is still hard: hundreds of data points to name, link and combine. Sowel makes this work simpler by organising the knowledge of the home on its own. This article explains how." }] },
     { kind: "p", runs: [{ text: "When you walk into the living room, you know at once where you are, whether it is warm enough, whether someone is already there and which lamps are on. A home automation system knows none of this. It receives messages: a detector saw movement, a plug draws 40\u00a0W, a thermometer reads 21.3\u00a0°C. On their own, these messages say neither where the device is, nor what it is for, nor what they mean for the room." }] },
     { kind: "p", runs: [{ text: "In most home automation solutions, this work falls to the user. Each data point has to be named, put in a room and combined with others in hand-written rules, and everything has to be redone at the slightest change. This is where many users struggle. Yet everything depends on it: the screen that sums up the home, the automations that turn on the light, the modes that get the house ready for the night, the handling of solar surplus." }] },
     {
@@ -26,7 +26,7 @@ export const en: Article = {
     },
     {
       kind: "knowledge",
-      label: "Diagram of the knowledge of the home, layer by layer, on three examples. A bulb sends two data points, the lamp's state and brightness, which make up the equipment Living room lamp. A sensor sends two data points, motion and a light level of 12\u00a0lx, which make up the equipment Living room sensor. A relay and a contact give a pulse order and an open state, which together make up the equipment Garage door. The living room is occupied, at 12\u00a0lx, with 1 light on; the garage door is open. The ground floor, then the home, inherit this.",
+      label: "Diagram of the knowledge of the home, layer by layer, on three examples. A bulb sends two data points, the lamp's state and brightness, which make up the equipment Living room lamp. A sensor sends two data points, motion and a light level of 12\u00a0lx, which make up the equipment Living room sensor. A relay and a contact give a pulse command and an open state, which together make up the equipment Garage door. The living room is occupied, at 12\u00a0lx, with 1 light on; the garage door is open. The ground floor, then the home, inherit this.",
       caption: "The knowledge of the home, layer by layer. A device can provide several data points, and one piece of equipment can bring several devices together, like the garage door. Zones then compute the state of each room and pass it up to the floor and the home.",
       heads: [
         { name: "Devices", tag: "On the network", icon: "radio" },
@@ -47,7 +47,7 @@ export const en: Article = {
         },
         {
           devices: [{ name: "garage_relay", raw: "state: OFF" }, { name: "garage_contact", raw: "contact: false" }],
-          data: [{ name: "Order", value: "pulse" }, { name: "Opening", value: "open" }],
+          data: [{ name: "Command", value: "pulse" }, { name: "Opening", value: "open" }],
           equipment: { name: "Garage door", tag: "Two devices, one piece of equipment, garage" },
         },
       ],
@@ -103,7 +103,7 @@ export const en: Article = {
     { kind: "list", items: [
       { lead: "A category.", text: "There are about forty: temperature, humidity, motion, lamp state, shutter position, power, and so on. Every value received is filed under one of them." },
       { lead: "A unit and a type.", text: "A temperature is a number in degrees Celsius, motion is a yes or a no, a position is a percentage." },
-      { lead: "A rule for combining.", text: "The category also says how the data point combines with the others in the same room: motion adds up, temperatures are averaged, power is summed." },
+      { lead: "A rule for combining.", text: "The category also says how the data point combines with the others in the same room: a single motion is enough, temperatures are averaged, power is summed." },
     ] },
     { kind: "p", runs: [{ text: "Each integration translates what it receives into this model. A temperature is a temperature in degrees Celsius, whether it comes from a Zigbee sensor, a Wi-Fi sensor or a Netatmo station. The integration adapts to the model, so nothing built on top depends on a brand." }] },
     {
@@ -124,14 +124,14 @@ export const en: Article = {
         ] },
       ],
     },
-    { kind: "p", runs: [{ text: "Data quality is checked too, as in the pipelines that feed company databases. A reading that is no longer renewed at its device's usual pace is marked as stale, and equipment that stays silent too long goes offline: neither one skews the calculations. An alert warns when a battery runs low. Finally, Sowel checks that each command was actually carried out, for example that the garage door did open, and replays once, when the integration comes back, a command lost during an outage." }] },
+    { kind: "p", runs: [{ text: "Data quality is checked too, as in the pipelines that feed company databases. A reading that is no longer renewed at its device's usual pace is marked as stale, and equipment that stays silent too long goes offline: neither one skews the calculations. An alert warns when a battery runs low. Finally, Sowel checks that each command was actually carried out, for example that the garage door did open, and, when the integration comes back, replays once any command lost during an outage." }] },
     { kind: "h2", text: "Second layer: equipment, what is in the room" },
     { kind: "p", runs: [{ text: "A device is not what you recognise in your home. You do not think of the dimmer module hidden behind the switch, you think of the living room sconces. Sowel makes the same distinction." }] },
     { kind: "pull", text: "A device is what sits on the network. Equipment is what sits in the room." },
     { kind: "p", runs: [{ text: "A piece of equipment has a name you choose and a type: dimmable light, shutter, thermostat, water heater, charging point, sensor, and many more. The type is a contract. It says what information the equipment carries and what commands it accepts. A dimmable light has a state and a brightness, and it can turn on, turn off and dim. A shutter has a position, and it can go up, go down and stop. To create a piece of equipment, you choose its type and its room, then its devices: Sowel only offers compatible devices and makes all the links itself." }] },
     { kind: "p", runs: [{ text: "Separating equipment from devices has several consequences:" }] },
     { kind: "list", items: [
-      { lead: "Several devices make one piece of equipment.", text: "The garage door brings together the motor relay and the opening sensor. You operate it in one gesture, you see whether it is open, and after each command Sowel checks that it did move." },
+      { lead: "Several devices make one piece of equipment.", text: "The garage door brings together the motor relay and the opening sensor. You operate it with a single action, you see whether it is open, and after each command Sowel checks that it did move." },
       { lead: "The same type is operated the same way.", text: "A Zigbee sconce and a Wi-Fi sconce are both dimmable lights. The app, the recipes and the modes operate them the same way, whatever the protocol." },
       { lead: "The hardware changes, the equipment stays.", text: "If the living room detector fails, you link the new one to the existing equipment. The name, the room, the recipes that use it and the history of its readings stay in place, because they belong to the equipment and not to the device." },
     ] },
@@ -165,8 +165,8 @@ export const en: Article = {
     { kind: "p", runs: [{ text: "These calculations climb the hierarchy. The ground floor is occupied as soon as one of its rooms is, and its temperature is the average of all its sensors. The home knows at any moment how many lights are still on and whether a window is open somewhere." }] },
     {
       kind: "topology",
-      label: "Diagram of the topology of a home. The living room, with motion, 21.2\u00a0°C and 2 lights on, and the kitchen, quiet, 20.4\u00a0°C and 1 light on, combine into the ground floor: occupied, 20.8\u00a0°C, 3 lights. The bedroom, quiet, 19.4\u00a0°C, and the bathroom, with motion, 21.8\u00a0°C, 1 light and 1 window open, combine into the upstairs: occupied, 20.6\u00a0°C, 1 light, 1 window. The ground floor and the upstairs combine into the home: occupied, 20.7\u00a0°C, 4 lights, 1 window open.",
-      caption: "Each zone computes what its rooms are living. Presence climbs as soon as a room is occupied, temperature is the average of the sensors, lights and open windows add up. Example values.",
+      label: "Diagram of the topology of a home. The living room, with motion, 21.2\u00a0°C and 2 lights on, and the kitchen, quiet, 20.4\u00a0°C and 1 light on, combine into the ground floor: occupied, 20.8\u00a0°C, 3 lights. The bedroom, quiet, 19.4\u00a0°C, and the bathroom, with motion, 21.8\u00a0°C, 1 light and 1 window open, combine into the upstairs floor: occupied, 20.6\u00a0°C, 1 light, 1 window. The ground floor and the upstairs combine into the home: occupied, 20.7\u00a0°C, 4 lights, 1 window open.",
+      caption: "Each zone computes what is happening in its rooms. Presence climbs as soon as a room is occupied, temperature is the average of the sensors, lights and open windows add up. Example values.",
       zones: [
         { name: "Home", level: 0, icon: "house", values: [{ text: "Occupied", on: true }, { text: "20.7\u00a0°C" }, { text: "4 lights" }, { text: "1 window" }] },
         { name: "Ground floor", level: 1, icon: "layers", values: [{ text: "Occupied", on: true }, { text: "20.8\u00a0°C" }, { text: "3 lights" }] },
@@ -207,7 +207,7 @@ export const en: Article = {
     { kind: "p", runs: [{ text: "Setting up home automation well starts with organising what it knows about the home. Sowel takes this work on, in three layers. Data arrives standardised and checked, whatever the brand. Equipment matches what you see in the room, and it outlives hardware changes. Zones follow the topology of the home and keep computing the state of every space." }] },
     {
       kind: "stack",
-      label: "Diagram. At the bottom, the knowledge of the home in three layers: data, standardised and checked; equipment, what is in the room; zones, the topology of the home and what each space is living. Above, what relies on it: the app, recipes, modes and the energy arbiter.",
+      label: "Diagram. At the bottom, the knowledge of the home in three layers: data, standardised and checked; equipment, what is in the room; zones, the topology of the home and what is happening in each space. Above, what relies on it: the app, recipes, modes and the energy arbiter.",
       caption: "The three layers of knowledge, and what relies on them.",
       base: "The knowledge of the home",
       items: [
@@ -215,7 +215,7 @@ export const en: Article = {
         { name: "Recipes", icon: "chef-hat", tier: "use" },
         { name: "Modes", icon: "moon", tier: "use" },
         { name: "The energy arbiter", icon: "scale", tier: "use" },
-        { name: "Zones", icon: "map", tier: "layer", body: "The topology of the home, and what each space is living" },
+        { name: "Zones", icon: "map", tier: "layer", body: "The topology of the home, and what is happening in each space" },
         { name: "Equipment", icon: "package", tier: "layer", body: "What is in the room" },
         { name: "Data", icon: "radio", tier: "layer", body: "Standardised and checked, whatever the brand" },
       ],

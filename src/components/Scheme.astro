@@ -206,24 +206,24 @@ if (b.kind === "form")
     }
     {
       b.kind === "chain" && (
-        <ol class="chain" role="img" aria-label={b.label} aria-describedby={capId}>
+        <div class="chain" role="img" aria-label={b.label} aria-describedby={capId}>
           {b.steps.map((st, n) => (
             <Fragment>
               {n > 0 && (
-                <li class="chain__arrow">
+                <span class="chain__arrow">
                   <Icon name="arrow-right" class="icon" />
-                </li>
+                </span>
               )}
-              <li class={st.accent ? "chain__step chain__step--accent" : "chain__step"}>
+              <span class={st.accent ? "chain__step chain__step--accent" : "chain__step"}>
                 <span class="card__ico">
                   <Icon name={st.icon} class="icon" />
                 </span>
                 <span class="chain__k">{st.key}</span>
                 <span class="chain__v">{st.value}</span>
-              </li>
+              </span>
             </Fragment>
           ))}
-        </ol>
+        </div>
       )
     }
     {
@@ -561,7 +561,8 @@ if (b.kind === "form")
     overflow-wrap: anywhere;
   }
 
-  /* Knowledge (spec 004): devices, then data, then equipment, row by row; the zones to the right, the room outlined. */
+  /* Knowledge (spec 004): devices, then data, then equipment, row by row; the zones to the right, the room outlined.
+     The seven columns assume four heads (devices and the three layers). */
   .km {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 18px minmax(0, 1fr) 18px minmax(0, 1fr) 18px minmax(0, 1.2fr);
@@ -770,7 +771,7 @@ if (b.kind === "form")
     height: 18px;
   }
 
-  /* Stack (spec 004): the uses on top, the three layers of knowledge at the base. */
+  /* Stack (spec 004): the uses on top (four columns, one per use), the three layers of knowledge at the base. */
   .stack {
     display: grid;
     gap: 12px;

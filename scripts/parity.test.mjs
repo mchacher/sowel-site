@@ -518,3 +518,15 @@ test("an empty stack base, an empty knowledge value and an empty chain are repor
     compareArticles(c, knowledge("fr")).some((m) => m.includes("(chain): an empty scheme")),
   );
 });
+
+test("a knowledge scheme without zones and a stack layer without description are reported", () => {
+  const b = knowledge("fr");
+  b.blocks[1] = { ...b.blocks[1], zones: [] };
+  b.blocks[3] = {
+    ...b.blocks[3],
+    items: [b.blocks[3].items[0], { ...b.blocks[3].items[1], body: undefined }],
+  };
+  const p = compareArticles(knowledge("en"), b);
+  assert.ok(p.some((m) => m.includes("without heads or zones")));
+  assert.ok(p.some((m) => m.includes("a layer without its description")));
+});

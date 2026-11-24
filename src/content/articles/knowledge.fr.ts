@@ -124,7 +124,7 @@ export const fr: Article = {
         ] },
       ],
     },
-    { kind: "p", runs: [{ text: "La qualité des données est contrôlée elle aussi, comme dans les chaînes qui alimentent les bases de données des entreprises. Une mesure qui n'est plus renouvelée au rythme habituel de son appareil est marquée comme périmée, et un équipement silencieux trop longtemps passe hors ligne\u00a0: ni l'une ni l'autre ne faussent les calculs. Une alerte prévient quand une pile faiblit. Enfin, Sowel vérifie que chaque commande a bien été exécutée, par exemple que la porte du garage s'est ouverte, et rejoue une fois, au retour de l'intégration, une commande perdue pendant une coupure." }] },
+    { kind: "p", runs: [{ text: "La qualité des données est contrôlée elle aussi, comme dans les chaînes qui alimentent les bases de données des entreprises. Une mesure qui n'est plus renouvelée au rythme habituel de son appareil est marquée comme périmée, et un équipement silencieux trop longtemps passe hors ligne\u00a0: ni l'un ni l'autre ne faussent les calculs. Une alerte prévient quand une pile faiblit. Enfin, Sowel vérifie que chaque commande a bien été exécutée, par exemple que la porte du garage s'est ouverte, et rejoue une fois, au retour de l'intégration, une commande perdue pendant une coupure." }] },
     { kind: "h2", text: "Deuxième couche\u00a0: les équipements, ce qui est dans la pièce" },
     { kind: "p", runs: [{ text: "Un appareil n'est pas ce que vous reconnaissez dans la maison. Vous ne pensez pas au module variateur caché derrière l'interrupteur, vous pensez aux appliques du séjour. Sowel fait la même distinction." }] },
     { kind: "pull", text: "Un appareil, c'est ce qui est sur le réseau. Un équipement, c'est ce qui est dans la pièce." },

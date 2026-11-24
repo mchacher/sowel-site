@@ -183,6 +183,15 @@ export function compareArticles(a, b) {
         }
         const parts = { knowledge: "rows", chain: "steps", stack: "items" }[x.kind];
         if (!(x[parts] ?? []).length) problems.push(`${at} (${x.kind}): an empty scheme`);
+        if (x.kind === "knowledge")
+          for (const h of [x, y])
+            if (!(h.heads ?? []).length || !(h.zones ?? []).length)
+              problems.push(`${at} (knowledge): a scheme without heads or zones`);
+        if (x.kind === "stack")
+          for (const h of [x, y])
+            for (const it of h.items ?? [])
+              if (it.tier === "layer" && !text(it.body))
+                problems.push(`${at} (stack): a layer without its description`);
         const whole = (v) =>
           JSON.stringify({ ...v, label: "", caption: "" }, (k, val) => {
             if (typeof val === "string")
