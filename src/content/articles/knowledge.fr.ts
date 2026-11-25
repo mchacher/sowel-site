@@ -223,9 +223,8 @@ export const fr: Article = {
     { kind: "p", runs: [{ text: "Configurer sa maison revient alors à la décrire\u00a0: ses pièces, et ce qui s'y trouve. Tout le reste découle de cette organisation, et c'est elle qui permet ensuite d'optimiser simplement le confort et l'énergie." }] },
     { kind: "p", runs: [{ text: "Cette organisation prépare aussi la suite. Sowel proposera prochainement un serveur MCP, le protocole qui permet à un assistant d'IA de dialoguer avec une application. Comme la connaissance de la maison est déjà organisée, un assistant pourra y accéder facilement, comprendre ce qui se passe dans chaque pièce et apporter toujours plus de valeur aux occupants." }] },
     { kind: "links", items: [
-      { label: "Lire l'article sur les recettes", href: withBase("/fr/articles/optimiser-simplement-le-confort-de-votre-maison/") },
-      { label: "Lire l'article sur l'arbitre énergétique", href: withBase("/fr/articles/optimiser-votre-production-photovoltaique/") },
       { label: "Installer Sowel", href: withBase("/fr/#install") },
+      { label: "Lire l'article sur l'arbitre énergétique", href: withBase("/fr/articles/optimiser-votre-production-photovoltaique/") },
       { label: "Lire le chapitre du manuel sur les zones", href: "https://docs.sowel.org/fr/user/zones/" },
     ] },
   ],

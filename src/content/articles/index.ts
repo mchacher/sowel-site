@@ -6,15 +6,31 @@ import { en as comfortEn } from "./comfort.en.ts";
 import { fr as comfortFr } from "./comfort.fr.ts";
 import { en as knowledgeEn } from "./knowledge.en.ts";
 import { fr as knowledgeFr } from "./knowledge.fr.ts";
-import { articleList, byYear, menuArticles, type ArticleEntry } from "../../lib/articles.ts";
+import { articleList, byYear, menuArticles, pathList, stepOf, type ArticleEntry } from "../../lib/articles.ts";
 
-export { slugOf, indexPath, MENU_ARTICLES, type ArticleEntry, type ArticleLink } from "../../lib/articles.ts";
+export { slugOf, indexPath, MENU_ARTICLES, type ArticleEntry, type ArticleLink, type PathStep } from "../../lib/articles.ts";
 
 export const articles: ArticleEntry[] = [
   { en: energyBrainEn, fr: energyBrainFr },
   { en: comfortEn, fr: comfortFr },
   { en: knowledgeEn, fr: knowledgeFr },
 ];
+
+/**
+ * The reading path: the articles that read best in this order, each building on the one before. The index page opens
+ * with it, and each of its articles names its step and ends on the next one. An article may stay off the path.
+ */
+export const readingPath: ArticleEntry[] = [
+  { en: knowledgeEn, fr: knowledgeFr },
+  { en: comfortEn, fr: comfortFr },
+  { en: energyBrainEn, fr: energyBrainFr },
+];
+
+/** The reading path of one language, in its order. */
+export const pathLinks = (lang: "en" | "fr") => pathList(readingPath, lang);
+
+/** Where one article stands on the path, if it is on it. */
+export const pathStep = (lang: "en" | "fr", path: string) => stepOf(readingPath, lang, path);
 
 /** Every article of one language, the most recent first: the index page. */
 export const articleLinks = (lang: "en" | "fr") => articleList(articles, lang);

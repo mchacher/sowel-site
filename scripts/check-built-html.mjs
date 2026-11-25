@@ -2,6 +2,8 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import {
   articleLinks,
+  pathLinks,
+  pathStep,
   articles,
   indexPath,
   menuLinks,
@@ -16,6 +18,7 @@ import {
   checkFooterArticles,
   checkNoArticlesZone,
   checkPage,
+  checkPathStep,
   checkSitemap,
 } from "./lib/html.mjs";
 
@@ -67,7 +70,7 @@ for (const lang of ["en", "fr"]) {
   const file = join(dist, indexPath(lang), "index.html");
   const html = readFileSync(file, "utf8");
   report(file, checkPage(html, { lang, type: "CollectionPage" }));
-  report(file, checkArticlesIndex(html, { articles: articleLinks(lang) }));
+  report(file, checkArticlesIndex(html, { articles: articleLinks(lang), path: pathLinks(lang) }));
   common(file, html, lang, indexPath(lang));
 }
 for (const entry of articles) {
@@ -77,6 +80,10 @@ for (const entry of articles) {
     const figures = entry[lang].blocks.filter((b) => FIGURE_KINDS.includes(b.kind)).length;
     report(file, checkPage(html, { lang, type: "Article", figures }));
     report(file, checkBreadcrumb(html, { index: indexPath(lang), title: entry[lang].title }));
+    report(
+      file,
+      checkPathStep(html, { step: pathStep(lang, entry[lang].path), index: indexPath(lang) }),
+    );
     common(file, html, lang, entry[lang].path);
   }
 }

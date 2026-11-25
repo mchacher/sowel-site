@@ -229,9 +229,9 @@ export function checkDocsMenu(html, { lang, articles, index, manual, current }) 
 /**
  * The index page of the articles (spec 002): every article of the language once, in the given order (newest first),
  * under a heading h2 per year in that order, each entry a link named by its title (aria-labelledby on a heading) with
- * a sized thumbnail.
+ * a sized thumbnail. Above them, the reading path: its articles in its own order, or no block when it is empty.
  */
-export function checkArticlesIndex(html, { articles }) {
+export function checkArticlesIndex(html, { articles, path = [] }) {
   const p = [];
   const main = /<main\b[\s\S]*?<\/main>/i.exec(html)?.[0] ?? "";
   const entries = [
@@ -247,7 +247,14 @@ export function checkArticlesIndex(html, { articles }) {
   else if (JSON.stringify(found) !== JSON.stringify(articles.map((a) => a.path)))
     p.push("the index does not list the articles newest first");
   const years = [...new Set(articles.map((a) => a.datePublished.slice(0, 4)))];
-  const h2 = [...main.matchAll(/<h2\b[^>]*>([\s\S]*?)<\/h2>/gi)].map((m) => strip(m[1]));
+  const steps = [...main.matchAll(/\bdata-path-article="([^"]*)"/gi)].map((m) => m[1]);
+  if (JSON.stringify(steps) !== JSON.stringify(path.map((a) => a.path)))
+    p.push(
+      `the reading path lists ${steps.join(", ") || "nothing"}, not ${path.map((a) => a.path).join(", ") || "nothing"}`,
+    );
+  const h2 = [
+    ...main.matchAll(/<section\b[^>]*\bdata-year="\d{4}"[^>]*>\s*<h2\b[^>]*>([\s\S]*?)<\/h2>/gi),
+  ].map((m) => strip(m[1]));
   if (JSON.stringify(h2) !== JSON.stringify(years))
     p.push(`the index's year headings are ${h2.join(", ") || "none"}, not ${years.join(", ")}`);
   // Each entry sits in the section of its year.
@@ -275,6 +282,32 @@ export function checkArticlesIndex(html, { articles }) {
     if (!/\bdatetime="\d{4}-\d{2}-\d{2}"/.test(inner))
       p.push(`an index entry has no date: ${path}`);
   }
+  return p;
+}
+
+/**
+ * An article's place on the reading path: on the path, its step in the byline links to the path on the index and,
+ * unless it is the last, one card links to the next article; off the path, neither.
+ */
+export function checkPathStep(html, { step, index }) {
+  const p = [];
+  const marks = [...html.matchAll(/<a\b([^>]*\bdata-path-step="([^"]*)"[^>]*)>/gi)];
+  const nexts = [...html.matchAll(/<a\b([^>]*\bdata-path-next="([^"]*)"[^>]*)>/gi)];
+  if (!step) {
+    if (marks.length || nexts.length) p.push("an article off the reading path shows a step");
+    return p;
+  }
+  if (marks.length !== 1 || marks[0][2] !== String(step.n))
+    p.push(`the byline does not show step ${step.n}`);
+  else if (!(attr(marks[0][1], "href") ?? "").endsWith(`${index}#start`))
+    p.push(`the step does not link to ${index}#start`);
+  const want = step.next ? [step.next.path] : [];
+  if (JSON.stringify(nexts.map((m) => m[2])) !== JSON.stringify(want))
+    p.push(
+      `the next step links to ${nexts.map((m) => m[2]).join(", ") || "nothing"}, not ${want.join(", ") || "nothing"}`,
+    );
+  else if (step.next && !(attr(nexts[0][1], "href") ?? "").endsWith(step.next.path))
+    p.push(`the next step card does not lead to ${step.next.path}`);
   return p;
 }
 

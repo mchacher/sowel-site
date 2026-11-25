@@ -78,6 +78,7 @@ export const fr: SiteCopy = {
     title: "Tout commence par le plan de votre maison",
     titleAccent: "plan de votre maison",
     lead: "Vous décrivez votre maison une fois : ses étages, ses pièces, ce qu'il y a dans chacune. Sowel organise tout le reste autour de cette description.",
+    article: { label: "Lire l'article\u00a0: Organiser la connaissance de votre maison", href: withBase("/fr/articles/organiser-la-connaissance-de-votre-maison/") },
     topology: {
       title: "Des zones dans des zones",
       body: "Une zone peut en contenir d'autres : la maison, un étage, une pièce. Chaque zone remonte à celle du dessus ce qu'elle mesure.",
@@ -356,6 +357,8 @@ export const fr: SiteCopy = {
     toc: "Dans cet article",
     readingTime: "{n}\u00a0min de lecture",
     anchor: "Lien vers la section\u00a0: {h}",
+    step: "Étape {n} sur {total}",
+    next: "Étape suivante",
   },
   articlesPage: {
     meta: {
@@ -365,6 +368,7 @@ export const fr: SiteCopy = {
     count: { one: "1 article", other: "{n} articles" },
     title: "Articles",
     lead: "Les idées derrière Sowel, une à la fois.",
+    start: { title: "Par où commencer", lead: "Ces articles se lisent dans l'ordre\u00a0: chacun s'appuie sur le précédent." },
     read: "Lire l'article",
   },
 };

@@ -12,6 +12,7 @@ import type { SiteCopy } from "../content/types";
 import type { Article, Block, Run } from "../content/articles/types";
 import { withBase } from "../lib/url";
 import { formatDate, headingIds, readingMinutes } from "../lib/article";
+import { indexPath, pathStep } from "../content/articles/index.ts";
 
 interface Props {
   copy: SiteCopy;
@@ -55,6 +56,10 @@ const date = formatDate(article.datePublished, article.lang);
 // A paragraph's runs: text, bold, or a link (spec 003). A list item: text, or a bold lead and its text.
 const isLink = (r: Run): r is { link: string; href: string } => "link" in r;
 const byline = article.byline.replace(/\.\s*$/, "");
+// The reading path: the step shows in the byline, and the card to the next step comes just before the closing links.
+const step = pathStep(article.lang, article.path);
+const stepText = step && ui.step.replace("{n}", String(step.n)).replace("{total}", String(step.total));
+const hasLinks = body.some(({ b }) => b.kind === "links");
 ---
 
 <Base
@@ -90,6 +95,7 @@ const byline = article.byline.replace(/\.\s*$/, "");
             <p class="byline__meta">
               <span><Icon name="calendar" class="icon byline__icon" /><time datetime={article.datePublished}>{date}</time></span>
               <span data-reading-time={minutes}><Icon name="clock" class="icon byline__icon" />{ui.readingTime.replace("{n}", String(minutes))}</span>
+              {step && <a class="byline__step" href={withBase(`${indexPath(article.lang)}#start`)} data-path-step={step.n}><Icon name="list-ordered" class="icon byline__icon" />{stepText}</a>}
             </p>
           </div>
         </div>
@@ -135,6 +141,14 @@ const byline = article.byline.replace(/\.\s*$/, "");
             if (b.kind === "links") {
               const [primary, ...quiet] = b.items;
               return (
+                <>
+                {step?.next && (
+                <a class="next" href={step.next.href} data-path-next={step.next.path}>
+                  <span class="next__label">{ui.next}</span>
+                  <span class="next__title">{step.next.title}</span>
+                  <Icon name="arrow-right" class="icon next__arrow" />
+                </a>
+              )}
                 <ul class="cta">
                   {primary && (
                     <li class="cta__primary">
@@ -153,6 +167,7 @@ const byline = article.byline.replace(/\.\s*$/, "");
                     </li>
                   ))}
                 </ul>
+                </>
               );
             }
             if (b.kind === "highlight") return <Highlight block={b} />;
@@ -195,6 +210,15 @@ const byline = article.byline.replace(/\.\s*$/, "");
               </figure>
             );
           })
+        }
+        {
+          step?.next && !hasLinks && (
+                <a class="next" href={step.next.href} data-path-next={step.next.path}>
+                  <span class="next__label">{ui.next}</span>
+                  <span class="next__title">{step.next.title}</span>
+                  <Icon name="arrow-right" class="icon next__arrow" />
+                </a>
+              )
         }
       </div>
     </div>
@@ -619,6 +643,77 @@ const byline = article.byline.replace(/\.\s*$/, "");
       width: 720px;
       max-width: none;
     }
+  }
+
+  /* The byline's step on the reading path: a quiet link to the path at the top of the index. */
+  .byline__step {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    color: var(--text-2);
+    border-radius: 3px;
+  }
+  .byline__step:hover {
+    color: var(--accent-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* The next step of the reading path: one link, its label above the title of the next article. */
+  .prose > .next {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 16px;
+    row-gap: 4px;
+    align-items: center;
+    margin-top: 2rem;
+    padding: clamp(18px, 2.6vw, 22px) clamp(20px, 3vw, 28px);
+    border-radius: var(--r-lg);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    box-shadow: var(--shadow-card);
+    color: inherit;
+    text-decoration: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .prose > .next:hover {
+    color: inherit;
+    border-color: var(--border-strong);
+    box-shadow: 0 1px 2px rgba(15, 42, 60, 0.05), 0 18px 36px -18px rgba(15, 42, 60, 0.28);
+  }
+  .prose > .next:focus-visible {
+    outline: 2px solid var(--accent-mark);
+    outline-offset: 4px;
+  }
+  .next__label {
+    grid-column: 1;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-3);
+  }
+  .next__title {
+    grid-column: 1;
+    font-size: clamp(1.125rem, 1.05rem + 0.3vw, 1.25rem);
+    line-height: 1.3;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    color: var(--text-strong);
+    text-wrap: balance;
+  }
+  .next:hover .next__title {
+    color: var(--accent-ink);
+  }
+  .next :global(.next__arrow) {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    width: 20px;
+    height: 20px;
+    color: var(--accent-ink);
+    transition: transform 0.15s ease;
+  }
+  .next:hover :global(.next__arrow) {
+    transform: translateX(3px);
   }
 
   /* The last block: the three ways on, a card with one button and two quiet links. */

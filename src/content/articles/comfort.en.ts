@@ -136,8 +136,8 @@ export const en: Article = {
     },
     { kind: "p", runs: [{ text: "You stay in control of what matters, your needs. Sowel helps you meet them as well as possible: it wraps up the complexity, keeps performance in check and makes the right trade-offs." }] },
     { kind: "links", items: [
-      { label: "Read the article on the energy arbiter", href: withBase("/en/articles/optimise-your-solar-power-production/") },
       { label: "Install Sowel", href: withBase("/en/#install") },
+      { label: "Read the article on the knowledge of the home", href: withBase("/en/articles/organise-the-knowledge-of-your-home/") },
       { label: "Read the manual's chapter on recipes", href: "https://docs.sowel.org/user/recipes/" },
     ] },
   ],
