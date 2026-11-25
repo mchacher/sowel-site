@@ -51,22 +51,24 @@ export function thumbnailOf(article: Article): Img | undefined {
   return undefined;
 }
 
+/** What a list shows for one article. */
+export function linkOf(a: Article): ArticleLink {
+  return {
+    slug: slugOf(a),
+    path: a.path,
+    href: withBase(a.path),
+    title: a.title,
+    standfirst: standfirstOf(a),
+    datePublished: a.datePublished,
+    minutes: readingMinutes(a),
+    thumbnail: thumbnailOf(a),
+  };
+}
+
 /** The articles of one language, the most recent first (same date: by title, so the order is stable). */
 export function articleList(entries: ArticleEntry[], lang: "en" | "fr"): ArticleLink[] {
   return entries
-    .map((entry) => {
-      const a = entry[lang];
-      return {
-        slug: slugOf(a),
-        path: a.path,
-        href: withBase(a.path),
-        title: a.title,
-        standfirst: standfirstOf(a),
-        datePublished: a.datePublished,
-        minutes: readingMinutes(a),
-        thumbnail: thumbnailOf(a),
-      };
-    })
+    .map((entry) => linkOf(entry[lang]))
     .sort((x, y) => y.datePublished.localeCompare(x.datePublished) || x.title.localeCompare(y.title));
 }
 
@@ -90,4 +92,24 @@ export function byYear(list: ArticleLink[]): YearGroup[] {
 /** The index page of a language. */
 export function indexPath(lang: "en" | "fr"): string {
   return `/${lang}/articles/`;
+}
+
+/** Where an article stands in the reading path: its step, counted from 1, the length of the path, and the next one. */
+export interface PathStep {
+  n: number;
+  total: number;
+  next?: ArticleLink;
+}
+
+/** The reading path of one language, in its own order (not by date): the « Where to start » block of the index. */
+export function pathList(path: ArticleEntry[], lang: "en" | "fr"): ArticleLink[] {
+  return path.map((entry) => linkOf(entry[lang]));
+}
+
+/** The step of the article at this address, or undefined when the article is not on the path. */
+export function stepOf(path: ArticleEntry[], lang: "en" | "fr", articlePath: string): PathStep | undefined {
+  const i = path.findIndex((entry) => entry[lang].path === articlePath);
+  if (i < 0) return undefined;
+  const next = path[i + 1];
+  return { n: i + 1, total: path.length, next: next ? linkOf(next[lang]) : undefined };
 }

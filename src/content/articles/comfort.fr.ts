@@ -136,8 +136,8 @@ export const fr: Article = {
     },
     { kind: "p", runs: [{ text: "Vous gardez la main sur ce qui compte, votre besoin. Sowel vous aide à le satisfaire au mieux\u00a0: il encapsule la complexité, maîtrise la performance et fait les bons compromis." }] },
     { kind: "links", items: [
-      { label: "Lire l'article sur l'arbitre énergétique", href: withBase("/fr/articles/optimiser-votre-production-photovoltaique/") },
       { label: "Installer Sowel", href: withBase("/fr/#install") },
+      { label: "Lire l'article sur la connaissance de la maison", href: withBase("/fr/articles/organiser-la-connaissance-de-votre-maison/") },
       { label: "Lire le chapitre du manuel sur les recettes (en anglais)", href: "https://docs.sowel.org/user/recipes/" },
     ] },
   ],

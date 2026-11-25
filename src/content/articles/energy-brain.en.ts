@@ -80,6 +80,8 @@ export const en: Article = {
     { kind: "p", runs: [{ text: "Sowel is free software and runs on your own hardware. The water heater and EV charger recipes install from the app's catalogue, and the manual covers the arbiter and its settings." }] },
     { kind: "links", items: [
       { label: "Install Sowel", href: withBase("/en/#install") },
+      { label: "Read the article on the knowledge of the home", href: withBase("/en/articles/organise-the-knowledge-of-your-home/") },
+      { label: "Read the article on recipes", href: withBase("/en/articles/simply-optimise-the-comfort-of-your-home/") },
       { label: "Read the chapter on the surplus arbiter", href: "https://docs.sowel.org/deep-dives/surplus-arbiter/" },
       { label: "Watch the introduction film", href: withBase("/en/") },
     ] },

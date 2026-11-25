@@ -175,6 +175,7 @@ test("a contents that misses a section and an unnamed nav are reported", () => {
 import {
   checkArticlesIndex,
   checkBreadcrumb,
+  checkPathStep,
   checkDocsMenu,
   checkFooterArticles,
   checkNoArticlesZone,
@@ -405,5 +406,69 @@ test("nothing may point at the removed Articles zone", () => {
   assert.equal(
     checkNoArticlesZone('<a href="/en/#articles">A</a><section id="articles"></section>').length,
     2,
+  );
+});
+
+// The reading path: a block above the years on the index, a step in the byline, a card to the next article.
+const startBlock = (paths) =>
+  `<section class="start" id="start"><h2 id="start-title">Where to start</h2><ol>` +
+  paths
+    .map((x) => `<li><a class="step" href="${x}" data-path-article="${x}">${x}</a></li>`)
+    .join("") +
+  `</ol></section>`;
+
+test("an index with the reading path in its order above the years: no problem", () => {
+  const path = [ART[1], ART[0]];
+  const html = index().replace("<main>", "<main>" + startBlock(path.map((a) => a.path)));
+  assert.deepEqual(checkArticlesIndex(html, { articles: ART, path }), []);
+});
+
+test("a reading path in the wrong order, or missing, is reported", () => {
+  const path = [ART[1], ART[0]];
+  const wrong = index().replace("<main>", "<main>" + startBlock([ART[0].path, ART[1].path]));
+  assert.ok(
+    checkArticlesIndex(wrong, { articles: ART, path }).some((m) => m.includes("reading path")),
+  );
+  assert.ok(
+    checkArticlesIndex(index(), { articles: ART, path }).some((m) => m.includes("reading path")),
+  );
+});
+
+const stepHtml = (n, next) =>
+  `<p class="byline__meta"><a class="byline__step" href="/en/articles/#start" data-path-step="${n}">Step ${n} of 3</a></p>` +
+  (next ? `<a class="next" href="${next}" data-path-next="${next}">Next step</a>` : "");
+
+test("an article on the path with its step and the next card: no problem", () => {
+  const step = { n: 1, total: 3, next: { path: "/en/articles/b/" } };
+  assert.deepEqual(
+    checkPathStep(stepHtml(1, "/en/articles/b/"), { step, index: "/en/articles/" }),
+    [],
+  );
+  const last = { n: 3, total: 3 };
+  assert.deepEqual(checkPathStep(stepHtml(3), { step: last, index: "/en/articles/" }), []);
+  assert.deepEqual(
+    checkPathStep("<p>no path</p>", { step: undefined, index: "/en/articles/" }),
+    [],
+  );
+});
+
+test("a wrong step, a missing or extra next card, a step off the path are reported", () => {
+  const step = { n: 2, total: 3, next: { path: "/en/articles/c/" } };
+  const idx = "/en/articles/";
+  assert.ok(
+    checkPathStep(stepHtml(1, "/en/articles/c/"), { step, index: idx }).some((m) =>
+      m.includes("step 2"),
+    ),
+  );
+  assert.ok(checkPathStep(stepHtml(2), { step, index: idx }).some((m) => m.includes("next step")));
+  assert.ok(
+    checkPathStep(stepHtml(3, "/en/articles/c/"), { step: { n: 3, total: 3 }, index: idx }).some(
+      (m) => m.includes("next step"),
+    ),
+  );
+  assert.ok(
+    checkPathStep(stepHtml(1), { step: undefined, index: idx }).some((m) =>
+      m.includes("off the reading path"),
+    ),
   );
 });

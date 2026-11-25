@@ -27,6 +27,7 @@ walk(t, 0);
       <SectionTag text={home.eyebrow} icon="house" />
       <h2 class="h2"><Accent text={home.title} accent={home.titleAccent} /></h2>
       <p class="lead">{home.lead}</p>
+      <p class="more"><a href={home.article.href}>{home.article.label}</a></p>
     </div>
 
     <div class="pillars">
@@ -106,6 +107,20 @@ walk(t, 0);
 </section>
 
 <style>
+  /* The line under the lead that leads to the article on knowledge, as in the Recipes and Energy sections. */
+  .more {
+    margin-top: 14px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .more a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: color-mix(in srgb, var(--accent-mark) 50%, transparent);
+  }
+  .more a::after {
+    content: " \2192";
+  }
   .pillars {
     margin-top: clamp(40px, 5vw, 64px);
     display: grid;

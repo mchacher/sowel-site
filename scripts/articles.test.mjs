@@ -5,6 +5,8 @@ import {
   byYear,
   menuArticles,
   MENU_ARTICLES,
+  pathList,
+  stepOf,
   thumbnailOf,
 } from "../src/lib/articles.ts";
 
@@ -83,4 +85,29 @@ test("an article's own thumbnail wins over its first figure (spec 003)", () => {
     thumbnail: { src: "/img/own.webp", alt: "Own", width: 20, height: 10 },
   };
   assert.equal(thumbnailOf(a)?.src, "/img/own.webp");
+});
+
+test("the reading path keeps its own order, not the date order", () => {
+  const path = [registry[4], registry[0], registry[2]];
+  assert.deepEqual(
+    pathList(path, "fr").map((a) => a.title),
+    ["Article 3", "Article 1", "Article 2"],
+  );
+});
+
+test("each step knows its rank, the length of the path and the next article; the last has none", () => {
+  const path = [registry[4], registry[0], registry[2]];
+  const first = stepOf(path, "en", "/en/articles/a3/");
+  assert.equal(first.n, 1);
+  assert.equal(first.total, 3);
+  assert.equal(first.next.path, "/en/articles/a1/");
+  const last = stepOf(path, "en", "/en/articles/a2/");
+  assert.equal(last.n, 3);
+  assert.equal(last.next, undefined);
+});
+
+test("an article off the path has no step, and a path read in the other language does not match", () => {
+  const path = [registry[4], registry[0]];
+  assert.equal(stepOf(path, "en", "/en/articles/a6/"), undefined);
+  assert.equal(stepOf(path, "fr", "/en/articles/a3/"), undefined);
 });

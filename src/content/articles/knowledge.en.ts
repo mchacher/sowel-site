@@ -223,9 +223,8 @@ export const en: Article = {
     { kind: "p", runs: [{ text: "Setting up your home then comes down to describing it: its rooms, and what is in them. Everything else follows from this organisation, and it is what then makes it possible to optimise comfort and energy simply." }] },
     { kind: "p", runs: [{ text: "This organisation also prepares what comes next. Sowel will soon offer an MCP server, the protocol that lets an AI assistant talk to an application. Because the knowledge of the home is already organised, an assistant will be able to reach it easily, understand what is happening in each room and bring ever more value to the people who live there." }] },
     { kind: "links", items: [
-      { label: "Read the article on recipes", href: withBase("/en/articles/simply-optimise-the-comfort-of-your-home/") },
-      { label: "Read the article on the energy arbiter", href: withBase("/en/articles/optimise-your-solar-power-production/") },
       { label: "Install Sowel", href: withBase("/en/#install") },
+      { label: "Read the article on the energy arbiter", href: withBase("/en/articles/optimise-your-solar-power-production/") },
       { label: "Read the manual's chapter on zones", href: "https://docs.sowel.org/user/zones/" },
     ] },
   ],

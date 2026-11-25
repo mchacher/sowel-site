@@ -78,6 +78,7 @@ export const en: SiteCopy = {
     title: "Everything starts from the layout of your home",
     titleAccent: "layout of your home",
     lead: "You describe your home once: its floors, its rooms, what is in each of them. Sowel organises everything else around that description.",
+    article: { label: "Read the article: Organise the knowledge of your home", href: withBase("/en/articles/organise-the-knowledge-of-your-home/") },
     topology: {
       title: "Zones inside zones",
       body: "A zone can hold other zones: the home, a floor, a room. Each zone passes up to the zone above what it measures.",
@@ -356,6 +357,8 @@ export const en: SiteCopy = {
     toc: "In this article",
     readingTime: "{n} min read",
     anchor: "Link to the section: {h}",
+    step: "Step {n} of {total}",
+    next: "Next step",
   },
   articlesPage: {
     meta: {
@@ -365,6 +368,7 @@ export const en: SiteCopy = {
     count: { one: "1 article", other: "{n} articles" },
     title: "Articles",
     lead: "The ideas behind Sowel, one at a time.",
+    start: { title: "Where to start", lead: "These articles read best in order: each one builds on the one before." },
     read: "Read the article",
   },
 };

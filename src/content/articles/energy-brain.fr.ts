@@ -80,6 +80,8 @@ export const fr: Article = {
     { kind: "p", runs: [{ text: "Sowel est libre et tourne sur votre matériel. Les recettes de chauffe-eau et de borne de recharge s'installent depuis le catalogue de l'application, et le manuel détaille l'arbitre et ses réglages." }] },
     { kind: "links", items: [
       { label: "Installer Sowel", href: withBase("/fr/#install") },
+      { label: "Lire l'article sur la connaissance de la maison", href: withBase("/fr/articles/organiser-la-connaissance-de-votre-maison/") },
+      { label: "Lire l'article sur les recettes", href: withBase("/fr/articles/optimiser-simplement-le-confort-de-votre-maison/") },
       { label: "Lire le chapitre sur l'arbitre de surplus", href: "https://docs.sowel.org/fr/deep-dives/surplus-arbiter/" },
       { label: "Voir le film de présentation", href: withBase("/fr/") },
     ] },

@@ -92,6 +92,8 @@ export interface SiteCopy {
     title: string;
     titleAccent: string;
     lead: string;
+    /** One line under the lead: the article on the knowledge of the home, the first step of the reading path. */
+    article: Link;
     topology: { title: string; body: string; tree: TreeNode };
     equipment: {
       title: string;
@@ -200,6 +202,10 @@ export interface SiteCopy {
     readingTime: string;
     /** The accessible name of a heading's anchor link; {h} is replaced by the heading. */
     anchor: string;
+    /** An article's place on the reading path, in the byline; {n} and {total} are replaced. It links to the path. */
+    step: string;
+    /** The heading of the card that ends an article of the path and leads to the next one. */
+    next: string;
   };
   /** The index page of the articles (spec 002): /{lang}/articles/. */
   articlesPage: {
@@ -208,6 +214,8 @@ export interface SiteCopy {
     count: { one: string; other: string };
     title: string;
     lead: string;
+    /** The block that opens the page: the reading path, in its order. */
+    start: { title: string; lead: string };
     /** The call at the foot of each entry. */
     read: string;
   };
