@@ -4,6 +4,7 @@ import Logo from "./Logo.astro";
 import Icon from "./Icon.astro";
 import { withBase } from "../lib/url";
 import { indexPath, menuLinks } from "../content/articles/index.ts";
+import { tutorialLinks } from "../content/tutorials/index.ts";
 
 interface Props {
   copy: SiteCopy;
@@ -21,6 +22,15 @@ const docs = copy.nav.docs;
 // The menu shows the most recent articles only; the « All articles » row leads to the index and the rest.
 const arts = menuLinks(copy.lang);
 const index = indexPath(copy.lang);
+// The tutorials (spec 005), all of them, in reading order.
+const tuts = tutorialLinks(copy.lang);
+// Two levels (spec 005): the rail names the groups, the pane shows one. It opens on the group of the current page.
+const groups = [
+  { id: "articles", label: docs.articles, icon: "newspaper" as const },
+  ...(tuts.length ? [{ id: "tutorials", label: docs.tutorials, icon: "graduation-cap" as const }] : []),
+  { id: "manual", label: docs.manual, icon: "book-open" as const },
+];
+const activeGroup = tuts.some((t) => t.path === inner?.current) ? "tutorials" : "articles";
 const readingTime = (n: number) => copy.articlePage.readingTime.replace("{n}", String(n));
 ---
 
@@ -44,7 +54,21 @@ const readingTime = (n: number) => copy.articlePage.readingTime.replace("{n}", S
           <span class="docs__label">{docs.label}</span>
           <Icon name="chevron-down" class="icon docs__chev" />
         </summary>
-        <nav class="docs__panel" id="docs-panel" aria-label={docs.menu} data-docs-panel>
+        <nav class="docs__panel" id="docs-panel" aria-label={docs.menu} data-docs-panel data-active={activeGroup}>
+          <!-- The rail: shown once the script runs; without it, the three groups stay stacked. -->
+          <div class="docs__rail" data-docs-rail>
+            {
+              groups.map((g) => (
+                <button class="docs__tab" type="button" aria-controls={`docs-sec-${g.id}`} data-docs-tab={g.id}>
+                  <Icon name={g.icon} class="icon docs__tab-i" />
+                  <span>{g.label}</span>
+                  <Icon name="chevron-right" class="icon docs__tab-chev" />
+                </button>
+              ))
+            }
+          </div>
+          <div class="docs__panes">
+          <section class="docs__sec" id="docs-sec-articles" data-docs-sec="articles">
           <p class="docs__group" id="docs-g-articles">{docs.articles}</p>
           <ul class="docs__list" aria-labelledby="docs-g-articles">
             {
@@ -79,6 +103,29 @@ const readingTime = (n: number) => copy.articlePage.readingTime.replace("{n}", S
               </a>
             </li>
           </ul>
+          </section>
+          {
+            tuts.length > 0 && (
+              <section class="docs__sec" id="docs-sec-tutorials" data-docs-sec="tutorials">
+                <p class="docs__group" id="docs-g-tutorials">{docs.tutorials}</p>
+                <ul class="docs__list" aria-labelledby="docs-g-tutorials">
+                  {tuts.map((a) => (
+                    <li>
+                      <a class="docs__item" href={a.href} aria-current={inner?.current === a.path ? "page" : undefined} data-docs-tutorial>
+                        <span class="docs__medal" aria-hidden="true">
+                          <Icon name="graduation-cap" class="icon docs__icon" />
+                        </span>
+                        <span class="docs__text">
+                          <span class="docs__title">{a.title}</span>
+                        </span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )
+          }
+          <section class="docs__sec" id="docs-sec-manual" data-docs-sec="manual">
           <p class="docs__group" id="docs-g-manual">{docs.manual}</p>
           <ul class="docs__list" aria-labelledby="docs-g-manual">
             {
@@ -97,6 +144,8 @@ const readingTime = (n: number) => copy.articlePage.readingTime.replace("{n}", S
               ))
             }
           </ul>
+          </section>
+          </div>
         </nav>
       </details>
       <a class="gh" href={copy.nav.github.href} aria-label={copy.nav.github.label}>
@@ -123,6 +172,30 @@ const readingTime = (n: number) => copy.articlePage.readingTime.replace("{n}", S
     });
     document.addEventListener("click", (e) => {
       if (d.open && !d.contains(e.target)) d.open = false;
+    });
+    // Two levels: the rail switches the pane, on hover with a mouse, on a click or a tap otherwise.
+    const panel = d.querySelector("[data-docs-panel]");
+    d.classList.add("docs--tabs");
+    const show = (id) => {
+      panel.dataset.active = id;
+      panel.querySelectorAll("[data-docs-tab]").forEach((t) => t.setAttribute("aria-pressed", t.dataset.docsTab === id ? "true" : "false"));
+    };
+    show(panel.dataset.active);
+    panel.querySelectorAll("[data-docs-tab]").forEach((t) => {
+      t.addEventListener("click", () => show(t.dataset.docsTab));
+      // A short pause before switching on hover, so a diagonal move towards an entry does not cross onto another group.
+      let timer;
+      t.addEventListener("pointerenter", (e) => {
+        if (e.pointerType !== "mouse") return;
+        clearTimeout(timer);
+        timer = setTimeout(() => show(t.dataset.docsTab), 120);
+      });
+      t.addEventListener("pointerleave", () => clearTimeout(timer));
+    });
+    // A keyboard user tabs through every entry: the pane follows the focus.
+    panel.addEventListener("focusin", (e) => {
+      const sec = e.target.closest("[data-docs-sec]");
+      if (sec) show(sec.dataset.docsSec);
     });
     d.addEventListener("focusout", (e) => {
       if (d.open && e.relatedTarget && !d.contains(e.relatedTarget)) d.open = false;
@@ -320,6 +393,7 @@ const readingTime = (n: number) => copy.articlePage.readingTime.replace("{n}", S
     font-weight: 600;
     color: var(--text-3);
   }
+  .docs__sec + .docs__sec,
   .docs__list + .docs__group {
     margin-top: 6px;
     padding-top: 14px;
@@ -427,6 +501,117 @@ const readingTime = (n: number) => copy.articlePage.readingTime.replace("{n}", S
   }
   .docs__all:hover :global(.docs__arrow) {
     transform: translateX(3px);
+  }
+  /* Two levels (spec 005): with the script, the rail on the left names the groups and the pane shows one of them. */
+  .docs__rail {
+    display: none;
+  }
+  .docs--tabs .docs__rail {
+    display: flex;
+    gap: 4px;
+  }
+  .docs__tab {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 10px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--text-2);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: left;
+    cursor: pointer;
+  }
+  .docs__tab:hover {
+    color: var(--text-strong);
+  }
+  .docs__tab:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
+  .docs__tab[aria-pressed="true"] {
+    color: var(--text-strong);
+    background: rgba(127, 184, 212, 0.12);
+  }
+  .docs :global(.docs__tab-i) {
+    width: 17px;
+    height: 17px;
+    flex: none;
+    color: var(--accent);
+  }
+  .docs :global(.docs__tab-chev) {
+    display: none;
+    width: 15px;
+    height: 15px;
+    margin-left: auto;
+    color: var(--text-3);
+  }
+  .docs--tabs .docs__sec {
+    display: none;
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+  .docs--tabs [data-active="articles"] [data-docs-sec="articles"],
+  .docs--tabs [data-active="tutorials"] [data-docs-sec="tutorials"],
+  .docs--tabs [data-active="manual"] [data-docs-sec="manual"] {
+    display: block;
+  }
+  /* In the pane, the group's name is the rail's job: it stays for screen readers only. */
+  .docs--tabs .docs__group {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    padding: 0;
+  }
+  /* On a phone the rail is a row of three tabs above the pane. */
+  @media (max-width: 639.98px) {
+    .docs--tabs .docs__rail {
+      padding: 0 2px 8px;
+      margin-bottom: 6px;
+      border-bottom: 1px solid var(--stage-line);
+    }
+    .docs--tabs .docs__tab {
+      flex: 1;
+      min-width: 0;
+      justify-content: center;
+      gap: 6px;
+      padding: 9px 6px;
+      font-size: 13px;
+    }
+  }
+  /* Between phone and desktop, the wider panel hangs from the header's right gutter, not from the button. */
+  @media (min-width: 640px) and (max-width: 1099.98px) {
+    .docs--tabs {
+      position: static;
+    }
+    .docs--tabs .docs__panel {
+      top: calc(100% - 4px);
+      right: var(--gutter);
+    }
+  }
+  @media (min-width: 640px) {
+    .docs--tabs .docs__panel {
+      display: grid;
+      grid-template-columns: 11.5rem minmax(0, 1fr);
+      gap: 8px;
+      width: min(38rem, calc(100vw - 32px));
+    }
+    .docs--tabs .docs__rail {
+      flex-direction: column;
+      padding-right: 8px;
+      border-right: 1px solid var(--stage-line);
+    }
+    .docs :global(.docs__tab-chev) {
+      display: block;
+    }
   }
   @media (prefers-reduced-motion: reduce) {
     .docs[open] > .docs__panel {

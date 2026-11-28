@@ -32,9 +32,10 @@ export const en: SiteCopy = {
     github: { label: "GitHub", href: REPO },
     docs: {
       label: "Docs",
-      menu: "Articles and manual",
+      menu: "Articles, tutorials and manual",
       articles: "Articles",
       all: "All articles",
+      tutorials: "Tutorials",
       manual: "Manual",
       links: [
         { icon: "rocket", title: "Getting started", body: "Install Sowel and add your first devices", href: `${DOCS}user/getting-started/` },
@@ -350,6 +351,14 @@ export const en: SiteCopy = {
       { label: "Manual", href: DOCS },
       { label: "Licence", href: `${REPO}/blob/main/LICENSE` },
     ],
+  },
+  tutorialPage: {
+    eyebrow: "Tutorial",
+    breadcrumb: "Tutorials",
+    toc: "In this tutorial",
+    callout: { tip: "Tip", warn: "Warning", note: "Good to know" },
+    copy: "Copy",
+    copied: "Copied",
   },
   articlePage: {
     eyebrow: "Article",

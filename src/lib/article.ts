@@ -40,7 +40,9 @@ export function wordCount(article: Article): number {
     else if (b.kind === "list") parts.push(...b.items.map((t) => (typeof t === "string" ? t : `${t.lead} ${t.text}`)));
     else if (b.kind === "links") parts.push(...b.items.map((l) => l.label));
     else if (b.kind === "highlight") parts.push(b.text);
-    else if (b.kind === "figure") parts.push(b.caption);
+    else if (b.kind === "figure" || b.kind === "shot") parts.push(b.caption);
+    else if (b.kind === "items") parts.push(...b.items.flat().map(runText));
+    else if (b.kind === "callout") parts.push(b.title, ...b.runs.map(runText));
     else if (SCHEME_KINDS.includes(b.kind)) parts.push((b as { caption: string }).caption);
   }
   return parts.join(" ").split(/\s+/).filter((w) => /[\p{L}\p{N}]/u.test(w)).length;

@@ -69,6 +69,8 @@ export interface SiteCopy {
       articles: string;
       /** The last row of the articles group, always present: the link to the index page. */
       all: string;
+      /** The heading of the tutorials group (spec 005); the entries come from src/content/tutorials/index.ts. */
+      tutorials: string;
       /** The heading of the manual group. */
       manual: string;
       /** The manual's entries, on docs.sowel.org in the language of the page. */
@@ -190,6 +192,17 @@ export interface SiteCopy {
     links: { icon: IconName; title: string; body: string; href: string }[];
   };
   footer: { tagline: string; licence: string; privacy: string; links: Link[] };
+  /** The interface around a tutorial (spec 005), where it differs from an article's. */
+  tutorialPage: {
+    eyebrow: string;
+    breadcrumb: string;
+    toc: string;
+    /** The callout tags, by tone. */
+    callout: { tip: string; warn: string; note: string };
+    /** The copy button of a command or file, and its state once copied. */
+    copy: string;
+    copied: string;
+  };
   /** The interface around an article (spec 002): its words stay in src/content/articles/. */
   articlePage: {
     /** The small tag above the title. */

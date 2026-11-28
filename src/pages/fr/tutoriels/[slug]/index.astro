@@ -1,0 +1,17 @@
+---
+import ArticlePage from "../../../../components/ArticlePage.astro";
+import { fr } from "../../../../content/fr";
+import { tutorials, slugOf } from "../../../../content/tutorials/index.ts";
+import type { Article } from "../../../../content/articles/types";
+
+// One page per tutorial (spec 005), at /fr/tutoriels/<slug>/.
+export function getStaticPaths() {
+  return tutorials.map((t) => ({ params: { slug: slugOf(t.fr) }, props: { article: t.fr } }));
+}
+interface Props {
+  article: Article;
+}
+const { article } = Astro.props;
+---
+
+<ArticlePage copy={fr} article={article} />

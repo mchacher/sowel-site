@@ -1,12 +1,14 @@
 import type { APIRoute } from "astro";
 import { withBase } from "../lib/url";
 import { articles, indexPath } from "../content/articles/index.ts";
+import { tutorials } from "../content/tutorials/index.ts";
 
 // Each entry is one page and its twin in the other language: both get a <url> with the full pair.
 const pages = [
   { en: "/en/", fr: "/fr/" },
   { en: indexPath("en"), fr: indexPath("fr") },
   ...articles.map((a) => ({ en: a.en.path, fr: a.fr.path })),
+  ...tutorials.map((t) => ({ en: t.en.path, fr: t.fr.path })),
 ];
 
 export const GET: APIRoute = ({ site }) => {

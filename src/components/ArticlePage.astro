@@ -8,6 +8,7 @@ import SectionTag from "./SectionTag.astro";
 import Highlight from "./Highlight.astro";
 import Diagram from "./Diagram.astro";
 import Scheme from "./Scheme.astro";
+import TutorialBlock from "./TutorialBlock.astro";
 import type { SiteCopy } from "../content/types";
 import type { Article, Block, Run } from "../content/articles/types";
 import { withBase } from "../lib/url";
@@ -20,6 +21,10 @@ interface Props {
 }
 const { copy, article } = Astro.props;
 const ui = copy.articlePage;
+// A tutorial (spec 005) wears its own tag, trail and contents title, and shows its duration.
+const tut = article.type === "tutorial";
+const tp = copy.tutorialPage;
+const tocTitle = tut ? tp.toc : ui.toc;
 const abs = (p: string) => new URL(withBase(p), Astro.site).href;
 const jsonLd = {
   "@context": "https://schema.org",
@@ -75,11 +80,11 @@ const hasLinks = body.some(({ b }) => b.kind === "links");
         <nav class="crumbs" aria-label={ui.breadcrumb.label}>
           <ol>
             <li><a href={withBase(`/${article.lang}/`)}>{ui.breadcrumb.home}</a></li>
-            <li><a href={withBase(`/${article.lang}/articles/`)} data-crumb-index>{ui.breadcrumb.articles}</a></li>
+            {tut ? <li>{tp.breadcrumb}</li> : <li><a href={withBase(`/${article.lang}/articles/`)} data-crumb-index>{ui.breadcrumb.articles}</a></li>}
             <li class="crumbs__here" aria-current="page">{article.title}</li>
           </ol>
         </nav>
-        <SectionTag text={ui.eyebrow} icon="newspaper" small />
+        <SectionTag text={tut ? tp.eyebrow : ui.eyebrow} icon={tut ? "graduation-cap" : "newspaper"} small />
         <h1 class="article__title">{article.title}</h1>
         {
           lead && (
@@ -94,14 +99,14 @@ const hasLinks = body.some(({ b }) => b.kind === "links");
             <p class="byline__name">{byline}</p>
             <p class="byline__meta">
               <span><Icon name="calendar" class="icon byline__icon" /><time datetime={article.datePublished}>{date}</time></span>
-              <span data-reading-time={minutes}><Icon name="clock" class="icon byline__icon" />{ui.readingTime.replace("{n}", String(minutes))}</span>
+              <span data-reading-time={minutes}><Icon name="clock" class="icon byline__icon" />{tut && article.duration ? article.duration : ui.readingTime.replace("{n}", String(minutes))}</span>
               {step && <a class="byline__step" href={withBase(`${indexPath(article.lang)}#start`)} data-path-step={step.n}><Icon name="list-ordered" class="icon byline__icon" />{stepText}</a>}
             </p>
           </div>
         </div>
         <details class="toc-m">
-          <summary><span>{ui.toc}</span><Icon name="chevron-down" class="icon toc-m__chev" /></summary>
-          <nav aria-label={ui.toc}>
+          <summary><span>{tocTitle}</span><Icon name="chevron-down" class="icon toc-m__chev" /></summary>
+          <nav aria-label={tocTitle}>
             <ol class="toc__list">
               {toc.map((t) => <li><a href={`#${t.id}`}>{t.text}</a></li>)}
             </ol>
@@ -111,7 +116,7 @@ const hasLinks = body.some(({ b }) => b.kind === "links");
 
       <aside class="toc">
         <nav aria-labelledby="toc-title" data-toc>
-          <p class="toc__title" id="toc-title">{ui.toc}</p>
+          <p class="toc__title" id="toc-title">{tocTitle}</p>
           <ol class="toc__list">
             {toc.map((t) => <li><a href={`#${t.id}`}>{t.text}</a></li>)}
           </ol>
@@ -182,6 +187,8 @@ const hasLinks = body.some(({ b }) => b.kind === "links");
               b.kind === "stack"
             )
               return <Scheme block={b} uid={`sc-${i}`} />;
+            if (b.kind === "items" || b.kind === "code" || b.kind === "file" || b.kind === "callout" || b.kind === "table" || b.kind === "shot")
+              return <TutorialBlock copy={copy} block={b} eager={i < 6} />;
             if (b.kind === "pull")
               return (
                 <blockquote class="pull">
@@ -601,6 +608,29 @@ const hasLinks = body.some(({ b }) => b.kind === "links");
   .prose > :global(.scheme--stack) {
     max-width: min(var(--wide), 100%);
   }
+  /* The blocks of a tutorial (spec 005) are drawn by TutorialBlock.astro: they take the column and the rhythm here. */
+  .prose > :global(.t-block) {
+    width: 100%;
+    max-width: var(--col);
+    margin-inline: auto;
+  }
+  .prose > :global(*) + :global(.t-block),
+  .prose > :global(.t-block) + :global(*) {
+    margin-top: 1.15em;
+  }
+  .prose > :global(.term),
+  .prose > :global(.callout),
+  .prose > :global(.term) + :global(*),
+  .prose > :global(.callout) + :global(*) {
+    margin-top: 1.5em;
+  }
+  .prose > :global(.shot),
+  .prose > :global(.shot) + :global(*) {
+    margin-top: 2em;
+  }
+  .prose > .sec + :global(.t-block) {
+    margin-top: 0.7em;
+  }
   /* A raw name inside a paragraph (spec 004), as the network spells it. */
   .prose p code,
   .standfirst code {
@@ -620,7 +650,8 @@ const hasLinks = body.some(({ b }) => b.kind === "links");
   }
   /* A link inside a paragraph (spec 003). */
   .standfirst .inline,
-  .prose .inline {
+  .prose .inline,
+  .prose :global(.t-block a.inline) {
     color: var(--accent-ink);
     font-weight: 600;
     text-decoration: underline;
@@ -628,7 +659,8 @@ const hasLinks = body.some(({ b }) => b.kind === "links");
     text-underline-offset: 3px;
   }
   .standfirst .inline:hover,
-  .prose .inline:hover {
+  .prose .inline:hover,
+  .prose :global(.t-block a.inline:hover) {
     text-decoration-color: currentColor;
   }
   /* Bullets that open on a bold lead get a little more air (spec 003). */
@@ -778,7 +810,8 @@ const hasLinks = body.some(({ b }) => b.kind === "links");
     .article__head,
     .prose > *,
     .prose > :global(.hl),
-    .prose > :global(.scheme) {
+    .prose > :global(.scheme),
+    .prose > :global(.t-block) {
       margin-inline: 0;
     }
     .toc-m {
