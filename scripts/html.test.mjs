@@ -472,3 +472,47 @@ test("a wrong step, a missing or extra next card, a step off the path are report
     ),
   );
 });
+
+// Spec 005: the tutorials make a third group, between the articles and the manual.
+const withTutorials = (html, paths, current) =>
+  html.replace(
+    `<p class="docs__group">Manual</p>`,
+    `<p class="docs__group">Tutorials</p><ul>` +
+      paths
+        .map(
+          (t) =>
+            `<li><a class="docs__item" href="${t}" data-docs-tutorial${t === current ? ' aria-current="page"' : ""}><span>The tutorial</span></a></li>`,
+        )
+        .join("") +
+      `</ul><p class="docs__group">Manual</p>`,
+  );
+const TUTS = ["/en/tutorials/a/", "/en/tutorials/b/"];
+
+test("a Docs menu with its tutorials group: no problem, and the current tutorial is marked", () => {
+  assert.deepEqual(checkDocsMenu(withTutorials(menu(), TUTS), opts({ tutorials: TUTS })), []);
+  assert.deepEqual(
+    checkDocsMenu(
+      withTutorials(menu(), TUTS, TUTS[1]),
+      opts({ tutorials: TUTS, current: TUTS[1] }),
+    ),
+    [],
+  );
+});
+
+test("a Docs menu missing a tutorial, or its group, or the current mark: each is reported", () => {
+  assert.ok(
+    checkDocsMenu(withTutorials(menu(), TUTS.slice(0, 1)), opts({ tutorials: TUTS })).some((m) =>
+      m.includes("0 times to /en/tutorials/b/"),
+    ),
+  );
+  assert.ok(
+    checkDocsMenu(menu(), opts({ tutorials: TUTS })).some((m) =>
+      m.includes("2 named groups, not 3"),
+    ),
+  );
+  assert.ok(
+    checkDocsMenu(withTutorials(menu(), TUTS), opts({ tutorials: TUTS, current: TUTS[0] })).some(
+      (m) => m.includes("current tutorial is not marked"),
+    ),
+  );
+});

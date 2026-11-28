@@ -9,6 +9,7 @@ import {
   menuLinks,
   MENU_ARTICLES,
 } from "../src/content/articles/index.ts";
+import { tutorials, tutorialLinks } from "../src/content/tutorials/index.ts";
 import { en } from "../src/content/en.ts";
 import { fr } from "../src/content/fr.ts";
 import {
@@ -55,6 +56,7 @@ const common = (file, html, lang, current) => {
       index: indexPath(lang),
       manual: copy[lang].nav.docs.links.map((l) => l.href),
       current,
+      tutorials: tutorialLinks(lang).map((t) => t.path),
     }),
   );
   report(file, checkFooterArticles(html, indexPath(lang)));
@@ -87,15 +89,26 @@ for (const entry of articles) {
     common(file, html, lang, entry[lang].path);
   }
 }
+// The tutorials (spec 005): metadata, one figure per screenshot, and the Docs menu marking the page.
+for (const entry of tutorials) {
+  for (const lang of ["en", "fr"]) {
+    const file = join(dist, entry[lang].path, "index.html");
+    const html = readFileSync(file, "utf8");
+    const figures = entry[lang].blocks.filter((b) => b.kind === "shot").length;
+    report(file, checkPage(html, { lang, type: "Article", figures, tutorial: true }));
+    common(file, html, lang, entry[lang].path);
+  }
+}
 report(
   "sitemap.xml",
   checkSitemap(readFileSync(join(dist, "sitemap.xml"), "utf8"), [
     { en: "/en/", fr: "/fr/" },
     { en: indexPath("en"), fr: indexPath("fr") },
     ...articles.map((a) => ({ en: a.en.path, fr: a.fr.path })),
+    ...tutorials.map((t) => ({ en: t.en.path, fr: t.fr.path })),
   ]),
 );
 if (bad) process.exit(1);
 console.log(
-  "built html: the home pages, the article indexes, the articles, their Docs menu, the footers and the sitemap carry their metadata, names and links.",
+  "built html: the home pages, the article indexes, the articles, the tutorials, their Docs menu, the footers and the sitemap carry their metadata, names and links.",
 );

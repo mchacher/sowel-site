@@ -3,12 +3,14 @@
 import { en } from "../src/content/en.ts";
 import { fr } from "../src/content/fr.ts";
 import { articles } from "../src/content/articles/index.ts";
+import { tutorials } from "../src/content/tutorials/index.ts";
 import { compareCopy, compareDocsMenu, compareRegistry } from "./lib/parity.mjs";
 
 const problems = [
   ...compareCopy(en, fr),
   ...compareDocsMenu(en, fr),
   ...compareRegistry(articles).map((p) => `articles: ${p}`),
+  ...compareRegistry(tutorials, { en: "tutorials", fr: "tutoriels" }).map((p) => `tutorials: ${p}`),
 ];
 if (problems.length) {
   console.error("i18n parity failed:");
@@ -16,5 +18,5 @@ if (problems.length) {
   process.exit(1);
 }
 console.log(
-  "i18n parity: en and fr carry the same keys and the articles the same blocks, the Docs menu the same pages.",
+  "i18n parity: en and fr carry the same keys and the articles and tutorials the same blocks, the Docs menu the same pages.",
 );

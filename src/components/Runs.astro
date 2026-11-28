@@ -1,0 +1,10 @@
+---
+// The runs of a paragraph or an item: text, bold, a link, or a raw name in the mono face.
+import type { Run } from "../content/articles/types";
+interface Props {
+  runs: Run[];
+}
+const { runs } = Astro.props;
+---
+
+{runs.map((r) => ("link" in r ? <a class="inline" href={r.href}>{r.link}</a> : "bold" in r ? <strong>{r.bold}</strong> : "code" in r ? <code>{r.code}</code> : r.text))}

@@ -32,7 +32,15 @@ export type Block =
   | { kind: "knowledge"; label: string; caption: string; heads: KnowledgeHead[]; rows: KnowledgeRow[]; zones: KnowledgeZone[] }
   | { kind: "chain"; label: string; caption: string; steps: ChainStep[] }
   | { kind: "stack"; label: string; caption: string; base: string; items: StackItem[] }
-  | { kind: "links"; items: Link[] };
+  | { kind: "links"; items: Link[] }
+  /** Blocks of the tutorials (spec 005): a list whose items carry runs, numbered or not; a terminal command, with
+   *  what it prints; a file to create, with its name; a tip, warning or note; a table; a screenshot. */
+  | { kind: "items"; ordered: boolean; items: Run[][] }
+  | { kind: "code"; cmd: string; output?: string }
+  | { kind: "file"; name: string; content: string }
+  | { kind: "callout"; tone: "tip" | "warn" | "note"; title: string; runs: Run[] }
+  | { kind: "table"; head: string[]; rows: Run[][][] }
+  | { kind: "shot"; image: Img; caption: string };
 
 /** A zone of the topology scheme: its depth in the tree and the values computed for it. `on` marks a presence. */
 export interface TopologyZone {
@@ -161,6 +169,10 @@ export interface Illustration {
 
 export interface Article {
   lang: "en" | "fr";
+  /** A tutorial (spec 005) lives under /{lang}/tutoriels|tutorials/ and shows its duration instead of a reading time. */
+  type?: "tutorial";
+  /** How long the tutorial takes, as a phrase: « environ une heure ». */
+  duration?: string;
   /** Root-absolute path of this page, with its trailing slash. */
   path: string;
   /** The same article in the other language. */

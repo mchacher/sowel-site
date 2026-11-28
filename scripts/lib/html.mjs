@@ -10,7 +10,10 @@ const strip = (s) =>
 const attr = (tag, name) => new RegExp(`\\b${name}\\s*=\\s*"([^"]*)"`, "i").exec(tag)?.[1];
 
 /** `figures`: how many figures an article page must carry (its figure and scheme blocks). */
-export function checkPage(html, { lang, type = "SoftwareApplication", figures = 2 }) {
+export function checkPage(
+  html,
+  { lang, type = "SoftwareApplication", figures = 2, tutorial = false },
+) {
   const p = [];
   if (!new RegExp(`<html[^>]*\\blang="${lang}"`, "i").test(html))
     p.push(`html lang is not ${lang}`);
@@ -55,7 +58,8 @@ export function checkPage(html, { lang, type = "SoftwareApplication", figures = 
         p.push("a figure scheme has no name");
       if (!/<figcaption\b/i.test(m[0])) p.push("a figure has no caption");
     }
-    if (!/<blockquote\b[^>]*class="[^"]*\bpull\b/i.test(html)) p.push("no pull quote");
+    // A tutorial (spec 005) teaches steps: it has no exergue.
+    if (!tutorial && !/<blockquote\b[^>]*class="[^"]*\bpull\b/i.test(html)) p.push("no pull quote");
     // A diagram (the highlight's, spec 002) is an image named by its title and described by its desc.
     const pageIds = new Set([...html.matchAll(/\bid="([^"]+)"/gi)].map((m) => m[1]));
     for (const m of html.matchAll(/<svg\b([^>]*\brole="img"[^>]*)>([\s\S]*?)<\/svg>/gi)) {
@@ -70,8 +74,12 @@ export function checkPage(html, { lang, type = "SoftwareApplication", figures = 
       ...html.matchAll(/<link[^>]*rel="alternate"[^>]*hreflang="(en|fr)"[^>]*href="([^"]*)"/gi),
     ];
     for (const [, l, href] of alt)
-      if (!/^https?:\/\/.+\/articles\//.test(href))
-        p.push(`hreflang ${l} does not point at an article`);
+      if (
+        !(tutorial ? /^https?:\/\/.+\/(tutoriels|tutorials)\// : /^https?:\/\/.+\/articles\//).test(
+          href,
+        )
+      )
+        p.push(`hreflang ${l} does not point at ${tutorial ? "a tutorial" : "an article"}`);
     // The reading interface (spec 002, layout pass): ids on headings, a contents, a reading time.
     const h2 = [...html.matchAll(/<h2\b([^>]*)>/gi)];
     if (!h2.length) p.push("no h2 in the article");
@@ -151,7 +159,7 @@ export function checkSitemap(xml, pairs) {
  * marked aria-current="page", then always a last « All articles » row leading to the index (`index`), marked when the
  * page is the index, then the manual's links, in order, every one on docs.sowel.org under the prefix of the language.
  */
-export function checkDocsMenu(html, { lang, articles, index, manual, current }) {
+export function checkDocsMenu(html, { lang, articles, index, manual, current, tutorials = [] }) {
   const p = [];
   const det = /<details\b[^>]*\bdata-docs\b[^>]*>([\s\S]*?)<\/details>/i.exec(html);
   if (!det) return ["no Docs menu in the header"];
@@ -173,8 +181,10 @@ export function checkDocsMenu(html, { lang, articles, index, manual, current }) 
   const groups = [
     ...body.matchAll(/<p\b[^>]*class="[^"]*\bdocs__group\b[^"]*"[^>]*>([\s\S]*?)<\/p>/gi),
   ];
-  if (groups.length !== 2 || groups.some((g) => !strip(g[1])))
-    p.push(`the Docs panel has ${groups.length} named groups, not 2`);
+  // Articles and the manual, plus the tutorials when there are some (spec 005).
+  const want = tutorials.length ? 3 : 2;
+  if (groups.length !== want || groups.some((g) => !strip(g[1])))
+    p.push(`the Docs panel has ${groups.length} named groups, not ${want}`);
   const links = [...body.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)];
   for (const [, a, inner] of links)
     if (!strip(inner)) p.push(`a Docs entry has no text: ${attr(a, "href")}`);
@@ -190,6 +200,20 @@ export function checkDocsMenu(html, { lang, articles, index, manual, current }) 
     const marked = attr(a, "aria-current") === "page";
     if (isCurrent && !marked)
       p.push(`the current article is not marked in the Docs menu: ${current}`);
+    if (!isCurrent && marked) p.push(`a Docs entry is marked current wrongly: ${attr(a, "href")}`);
+  }
+  const tuts = links.filter((m) => /\bdata-docs-tutorial\b/.test(m[1]));
+  for (const path of tutorials) {
+    const hits = tuts.filter((m) => (attr(m[1], "href") ?? "").endsWith(path));
+    if (hits.length !== 1) p.push(`the Docs menu links ${hits.length} times to ${path}`);
+  }
+  if (tuts.length !== tutorials.length)
+    p.push(`the Docs menu has ${tuts.length} tutorials for ${tutorials.length}`);
+  for (const [, a] of tuts) {
+    const isCurrent = !!current && (attr(a, "href") ?? "").endsWith(current);
+    const marked = attr(a, "aria-current") === "page";
+    if (isCurrent && !marked)
+      p.push(`the current tutorial is not marked in the Docs menu: ${current}`);
     if (!isCurrent && marked) p.push(`a Docs entry is marked current wrongly: ${attr(a, "href")}`);
   }
   const allIdx = links.findIndex((m) => /\bdata-docs-all\b/.test(m[1]));

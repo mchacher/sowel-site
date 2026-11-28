@@ -280,6 +280,66 @@ export function compareArticles(a, b) {
             problems.push(`${at}: figure without size`);
         }
         break;
+      // The blocks of a tutorial (spec 005). A command or a file may differ by language (a time zone, a name to
+      // replace), so only its presence is checked; the rest keeps the same shape in both languages.
+      case "items": {
+        if (x.ordered !== y.ordered) problems.push(`${at}: numbered in one language only`);
+        if (x.items.length !== y.items.length)
+          problems.push(`${at}: ${x.items.length} items vs ${y.items.length}`);
+        x.items.forEach((it, j) => {
+          const other = y.items[j];
+          if (
+            other &&
+            it.map((r) => Object.keys(r)[0]).join() !== other.map((r) => Object.keys(r)[0]).join()
+          )
+            problems.push(`${at}: item ${j + 1} has other runs in each language`);
+        });
+        for (const it of [...x.items, ...y.items])
+          for (const r of it) filled(Object.values(r)[0], "run");
+        break;
+      }
+      case "code":
+        filled(x.cmd, "command");
+        filled(y.cmd, "command");
+        if (!!x.output !== !!y.output) problems.push(`${at}: an output in one language only`);
+        break;
+      case "file":
+        for (const f of [x, y]) {
+          filled(f.name, "file name");
+          filled(f.content, "file content");
+        }
+        if (x.name !== y.name)
+          problems.push(`${at}: the file is named differently in each language`);
+        break;
+      case "callout":
+        if (x.tone !== y.tone) problems.push(`${at}: callout ${x.tone} vs ${y.tone}`);
+        for (const c of [x, y]) {
+          filled(c.title, "callout title");
+          for (const r of c.runs) filled(Object.values(r)[0], "run");
+        }
+        if (x.runs.length !== y.runs.length)
+          problems.push(`${at}: ${x.runs.length} runs vs ${y.runs.length}`);
+        break;
+      case "table":
+        if (x.head.length !== y.head.length || x.rows.length !== y.rows.length)
+          problems.push(`${at}: the table has another shape in each language`);
+        for (const t of [x, y]) {
+          for (const h of t.head) filled(h, "table heading");
+          for (const r of t.rows) {
+            if (r.length !== t.head.length)
+              problems.push(`${at}: a row does not match the headings`);
+            for (const c of r) for (const run of c) filled(Object.values(run)[0], "cell");
+          }
+        }
+        break;
+      case "shot":
+        for (const f of [x, y]) {
+          filled(f.caption, "caption");
+          filled(f.image?.alt, "alt text");
+          if (!(f.image?.width > 0 && f.image?.height > 0))
+            problems.push(`${at}: screenshot without size`);
+        }
+        break;
     }
   }
   for (const [side, art] of [
@@ -304,7 +364,7 @@ export function compareArticles(a, b) {
  * article with the same blocks, both under /{lang}/articles/<slug>/, opening on a paragraph (the standfirst), and
  * no two entries share a path.
  */
-export function compareRegistry(entries) {
+export function compareRegistry(entries, folder = { en: "articles", fr: "articles" }) {
   const problems = [];
   const seen = new Set();
   entries.forEach((entry, n) => {
@@ -317,8 +377,8 @@ export function compareRegistry(entries) {
     for (const lang of ["en", "fr"]) {
       const a = entry[lang];
       if (a.lang !== lang) problems.push(`${at}: the ${lang} article says lang ${a.lang}`);
-      if (!new RegExp(`^/${lang}/articles/[a-z0-9]+(-[a-z0-9]+)*/$`).test(a.path ?? ""))
-        problems.push(`${at}: ${lang} path is not /${lang}/articles/<slug>/: ${a.path}`);
+      if (!new RegExp(`^/${lang}/${folder[lang]}/[a-z0-9]+(-[a-z0-9]+)*/$`).test(a.path ?? ""))
+        problems.push(`${at}: ${lang} path is not /${lang}/${folder[lang]}/<slug>/: ${a.path}`);
       if (seen.has(a.path)) problems.push(`${at}: the path ${a.path} is used twice`);
       seen.add(a.path);
       const first = a.blocks?.[0];
